@@ -105,10 +105,16 @@ public class AuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2U
         return new Token(token);
     }
 
-    public String memberCodeCreate(String memberCode) {
+    public String memberCodeCreate() {
 //        ENCODE
         String code = aesEncrypt.encrypt(
-            1 + "_" + LocalDateTime.now().plusDays(1000));
+            1 + "_" + LocalDateTime.now().plusDays(1000).withNano(0));
+        return code;
+    }
+
+    public String memberCodeDecode(String memberCode) {
+//        ENCODE
+        String code = aesEncrypt.decrypt(memberCode);
         return code;
     }
 }

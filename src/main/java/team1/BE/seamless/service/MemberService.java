@@ -95,10 +95,11 @@ public class MemberService {
     public MemberResponseDTO createMember(CreateMember create) {
 
 //        프로젝트id, exp
-        String[] temp = aesEncrypt.decrypt(create.getCode()).split("_");
+        Long projectId = Long.parseLong(aesEncrypt.decrypt(create.getCode()).split("_")[0]);
+        LocalDateTime exp = Util.parseDate(aesEncrypt.decrypt(create.getCode()).split("_")[1]);
 
 //        exp검사
-        if (Util.parseDate(temp[1]).isBefore(LocalDateTime.now())) {
+        if (exp.isBefore(LocalDateTime.now())) {
             throw new BaseHandler(HttpStatus.FORBIDDEN,"초대 코드가 만료되었습니다.");
         }
 
@@ -108,7 +109,7 @@ public class MemberService {
         };
 
 //        프로젝트 조회
-        ProjectEntity project = projectRepository.findById(Long.parseLong(temp[0]))
+        ProjectEntity project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
 
 //        if (project.getEndDate().isBefore(LocalDateTime.now())) {
