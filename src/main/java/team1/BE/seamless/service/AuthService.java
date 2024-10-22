@@ -1,6 +1,5 @@
 package team1.BE.seamless.service;
 
-import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +35,17 @@ public class AuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2U
     private final JwtToken jwtToken;
     private final AesEncrypt aesEncrypt;
 
+    private final AuthService authService;
+
     @Autowired
     public AuthService(UserRepository userRepository, MemberRepository memberRepository,
-        UserMapper userMapper, JwtToken jwtToken, AesEncrypt aesEncrypt) {
+        UserMapper userMapper, JwtToken jwtToken, AesEncrypt aesEncrypt, AuthService authService) {
         this.userRepository = userRepository;
         this.memberRepository = memberRepository;
         this.userMapper = userMapper;
         this.jwtToken = jwtToken;
         this.aesEncrypt = aesEncrypt;
+        this.authService = authService;
     }
 
     @Transactional
@@ -56,7 +58,7 @@ public class AuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2U
 
 //        로그인 플랫폼 확인
 //        추후 다른 OAuth2를 추가할 경우 사용
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+//        String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
 //        OAuth2 로그인 진행 시 키가 되는 필드 값
         String userNameAttributeName = userRequest.getClientRegistration()
@@ -70,7 +72,7 @@ public class AuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2U
 
 //        기존에 회원가입 되어 있으면 로그인
 //        회원가입이 않되어 있으면 회원가입 후 로그인
-        UserEntity user = saveOrUpdate(attributes);
+        UserEntity user = authService.saveOrUpdate(attributes);
 
         return new PrincipalDetails(user, oAuth2UserAttributes, userNameAttributeName);
     }
@@ -79,7 +81,7 @@ public class AuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2U
      * 유저 정보가 존재하지 않으면 파라미터로 유저 생성 유저 정보가 있으면 로그인 삭제여부는 서비스에서 검증
      */
     @Transactional
-    protected UserEntity saveOrUpdate(OAuthAttributes attributes) {
+    public UserEntity saveOrUpdate(OAuthAttributes attributes) {
         UserEntity user = userRepository.findByEmail(attributes.getEmail())
             // 구글 사용자 정보 업데이트(이미 가입된 사용자) => 업데이트
 //            .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
