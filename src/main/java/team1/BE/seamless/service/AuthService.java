@@ -35,17 +35,14 @@ public class AuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2U
     private final JwtToken jwtToken;
     private final AesEncrypt aesEncrypt;
 
-    private final AuthService authService;
-
     @Autowired
     public AuthService(UserRepository userRepository, MemberRepository memberRepository,
-        UserMapper userMapper, JwtToken jwtToken, AesEncrypt aesEncrypt, AuthService authService) {
+        UserMapper userMapper, JwtToken jwtToken, AesEncrypt aesEncrypt) {
         this.userRepository = userRepository;
         this.memberRepository = memberRepository;
         this.userMapper = userMapper;
         this.jwtToken = jwtToken;
         this.aesEncrypt = aesEncrypt;
-        this.authService = authService;
     }
 
     @Transactional
@@ -72,7 +69,7 @@ public class AuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2U
 
 //        기존에 회원가입 되어 있으면 로그인
 //        회원가입이 않되어 있으면 회원가입 후 로그인
-        UserEntity user = authService.saveOrUpdate(attributes);
+        UserEntity user = saveOrUpdate(attributes);
 
         return new PrincipalDetails(user, oAuth2UserAttributes, userNameAttributeName);
     }
