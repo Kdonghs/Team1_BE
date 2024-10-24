@@ -10,6 +10,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -86,7 +87,7 @@ class MemberServiceTest {
     }
 
 
-    //"멤버 이메일 빈 칸으로 정보 수정시 반영이 안되거나 예외처리 되는가?" 에 대한 테스트
+    @DisplayName("\"멤버 이메일 빈 칸으로 정보 수정시 반영이 안되거나 예외처리 되는가?\" 에 대한 테스트")
     @Test
     void updateMemberWithEmptyEmailShouldFail() {
         UpdateMember updateInfo = new UpdateMember("새로운 이름", "팀원", "", "http://example.com/");
@@ -101,7 +102,7 @@ class MemberServiceTest {
         assertThat(response.getStatusCode()).isEqualTo(OK);
     }
 
-    // 멤버가 멤버를 삭제 가능한에 대한 테스트
+    @DisplayName("멤버가 멤버를 삭제 가능한에 대한 테스트")
     @Test
     void softDeleteMember() {
         headers.setBearerAuth(memberToken);
@@ -117,7 +118,7 @@ class MemberServiceTest {
         assertThat(response.getStatusCode()).isEqualTo(FORBIDDEN);
     }
 
-    // "멤버 삭제(softdelete로 되는가, 다시 조회하면 조회 되는가)" 에 대한 테스트
+    @DisplayName("\"멤버 삭제(softdelete로 되는가, 다시 조회하면 조회 되는가)\" 에 대한 테스트")
     @Test
     void softDeleteMemberAndRequery() {
         headers.setBearerAuth(token);
