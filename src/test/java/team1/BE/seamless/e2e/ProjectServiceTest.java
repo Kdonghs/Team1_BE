@@ -1,12 +1,10 @@
-package team1.BE.seamless.service;
+package team1.BE.seamless.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import team1.BE.seamless.DTO.UserDTO.UserUpdate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserServiceTest {
+class ProjectServiceTest {
 
     @LocalServerPort
     private int port;
@@ -30,13 +28,13 @@ class UserServiceTest {
     private String token;
     private HttpHeaders headers = new HttpHeaders();
 
-    private final UserService userService;
+    private final ProjectService projectService;
 
 
     @Autowired
-    public UserServiceTest(TestRestTemplate restTemplate, UserService userService) {
+    public ProjectServiceTest(TestRestTemplate restTemplate, ProjectService projectService) {
         this.restTemplate = restTemplate;
-        this.userService = userService;
+        this.projectService = projectService;
     }
 
     /**
@@ -56,34 +54,5 @@ class UserServiceTest {
         token = responseEntity.getBody().substring(startIndex, endIndex);
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(token);
-    }
-
-    @Test
-    void 유저정보_수정_테스트_실패_url() {
-        UserUpdate body = new UserUpdate("name1","qwer1234");
-
-        HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user",
-            PUT,
-            requestEntity, String.class);
-
-        System.out.println(responseEntity);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
-    }
-
-    @Test
-    void 유저정보_삭제_실패() {
-        HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
-//        삭제 두 번 시도
-        restTemplate.exchange(url + port + "/api/user",
-            DELETE,
-            requestEntity, String.class);
-
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user",
-            DELETE,
-            requestEntity, String.class);
-
-        System.out.println(responseEntity);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
     }
 }
