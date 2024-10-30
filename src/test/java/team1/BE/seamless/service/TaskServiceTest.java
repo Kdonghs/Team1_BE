@@ -21,9 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import team1.BE.seamless.DTO.TaskDTO.TaskCreate;
-import team1.BE.seamless.repository.MemberRepository;
-import team1.BE.seamless.repository.ProjectRepository;
-import team1.BE.seamless.repository.UserRepository;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -38,17 +35,11 @@ class TaskServiceTest {
 
     private TaskService taskService;
     private ProjectService projectService;
-    private ProjectRepository projectRepository;
-    private UserRepository userRepository;
-    private MemberRepository memberRepository;
 
     @Autowired
-    public TaskServiceTest(TestRestTemplate restTemplate, TaskService taskService, ProjectRepository projectRepository, UserRepository userRepository, MemberRepository memberRepository, ProjectService projectService) {
+    public TaskServiceTest(TestRestTemplate restTemplate, TaskService taskService, ProjectService projectService) {
         this.restTemplate = restTemplate;
         this.taskService = taskService;
-        this.projectRepository = projectRepository;
-        this.userRepository = userRepository;
-        this.memberRepository = memberRepository;
         this.projectService = projectService;
     }
 
@@ -92,7 +83,6 @@ class TaskServiceTest {
 
     @Test
     public void 프로젝트_삭제시_태스크_조회_실패() {
-        // 프로젝트 삭제
         projectService.deleteProject(1L);
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
@@ -110,5 +100,4 @@ class TaskServiceTest {
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(NOT_FOUND);
     }
-
 }
