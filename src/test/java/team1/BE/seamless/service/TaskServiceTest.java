@@ -21,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import team1.BE.seamless.DTO.TaskDTO.TaskCreate;
+import team1.BE.seamless.entity.enums.Priority;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -61,7 +62,7 @@ class TaskServiceTest {
 
     @Test
     public void 태스크_시작_시간이_프로젝트_일정_범위보다_이를_경우_실패() {
-        TaskCreate body = new TaskCreate("태스크1", "첫번째 태스크입니다.", 1L, LocalDateTime.of(2001, 10, 10, 0, 0), LocalDateTime.of(2025, 5, 3, 1, 0, 0));
+        TaskCreate body = new TaskCreate("태스크1", "첫번째 태스크입니다.", 1L, LocalDateTime.of(2001, 10, 10, 0, 0), LocalDateTime.of(2025, 5, 3, 1, 0, 0), Priority.HIGH, 50, 1);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
 
@@ -72,7 +73,7 @@ class TaskServiceTest {
 
     @Test
     public void 태스크_마감_시간이_프로젝트_일정_범위보다_늦을_경우_실패() {
-        TaskCreate body = new TaskCreate("태스크1", "첫번째 태스크입니다.", 1L, LocalDateTime.of(2024, 12, 1, 0, 0), LocalDateTime.of(2100, 5, 3, 1, 0, 0));
+        TaskCreate body = new TaskCreate("태스크1", "첫번째 태스크입니다.", 1L, LocalDateTime.of(2024, 12, 1, 0, 0), LocalDateTime.of(2100, 5, 3, 1, 0, 0), Priority.HIGH, 50, 1);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
 
