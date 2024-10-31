@@ -2,6 +2,8 @@ package team1.BE.seamless.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,25 +11,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import team1.BE.seamless.entity.enums.Priority;
 
-@Entity(name = "taskss")
+@Entity(name = "task")
 public class TaskEntity {
 
-    public TaskEntity(String name, String description, Priority priorityEnum, ProjectEntity project, MemberEntity member, LocalDateTime startDate, LocalDateTime endDate, Integer progress) {
+    public TaskEntity(String name, String description, Priority priority, ProjectEntity project, MemberEntity member, LocalDateTime startDate, LocalDateTime endDate, Integer progress, Integer status) {
         this.name = name;
         this.description = description;
         this.progress = progress;
-        this.status = 0;
-        this.priority = priorityEnum;
+        this.status = status;
+        this.priority = priority;
         this.isDeleted = false;
         this.projectEntity = project;
         this.owner = member;
         this.startDate = startDate;
         this.endDate = endDate;
-    }
-
-    public enum Priority {
-        LOW, MEDIUM, HIGH
     }
 
     public TaskEntity() {
@@ -51,6 +50,7 @@ public class TaskEntity {
     @Column(name = "status")
     private Integer status = 0;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "priority")
     private Priority priority;
 

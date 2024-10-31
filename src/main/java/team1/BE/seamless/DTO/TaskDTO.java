@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
+import team1.BE.seamless.entity.enums.Priority;
 import team1.BE.seamless.util.errorException.BaseHandler;
 import team1.BE.seamless.util.page.PageParam;
 
@@ -88,10 +89,6 @@ public class TaskDTO {
         public Integer getStatus() {
             return status;
         }
-
-        public enum Priority {
-            LOW, MEDIUM, HIGH
-        }
     }
 
     public static class TaskUpdate {
@@ -100,9 +97,15 @@ public class TaskDTO {
 
         private String description;
 
+        private Long ownerId;
+
+        @Min(value = 0, message = "진행도(progress)는 최소 0이어야 합니다.")
+        @Max(value = 100, message = "진행도(progress)는 최대 100이어야 합니다.")
         private Integer progress;
 
-        private Long ownerId;
+        private Integer status;
+
+        private Priority priority;
 
         private LocalDateTime startDate;
 
@@ -110,16 +113,18 @@ public class TaskDTO {
 
         public TaskUpdate(String name, String description, Integer progress, Long ownerId,
             LocalDateTime startDate,
-            LocalDateTime endDate) {
+            LocalDateTime endDate, Priority priority, Integer status) {
             if (endDate.isBefore(startDate)) {
                 throw new BaseHandler(HttpStatus.BAD_REQUEST, "종료시간은 시작시간보다 이전일 수 없습니다.");
             }
             this.name = name;
             this.description = description;
-            this.progress = progress;
             this.ownerId = ownerId;
             this.startDate = startDate;
             this.endDate = endDate;
+            this.priority = priority;
+            this.status = status;
+            this.progress = progress;
         }
 
         public String getName() {
@@ -144,6 +149,14 @@ public class TaskDTO {
 
         public LocalDateTime getEndDate() {
             return endDate;
+        }
+
+        public Integer getStatus() {
+            return status;
+        }
+
+        public Priority getPriority() {
+            return priority;
         }
     }
 
