@@ -168,7 +168,7 @@ public class TaskDTO {
 
         private String description;
 
-        private Long memberId;
+        private Long ownerId;
 
         private Integer progress;
 
@@ -176,15 +176,21 @@ public class TaskDTO {
 
         private LocalDateTime endDate;
 
-        public TaskDetail(Long id, String name, String description, Long memberId, Integer progress,
-            LocalDateTime startDate, LocalDateTime endDate) {
+        private Priority priority;
+
+        private Integer status;
+
+        public TaskDetail(Long id, String name, String description, Long ownerId, Integer progress, LocalDateTime startDate, LocalDateTime endDate, Priority priority,
+            Integer status) {
             this.id = id;
             this.name = name;
             this.description = description;
-            this.memberId = memberId;
+            this.ownerId = ownerId;
             this.progress = progress;
             this.startDate = startDate;
             this.endDate = endDate;
+            this.status = status;
+            this.priority = priority;
         }
 
         public Long getId() {
@@ -199,10 +205,6 @@ public class TaskDTO {
             return description;
         }
 
-        public Long getMemberId() {
-            return memberId;
-        }
-
         public Integer getProgress() {
             return progress;
         }
@@ -213,6 +215,18 @@ public class TaskDTO {
 
         public LocalDateTime getEndDate() {
             return endDate;
+        }
+
+        public Long getOwnerId() {
+            return ownerId;
+        }
+
+        public Priority getPriority() {
+            return priority;
+        }
+
+        public Integer getStatus() {
+            return status;
         }
     }
 }
