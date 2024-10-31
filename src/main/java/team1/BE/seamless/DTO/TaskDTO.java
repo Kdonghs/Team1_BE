@@ -1,5 +1,7 @@
 package team1.BE.seamless.DTO;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -20,7 +22,19 @@ public class TaskDTO {
 
         private String description;
 
-        private Long memberId;
+        @NotNull(message = "멤버 아이디는 필수 입력 사항입니다.")
+        private Long ownerId;
+
+        @NotNull(message = "진행 상태(status)는 필수 입력 사항입니다.")
+        private Integer status;
+
+        @NotNull(message = "중요도(priority)는 필수 입력 사항입니다.")
+        private Priority priority;
+
+        @NotNull(message = "진행도는 필수 입력 사항입니다.")
+        @Min(value = 0, message = "진행도(progress)는 최소 0이어야 합니다.")
+        @Max(value = 100, message = "진행도(progress)는 최대 100이어야 합니다.")
+        private Integer progress;
 
         @NotNull(message = "시작 시간은 필수 입력 사항입니다.")
         private LocalDateTime startDate;
@@ -28,19 +42,22 @@ public class TaskDTO {
         @NotNull(message = "종료 시간은 필수 입력 사항입니다.")
         private LocalDateTime endDate;
 
-        public TaskCreate(String name, String description, Long memberId, LocalDateTime startDate,
-            LocalDateTime endDate) {
+        public TaskCreate(String name, String description, Long ownerId, LocalDateTime startDate,
+            LocalDateTime endDate, Priority priority, Integer status, Integer progress) {
             if (endDate.isBefore(startDate)) {
                 throw new BaseHandler(HttpStatus.BAD_REQUEST, "종료시간은 시작시간보다 이전일 수 없습니다.");
             }
             this.name = name;
             this.description = description;
-            this.memberId = memberId;
+            this.ownerId = ownerId;
             this.startDate = startDate;
             this.endDate = endDate;
+            this.priority = priority;
+            this.status = status;
+            this.progress = progress;
         }
 
-        public @NotBlank(message = "이름은 필수 입력 사항입니다.") String getName() {
+        public String getName() {
             return name;
         }
 
@@ -48,16 +65,32 @@ public class TaskDTO {
             return description;
         }
 
-        public Long getMemberId() {
-            return memberId;
+        public Long getOwnerId() {
+            return ownerId;
         }
 
-        public @NotNull(message = "시작 시간은 필수 입력 사항입니다.") LocalDateTime getStartDate() {
+        public LocalDateTime getStartDate() {
             return startDate;
         }
 
-        public @NotNull(message = "종료 시간은 필수 입력 사항입니다.") LocalDateTime getEndDate() {
+        public LocalDateTime getEndDate() {
             return endDate;
+        }
+
+        public Integer getProgress() {
+            return progress;
+        }
+
+        public Priority getPriority() {
+            return priority;
+        }
+
+        public Integer getStatus() {
+            return status;
+        }
+
+        public enum Priority {
+            LOW, MEDIUM, HIGH
         }
     }
 
@@ -69,13 +102,13 @@ public class TaskDTO {
 
         private Integer progress;
 
-        private Long memberId;
+        private Long ownerId;
 
         private LocalDateTime startDate;
 
         private LocalDateTime endDate;
 
-        public TaskUpdate(String name, String description, Integer progress, Long memberId,
+        public TaskUpdate(String name, String description, Integer progress, Long ownerId,
             LocalDateTime startDate,
             LocalDateTime endDate) {
             if (endDate.isBefore(startDate)) {
@@ -84,7 +117,7 @@ public class TaskDTO {
             this.name = name;
             this.description = description;
             this.progress = progress;
-            this.memberId = memberId;
+            this.ownerId = ownerId;
             this.startDate = startDate;
             this.endDate = endDate;
         }
@@ -101,8 +134,8 @@ public class TaskDTO {
             return progress;
         }
 
-        public Long getMemberId() {
-            return memberId;
+        public Long getOwnerId() {
+            return ownerId;
         }
 
         public LocalDateTime getStartDate() {
@@ -115,6 +148,7 @@ public class TaskDTO {
     }
 
     public static class TaskDetail {
+
         private Long id;
 
         private String name;

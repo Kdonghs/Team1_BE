@@ -13,13 +13,23 @@ import team1.BE.seamless.util.Util;
 public class TaskMapper {
 
     public TaskEntity toEntity(ProjectEntity project, MemberEntity member, TaskCreate taskCreate) {
+        TaskEntity.Priority priorityEnum;
+
+        try {
+            priorityEnum = TaskEntity.Priority.valueOf(taskCreate.getPriority().name());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid priority value: " + taskCreate.getPriority());
+        }
+
         return new TaskEntity(
             taskCreate.getName(),
             taskCreate.getDescription(),
+            priorityEnum,
             project,
             member,
             taskCreate.getStartDate(),
-            taskCreate.getEndDate());
+            taskCreate.getEndDate(),
+            taskCreate.getProgress());
     }
 
     public TaskEntity toUpdate(TaskEntity task, TaskUpdate update) {

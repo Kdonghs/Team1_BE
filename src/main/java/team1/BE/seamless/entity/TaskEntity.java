@@ -13,20 +13,25 @@ import java.time.LocalDateTime;
 @Entity(name = "taskss")
 public class TaskEntity {
 
-    public TaskEntity() {
-
-    }
-
-    public TaskEntity(String name, String description, ProjectEntity projectEntity, MemberEntity owner,
-        LocalDateTime startDate, LocalDateTime endDate) {
+    public TaskEntity(String name, String description, Priority priorityEnum, ProjectEntity project, MemberEntity member, LocalDateTime startDate, LocalDateTime endDate, Integer progress) {
         this.name = name;
         this.description = description;
-        this.progress = 0;
+        this.progress = progress;
+        this.status = 0;
+        this.priority = priorityEnum;
         this.isDeleted = false;
-        this.projectEntity = projectEntity;
-        this.owner = owner;
+        this.projectEntity = project;
+        this.owner = member;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public enum Priority {
+        LOW, MEDIUM, HIGH
+    }
+
+    public TaskEntity() {
+
     }
 
     @Id
@@ -42,6 +47,12 @@ public class TaskEntity {
 
     @Column(name = "progress")
     private Integer progress = 0;
+
+    @Column(name = "status")
+    private Integer status = 0;
+
+    @Column(name = "priority")
+    private Priority priority;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
@@ -74,6 +85,14 @@ public class TaskEntity {
 
     public Integer getProgress() {
         return progress;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public Priority getPriority() {
+        return priority;
     }
 
     public Boolean getIsDeleted() {
@@ -122,5 +141,13 @@ public class TaskEntity {
 
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 }
