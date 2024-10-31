@@ -15,7 +15,7 @@ public class TaskMapper {
     public TaskEntity toEntity(ProjectEntity project, MemberEntity member, TaskCreate taskCreate) {
         return new TaskEntity(
             taskCreate.getName(),
-            taskCreate.getRemark(),
+            taskCreate.getDescription(),
             project,
             member,
             taskCreate.getStartDate(),
@@ -24,7 +24,7 @@ public class TaskMapper {
 
     public TaskEntity toUpdate(TaskEntity task, TaskUpdate update) {
         task.setName(Util.isNull(update.getName()) ? task.getName() : update.getName());
-        task.setRemark(Util.isNull(update.getRemark()) ? task.getRemark() : update.getRemark());
+        task.setDescription(Util.isNull(update.getDescription()) ? task.getDescription() : update.getDescription());
         task.setProgress(Util.isNull(update.getProgress().toString()) ? task.getProgress()
             : update.getProgress());
         task.setStartDate(Util.isNull(update.getStartDate().toString()) ? task.getStartDate()
@@ -37,6 +37,6 @@ public class TaskMapper {
 
 
     public TaskDetail toDetail(TaskEntity task) {
-        return new TaskDetail(task.getId(), task.getName(), task.getRemark(), task.getOwner().getId(), task.getProgress(), task.getStartDate(), task.getEndDate());
+        return new TaskDetail(task.getId(), task.getName(), task.getDescription(), task.getOwner().getId(), task.getProgress(), task.getStartDate(), task.getEndDate());
     }
 }

@@ -18,7 +18,7 @@ public class TaskDTO {
         @NotBlank(message = "이름은 필수 입력 사항입니다.")
         private String name;
 
-        private String remark;
+        private String description;
 
         private Long memberId;
 
@@ -28,13 +28,13 @@ public class TaskDTO {
         @NotNull(message = "종료 시간은 필수 입력 사항입니다.")
         private LocalDateTime endDate;
 
-        public TaskCreate(String name, String remark, Long memberId, LocalDateTime startDate,
+        public TaskCreate(String name, String description, Long memberId, LocalDateTime startDate,
             LocalDateTime endDate) {
             if (endDate.isBefore(startDate)) {
                 throw new BaseHandler(HttpStatus.BAD_REQUEST, "종료시간은 시작시간보다 이전일 수 없습니다.");
             }
             this.name = name;
-            this.remark = remark;
+            this.description = description;
             this.memberId = memberId;
             this.startDate = startDate;
             this.endDate = endDate;
@@ -44,8 +44,8 @@ public class TaskDTO {
             return name;
         }
 
-        public String getRemark() {
-            return remark;
+        public String getDescription() {
+            return description;
         }
 
         public Long getMemberId() {
@@ -65,7 +65,7 @@ public class TaskDTO {
 
         private String name;
 
-        private String remark;
+        private String description;
 
         private Integer progress;
 
@@ -75,14 +75,14 @@ public class TaskDTO {
 
         private LocalDateTime endDate;
 
-        public TaskUpdate(String name, String remark, Integer progress, Long memberId,
+        public TaskUpdate(String name, String description, Integer progress, Long memberId,
             LocalDateTime startDate,
             LocalDateTime endDate) {
             if (endDate.isBefore(startDate)) {
                 throw new BaseHandler(HttpStatus.BAD_REQUEST, "종료시간은 시작시간보다 이전일 수 없습니다.");
             }
             this.name = name;
-            this.remark = remark;
+            this.description = description;
             this.progress = progress;
             this.memberId = memberId;
             this.startDate = startDate;
@@ -93,8 +93,8 @@ public class TaskDTO {
             return name;
         }
 
-        public String getRemark() {
-            return remark;
+        public String getDescription() {
+            return description;
         }
 
         public Integer getProgress() {
@@ -119,7 +119,7 @@ public class TaskDTO {
 
         private String name;
 
-        private String remark;
+        private String description;
 
         private Long memberId;
 
@@ -129,11 +129,11 @@ public class TaskDTO {
 
         private LocalDateTime endDate;
 
-        public TaskDetail(Long id, String name, String remark, Long memberId, Integer progress,
+        public TaskDetail(Long id, String name, String description, Long memberId, Integer progress,
             LocalDateTime startDate, LocalDateTime endDate) {
             this.id = id;
             this.name = name;
-            this.remark = remark;
+            this.description = description;
             this.memberId = memberId;
             this.progress = progress;
             this.startDate = startDate;
@@ -148,8 +148,8 @@ public class TaskDTO {
             return name;
         }
 
-        public String getRemark() {
-            return remark;
+        public String getDescription() {
+            return description;
         }
 
         public Long getMemberId() {

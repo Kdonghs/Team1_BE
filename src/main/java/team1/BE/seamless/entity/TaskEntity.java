@@ -17,10 +17,10 @@ public class TaskEntity {
 
     }
 
-    public TaskEntity(String name, String remark, ProjectEntity projectEntity, MemberEntity owner,
+    public TaskEntity(String name, String description, ProjectEntity projectEntity, MemberEntity owner,
         LocalDateTime startDate, LocalDateTime endDate) {
         this.name = name;
-        this.remark = remark;
+        this.description = description;
         this.progress = 0;
         this.isDeleted = false;
         this.projectEntity = projectEntity;
@@ -37,8 +37,8 @@ public class TaskEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "remark")
-    private String remark;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "progress")
     private Integer progress = 0;
@@ -68,8 +68,8 @@ public class TaskEntity {
         return name;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getDescription() {
+        return description;
     }
 
     public Integer getProgress() {
@@ -104,8 +104,8 @@ public class TaskEntity {
         this.name = name;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setProgress(Integer progress) {
