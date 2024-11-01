@@ -37,10 +37,9 @@ public class AttendUrlController {
      * 팉장의 토큰과 프로젝트id로 프로젝트 존재 검증 프로젝트id + " " + exp로 코드 생성 코드를 양방향 암호화 ex)
      */
     @Operation(summary = "팀원초대 코드 생성")
-    @PostMapping("/api/project/{projectId}/invite-link/{userId}")
+    @PostMapping("/api/project/{projectId}/invite-link")
     public SingleResult<String> generateInviteLink(HttpServletRequest req,
-        @Valid @PathVariable("projectId") Long projectId,
-        @Valid @PathVariable("userId") Long userId) {
-        return new SingleResult<>(attendURLService.generateAttendURL(req, projectId, userId));
+        @Valid @PathVariable("projectId") Long projectId) {
+        return new SingleResult<>(attendURLService.generateAttendURL(req, projectId));
     }
 }

@@ -1,4 +1,4 @@
-package team1.BE.seamless.service;
+package team1.BE.seamless.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,6 +24,8 @@ import team1.BE.seamless.DTO.TaskDTO.TaskCreate;
 import team1.BE.seamless.repository.MemberRepository;
 import team1.BE.seamless.repository.ProjectRepository;
 import team1.BE.seamless.repository.UserRepository;
+import team1.BE.seamless.service.ProjectService;
+import team1.BE.seamless.service.TaskService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

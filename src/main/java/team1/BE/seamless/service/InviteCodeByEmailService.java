@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 import team1.BE.seamless.entity.ProjectEntity;
 import team1.BE.seamless.repository.ProjectRepository;
@@ -18,12 +19,12 @@ import java.util.UUID;
 @Service
 public class InviteCodeByEmailService {
 
-    private JavaMailSender mailSender;
-    private ProjectRepository projectRepository;
+    private final JavaMailSender mailSender;
+    private final ProjectRepository projectRepository;
 
     @Autowired
-    InviteCodeByEmailService(JavaMailSender mailSender, ProjectRepository projectRepository) {
-        this.mailSender = mailSender;
+    InviteCodeByEmailService(ProjectRepository projectRepository) {
+        this.mailSender = new JavaMailSenderImpl();
         this.projectRepository = projectRepository;
     }
 
