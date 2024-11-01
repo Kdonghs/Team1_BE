@@ -1,4 +1,4 @@
-package team1.BE.seamless.e2e;
+package team1.BE.seamless.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.DELETE;
@@ -43,7 +43,7 @@ class MemberServiceTest {
     @BeforeEach
     public void setUp() {
 //        새로운 멤버 생성
-        CreateMember member = new CreateMember("ex@gmail.com","wiRjOIEryKrkU04hAWDKdiryZT8g6JlQW1qOxmzIX7A=");
+        CreateMember member = new CreateMember("ex@gmail.com","wiRjOIEryKrkU04hAWDKdiryZT8g6JlQW1qOxmzIX7A=","랄랄랄");
         HttpEntity<CreateMember> request1 = new HttpEntity<>(member);
         ResponseEntity<String> response1 = restTemplate.exchange(
                 url + port + "/api/project/1/member",
