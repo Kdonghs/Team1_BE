@@ -42,7 +42,7 @@ class MemberServiceTest {
     @BeforeEach
     public void setUp() {
 //        새로운 멤버 생성
-        CreateMember member = new CreateMember("ex@gmail.com","cCeJvA99H7bV2ctvVIpM4Bh3ZJvawh3JnX3tREWGtNA=");
+        CreateMember member = new CreateMember("ex@gmail.com","cCeJvA99H7bV2ctvVIpM4Bh3ZJvawh3JnX3tREWGtNA=","랄랄랄");
         HttpEntity<CreateMember> request1 = new HttpEntity<>(member);
         ResponseEntity<String> response1 = restTemplate.exchange(
                 url + port + "/api/project/1/member",
