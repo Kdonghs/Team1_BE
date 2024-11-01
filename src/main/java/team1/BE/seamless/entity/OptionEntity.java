@@ -15,7 +15,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import team1.BE.seamless.entity.enums.OptionType;
 
-@Entity(name = "optionss")
+@Entity(name = "option")
 public class OptionEntity extends BaseEntity {
 
     public OptionEntity() {
