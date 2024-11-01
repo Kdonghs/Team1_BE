@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import team1.BE.seamless.entity.enums.Priority;
 
-@Entity(name = "task")
+@Entity(name = "taskss")
 public class TaskEntity {
 
     public TaskEntity(String name, String description, Priority priority, ProjectEntity project, MemberEntity member, LocalDateTime startDate, LocalDateTime endDate, Integer progress, Integer status) {
