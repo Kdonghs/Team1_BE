@@ -49,13 +49,13 @@ public class TaskService {
         return taskMapper.toDetail(taskEntity);
     }
 
-    public Page<TaskDetail> getTaskList(Long projectId, getList param) {
-//        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
-//            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+    public Page<TaskWithOwnerDetail> getTaskList(Long projectId, getList param) {
+        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
+            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
 
         Page<TaskEntity> taskEntities = taskRepository.findAllByProjectEntityIdAndIsDeletedFalse(projectId, param.toPageable());
 
-        return taskEntities.map(taskMapper::toDetail);
+        return taskEntities.map(taskMapper::toDetailWithOwner);
     }
 
     public TaskDetail createTask(HttpServletRequest req, Long projectId, TaskCreate taskCreate) {

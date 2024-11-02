@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
+import team1.BE.seamless.entity.MemberEntity;
 import team1.BE.seamless.entity.enums.Priority;
 import team1.BE.seamless.util.errorException.BaseHandler;
 import team1.BE.seamless.util.page.PageParam;
@@ -227,6 +228,110 @@ public class TaskDTO {
 
         public Integer getStatus() {
             return status;
+        }
+    }
+
+    public static class TaskWithOwnerDetail {
+        private Long id;
+
+        private String name;
+
+        private String description;
+
+        private OwnerDetail owner;
+
+        private Integer progress;
+
+        private LocalDateTime startDate;
+
+        private LocalDateTime endDate;
+
+        private Priority priority;
+
+        private Integer status;
+
+        public TaskWithOwnerDetail(Long id, String name, String description, MemberEntity owner,
+            Integer progress,
+            LocalDateTime startDate, LocalDateTime endDate, Priority priority, Integer status) {
+            this.id = id;
+            this.name = name;
+            this.description = description;
+            this.owner = new OwnerDetail(owner);
+            this.progress = progress;
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.priority = priority;
+            this.status = status;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public OwnerDetail getOwner() {
+            return owner;
+        }
+
+        public Integer getProgress() {
+            return progress;
+        }
+
+        public LocalDateTime getStartDate() {
+            return startDate;
+        }
+
+        public LocalDateTime getEndDate() {
+            return endDate;
+        }
+
+        public Priority getPriority() {
+            return priority;
+        }
+
+        public Integer getStatus() {
+            return status;
+        }
+    }
+
+    public static class OwnerDetail {
+
+        private Long id;
+
+        private String name;
+
+        private String role;
+
+        private String imageURL;
+
+        public OwnerDetail(MemberEntity owner) {
+            this.id = owner.getId();
+            this.name = owner.getName();
+            this.role = owner.getRole();
+            this.imageURL = owner.getImageURL();
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getRole() {
+            return role;
+        }
+
+        public String getImageURL() {
+            return imageURL;
         }
     }
 }
