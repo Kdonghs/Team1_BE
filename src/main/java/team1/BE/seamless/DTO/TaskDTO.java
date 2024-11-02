@@ -181,7 +181,8 @@ public class TaskDTO {
 
         private Integer status;
 
-        public TaskDetail(Long id, String name, String description, Long ownerId, Integer progress, LocalDateTime startDate, LocalDateTime endDate, Priority priority,
+        public TaskDetail(Long id, String name, String description, Long ownerId, Integer progress,
+            LocalDateTime startDate, LocalDateTime endDate, Priority priority,
             Integer status) {
             this.id = id;
             this.name = name;
@@ -232,6 +233,7 @@ public class TaskDTO {
     }
 
     public static class TaskWithOwnerDetail {
+
         private Long id;
 
         private String name;
@@ -332,6 +334,40 @@ public class TaskDTO {
 
         public String getImageURL() {
             return imageURL;
+        }
+    }
+    public static class ProjectProgress {
+
+        private Long projectId;
+
+        private Integer projectProgress;
+
+        private String treeGrowthStage;
+
+        private String description;
+
+        public ProjectProgress(Long projectId, Integer projectProgress, String treeGrowthStage,
+            String description) {
+            this.projectId = projectId;
+            this.projectProgress = projectProgress;
+            this.treeGrowthStage = treeGrowthStage;
+            this.description = description;
+        }
+
+        public Long getProjectId() {
+            return projectId;
+        }
+
+        public Integer getProjectProgress() {
+            return projectProgress;
+        }
+
+        public String getTreeGrowthStage() {
+            return treeGrowthStage;
+        }
+
+        public String getDescription() {
+            return description;
         }
     }
 }

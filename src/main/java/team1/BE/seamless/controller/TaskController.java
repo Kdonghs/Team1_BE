@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team1.BE.seamless.DTO.TaskDTO;
+import team1.BE.seamless.DTO.TaskDTO.ProjectProgress;
 import team1.BE.seamless.DTO.TaskDTO.TaskCreate;
 import team1.BE.seamless.DTO.TaskDTO.TaskUpdate;
 import team1.BE.seamless.DTO.TaskDTO.TaskDetail;
@@ -46,6 +47,11 @@ public class TaskController {
     public PageResult<TaskWithOwnerDetail> getTaskList(@PathVariable Long projectId,
         @Valid TaskDTO.getList param) {
         return PageMapper.toPageResult(taskService.getTaskList(projectId, param));
+    }
+
+    @GetMapping("/{projectId}/progress")
+    public SingleResult<ProjectProgress> getProjectProgress(@PathVariable Long projectId, @Valid TaskDTO.getList param) {
+        return new SingleResult<>(taskService.getProjectProgress(projectId, param));
     }
 
     /**

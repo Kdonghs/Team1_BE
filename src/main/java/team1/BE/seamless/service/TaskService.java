@@ -1,6 +1,7 @@
 package team1.BE.seamless.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -56,6 +57,47 @@ public class TaskService {
         Page<TaskEntity> taskEntities = taskRepository.findAllByProjectEntityIdAndIsDeletedFalse(projectId, param.toPageable());
 
         return taskEntities.map(taskMapper::toDetailWithOwner);
+    }
+
+    public ProjectProgress getProjectProgress(Long projectId, getList param) {
+        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
+            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+
+        Page<TaskEntity> taskEntities = taskRepository.findAllByProjectEntityIdAndIsDeletedFalse(projectId, param.toPageable());
+
+        int sum = taskEntities.getContent().stream().mapToInt(TaskEntity::getProgress).sum();
+        int count = taskEntities.getContent().size();
+
+        if (count == 0) {
+            throw new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트에 할당된 태스크가 존재하지 않습니다.");
+        }
+
+        int average = sum / count;
+        String growthLevel;
+        String description;
+
+        switch (average / 25) {
+            case 0: // 0~25
+                growthLevel = "새싹";
+                description = "아직 새싹이네요. 본격적으로 프로젝트를 시작해볼까요?";
+                break;
+            case 1: // 26~50
+                growthLevel = "묘목";
+                description = "나무가 자라기 시작했어요. 팀원들과 함께 나무를 열심히 키워봐요!";
+                break;
+            case 2: // 51~75
+                growthLevel = "어린 나무";
+                description = "나무가 자라고 있어요. 프로젝트에 더욱더 박차를 가해봐요!";
+                break;
+            case 3: // 76~100
+                growthLevel = "성장한 나무";
+                description = "나무가 거의 다 자랐어요. 프로젝트 마무리까지 화이팅!";
+                break;
+            default:
+                growthLevel = "나무 성장단계";
+                description = "나무를 키워요";
+        }
+        return new ProjectProgress(projectId, average, growthLevel, description);
     }
 
     public TaskDetail createTask(HttpServletRequest req, Long projectId, TaskCreate taskCreate) {
