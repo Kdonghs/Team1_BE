@@ -5,8 +5,11 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import team1.BE.seamless.entity.MemberEntity;
+import team1.BE.seamless.entity.TaskEntity;
 import team1.BE.seamless.entity.enums.Priority;
 import team1.BE.seamless.util.errorException.BaseHandler;
 import team1.BE.seamless.util.page.PageParam;
@@ -195,6 +198,19 @@ public class TaskDTO {
             this.priority = priority;
         }
 
+        public TaskDetail(TaskEntity task) {
+            this.id = task.getId();
+            this.name = task.getName();
+            this.description = task.getDescription();
+            this.ownerId = task.getId();
+            this.progress = task.getProgress();
+            this.description = task.getDescription();
+            this.startDate = task.getStartDate();
+            this.endDate = task.getEndDate();
+            this.status = task.getStatus();
+            this.priority = task.getPriority();
+        }
+
         public Long getId() {
             return id;
         }
@@ -368,6 +384,32 @@ public class TaskDTO {
 
         public String getDescription() {
             return description;
+        }
+    }
+
+    public static class MemberProgress {
+        private OwnerDetail teamMember;
+
+        private Integer progress;
+
+        private List<TaskDetail> activeTasks;
+
+        public MemberProgress(MemberEntity teamMember, Integer progress, List<TaskEntity> activeTasks) {
+            this.teamMember = new OwnerDetail(teamMember);
+            this.progress = progress;
+            this.activeTasks = activeTasks.stream().map(TaskDetail::new).collect(Collectors.toList());
+        }
+
+        public OwnerDetail getTeamMember() {
+            return teamMember;
+        }
+
+        public Integer getProgress() {
+            return progress;
+        }
+
+        public List<TaskDetail> getActiveTasks() {
+            return activeTasks;
         }
     }
 }

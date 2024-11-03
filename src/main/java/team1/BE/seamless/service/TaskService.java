@@ -1,9 +1,10 @@
 package team1.BE.seamless.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Optional;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ public class TaskService {
     private final MemberRepository memberRepository;
     private final TaskMapper taskMapper;
     private final ParsingPram parsingPram;
+
 
     @Autowired
     public TaskService(TaskRepository taskRepository, ProjectRepository projectRepository,
@@ -98,6 +100,29 @@ public class TaskService {
                 description = "나무를 키워요";
         }
         return new ProjectProgress(projectId, average, growthLevel, description);
+    }
+
+    public Page<MemberProgress> getMemberProgress(Long projectId, getList param) {
+        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
+            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+
+        // 프로젝트에 속한 팀원 목록 가져오기
+        // 동작 안됨
+        List<MemberEntity> teamMembers = project.getMemberEntities().stream().toList();
+//        List<MemberEntity> teamMembers = memberRepository.findAllByProjectEntityAndIsDeleteFalse(project);
+
+        // memberEntity와 projectEntity로 태스크 조회
+        teamMembers.forEach(member -> System.out.println("Team Member: " + member));
+
+        List<MemberProgress> teamMemberProgress = teamMembers.stream().map(member -> {
+            List<TaskEntity> activeTasks = taskRepository.findByOwnerIdAndProjectEntityAndIsDeletedFalse(member.getId(), project);
+
+            int averageProgress = activeTasks.isEmpty() ? 0 : (int) activeTasks.stream().mapToInt(TaskEntity::getProgress).average().orElse(0);
+
+            return new MemberProgress(member, averageProgress, activeTasks);
+        }).toList();
+
+        return new PageImpl<>(teamMemberProgress, param.toPageable(), teamMembers.size());
     }
 
     public TaskDetail createTask(HttpServletRequest req, Long projectId, TaskCreate taskCreate) {
