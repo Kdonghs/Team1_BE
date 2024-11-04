@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team1.BE.seamless.DTO.MemberRequestDTO;
-import team1.BE.seamless.DTO.MemberRequestDTO.CreateMember;
 import team1.BE.seamless.DTO.MemberRequestDTO.UpdateMember;
 import team1.BE.seamless.DTO.MemberRequestDTO.getMemberList;
 import team1.BE.seamless.DTO.MemberResponseDTO;
@@ -18,6 +17,7 @@ import team1.BE.seamless.entity.enums.Role;
 import team1.BE.seamless.mapper.MemberMapper;
 import team1.BE.seamless.repository.MemberRepository;
 import team1.BE.seamless.repository.ProjectRepository;
+import team1.BE.seamless.util.Email.EmailSend;
 import team1.BE.seamless.util.Util;
 import team1.BE.seamless.util.auth.AesEncrypt;
 import team1.BE.seamless.util.auth.ParsingPram;
@@ -33,17 +33,17 @@ public class MemberService {
     private final ProjectRepository projectRepository;
     private final ParsingPram parsingPram;
     private final AesEncrypt aesEncrypt;
-    private final InviteCodeByEmailService inviteCodeByEmailService;
+    private final EmailSend emailSend;
 
     @Autowired
     public MemberService(MemberRepository memberRepository, MemberMapper memberMapper,
-        ProjectRepository projectRepository, ParsingPram parsingPram, AesEncrypt aesEncrypt, InviteCodeByEmailService inviteCodeByEmailService) {
+        ProjectRepository projectRepository, ParsingPram parsingPram, AesEncrypt aesEncrypt, EmailSend emailSend) {
         this.memberRepository = memberRepository;
         this.memberMapper = memberMapper;
         this.projectRepository = projectRepository;
         this.parsingPram = parsingPram;
         this.aesEncrypt = aesEncrypt;
-        this.inviteCodeByEmailService = inviteCodeByEmailService;
+        this.emailSend = emailSend;
     }
 
     public MemberResponseDTO getMember(Long projectId, Long memberId) {
@@ -111,7 +111,16 @@ public class MemberService {
         String code = aesEncrypt.encrypt(member.getId().toString());
         System.out.println(code);
 
-//        이메일로 코드 전달(추가 요망) -> 추가할 필요없이 프론트 쪽에서 요청을 같이 보내달라고 하면 됨.
+
+//      이메일로 코드 전달
+        String email = create.getEmail();
+        String message = "안녕하세요,\n\n" + create.getName() + "님. " +
+                "프로젝트 '" + project.getName() + "'에 초대되었습니다.\n" + "\n\n" +
+                "프로젝트에 참여하려면 초대 코드를 사용하여 입장해주세요.\n\n" +
+                "감사합니다.\n\n" + "참여 코드는 다음과 같습니다: \n" ;
+        String subject = "[프로젝트 초대] 프로젝트 '" + project.getName() + "'에 참여하세요!";
+        emailSend.sendProjectInvite(email,project.getId(), message, subject);
+
 
         return memberMapper.toCreateResponseDTO(member, code);
     }
