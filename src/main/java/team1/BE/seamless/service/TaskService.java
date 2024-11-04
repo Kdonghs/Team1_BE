@@ -39,18 +39,6 @@ public class TaskService {
         this.parsingPram = parsingPram;
     }
 
-    public TaskDetail getTask(Long taskId) {
-        TaskEntity taskEntity = taskRepository.findByIdAndIsDeletedFalse(taskId)
-            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 태스크"));
-
-       Long projectId = taskEntity.getProject().getId();
-
-//       ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
-//           .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
-
-        return taskMapper.toDetail(taskEntity);
-    }
-
     public Page<TaskWithOwnerDetail> getTaskList(Long projectId, getList param) {
         ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
