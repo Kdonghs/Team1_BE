@@ -29,7 +29,6 @@ public class TaskService {
     private final TaskMapper taskMapper;
     private final ParsingPram parsingPram;
 
-
     @Autowired
     public TaskService(TaskRepository taskRepository, ProjectRepository projectRepository,
         MemberRepository memberRepository, TaskMapper taskMapper, ParsingPram parsingPram) {
@@ -106,13 +105,7 @@ public class TaskService {
         ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
 
-        // 프로젝트에 속한 팀원 목록 가져오기
-        // 동작 안됨
         List<MemberEntity> teamMembers = project.getMemberEntities().stream().toList();
-//        List<MemberEntity> teamMembers = memberRepository.findAllByProjectEntityAndIsDeleteFalse(project);
-
-        // memberEntity와 projectEntity로 태스크 조회
-        teamMembers.forEach(member -> System.out.println("Team Member: " + member));
 
         List<MemberProgress> teamMemberProgress = teamMembers.stream().map(member -> {
             List<TaskEntity> activeTasks = taskRepository.findByOwnerIdAndProjectEntityAndIsDeletedFalse(member.getId(), project);
@@ -134,6 +127,12 @@ public class TaskService {
         if (project.getStartDate().isAfter(taskCreate.getStartDate()) || project.getEndDate()
             .isBefore(taskCreate.getEndDate())) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "태스크는 프로젝트의 기한을 넘어설 수 없습니다.");
+        }
+
+        List<MemberEntity> teamMembers = project.getMemberEntities().stream().toList();
+        boolean isTeamMember = teamMembers.stream().anyMatch(member -> member.getId().equals(taskCreate.getOwnerId()));
+        if (!isTeamMember) {
+            throw new BaseHandler(HttpStatus.BAD_REQUEST, "해당 프로젝트와 관련된 팀원이 아닙니다.");
         }
 
         MemberEntity member = memberRepository.findById(taskCreate.getOwnerId())
