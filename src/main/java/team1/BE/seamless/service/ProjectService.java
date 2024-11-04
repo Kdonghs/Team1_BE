@@ -71,7 +71,7 @@ public class ProjectService {
     public List<MemberResponseDTO> getProjectMembers(long id) {
         ProjectEntity projectEntity = projectRepository.findById(id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
-        return projectEntity.getMemberEntities().stream().map( entity -> memberMapper.toGetResponseDTO(entity)).toList();
+        return projectEntity.getMemberEntities().stream().map(memberMapper::toGetResponseDTO).toList();
     }
 
     /**
@@ -101,7 +101,7 @@ public class ProjectService {
         List<OptionEntity> optionEntities = optionRepository.findByIdIn(create.getOptionIds());
 
         List<ProjectOption> projectOptions = optionEntities.stream()
-            .map(optionEntity -> new ProjectOption(optionEntity))
+            .map(ProjectOption::new)
             .toList();
 
         ProjectEntity projectEntity = projectRepository.save(
