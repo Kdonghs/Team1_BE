@@ -111,7 +111,7 @@ public class MemberService {
         String code = aesEncrypt.encrypt(member.getId().toString());
         System.out.println(code);
 
-//        이메일로 코드 전달(추가 요망)
+//        이메일로 코드 전달(추가 요망) -> 추가할 필요없이 프론트 쪽에서 요청을 같이 보내달라고 하면 됨.
 
         return memberMapper.toCreateResponseDTO(member, code);
     }

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 import team1.BE.seamless.entity.ProjectEntity;
 import team1.BE.seamless.repository.ProjectRepository;
@@ -19,16 +18,16 @@ import java.util.UUID;
 @Service
 public class InviteCodeByEmailService {
 
-    private final JavaMailSender mailSender;
-    private final ProjectRepository projectRepository;
+    private JavaMailSender mailSender;
+    private ProjectRepository projectRepository;
 
     @Autowired
-    InviteCodeByEmailService(ProjectRepository projectRepository) {
-        this.mailSender = new JavaMailSenderImpl();
+    InviteCodeByEmailService(JavaMailSender mailSender, ProjectRepository projectRepository) {
+        this.mailSender = mailSender;
         this.projectRepository = projectRepository;
     }
 
-    public void sendProjectInvite(String email, Long projectId) {
+    public void sendProjectInvite(String email, Long projectId, String name) {
         // 프로젝트 존재 검증
         ProjectEntity project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
@@ -36,16 +35,16 @@ public class InviteCodeByEmailService {
         // 프로젝트 종료 기간 검증
         if (project.getEndDate().isBefore(LocalDateTime.now())) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
-        } // 프로젝트 initData에 EndDate 설정이 안되어있어서 지금 테스트하면 오류걸림 그래서 주석처리 해놓음ㅇㅇ
+        } 
 
-        // 팀원인지 팀장인지 검증은 필요없음.(어차피 이 post요청은 아무 권한 없는 사람이 보내는 것 취급임)
+        // 팀원인지 팀장인지 검증은 필요없음.(어차피 이 post요청은 아무 권한 없는 사람이 보내는 것이기 때문임)
 
 
         // 참여코드 생성 (UUID 기반 + 현재 시간)
         String participationCode = generateParticipationCode();
 
         // 이메일 메시지 내용 생성
-        String message = "안녕하세요,\n\n" +
+        String message = "안녕하세요,\n\n" + name + "님. " +
                 "프로젝트 '" + project.getName() + "'에 초대되었습니다.\n" +
                 "참여 코드는 다음과 같습니다: " + participationCode + "\n\n" +
                 "프로젝트에 참여하려면 초대 코드를 사용하여 입장해주세요.\n\n" +
