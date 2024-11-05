@@ -1,5 +1,6 @@
 package team1.BE.seamless.repository;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,5 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
 
     Optional<ProjectEntity> findByIdAndUserEntityIdAndIsDeletedFalse(Long projectId, Long userId);
 
+    List<ProjectEntity> findAllByIsDeletedFalse();
 }

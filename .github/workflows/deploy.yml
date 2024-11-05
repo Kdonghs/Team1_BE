@@ -146,7 +146,7 @@ jobs:
 
             CURRENT_PID=$(pgrep -f $JAR_NAME)
 
-            if [ -n $CURRENT_PID ]
+            if [ -z $CURRENT_PID ]
             then
               sleep 1
             else
