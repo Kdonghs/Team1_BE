@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "project")
+@Entity(name = "projectss")
 public class ProjectEntity extends BaseEntity {
 
     public ProjectEntity() {
@@ -139,11 +139,13 @@ public class ProjectEntity extends BaseEntity {
         this.endDate = endDate;
     }
 
-    public ProjectEntity update(String name, LocalDateTime startDate, LocalDateTime endDate) {
+    public ProjectEntity update(String name, LocalDateTime startDate, LocalDateTime endDate, List<ProjectOption> projectOptions) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.projectOptions = projectOptions;
         return this;
     }
+
 
 }

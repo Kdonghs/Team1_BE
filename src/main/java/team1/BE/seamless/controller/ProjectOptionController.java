@@ -62,11 +62,11 @@ public class ProjectOptionController {
     @PutMapping("/{optionId}")
     public SingleResult<OptionDetail> updateOption(HttpServletRequest req,
         @Valid @PathVariable("optionId") Long id,
-        @Valid @RequestBody OptionDTO.updateOption update) {
+        @Valid @RequestBody OptionDTO.OptionUpdate update) {
         return new SingleResult<>(optionService.updateOption(id, update, parsingPram.getRole(req)));
     }
 
-    @Operation(summary = "옵션 수정")
+    @Operation(summary = "옵션 삭제")
     @DeleteMapping("/{optionId}")
     public SingleResult<OptionDetail> deleteOption(HttpServletRequest req,
         @Valid @PathVariable("optionId") Long id) {

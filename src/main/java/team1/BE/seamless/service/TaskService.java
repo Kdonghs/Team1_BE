@@ -1,9 +1,10 @@
 package team1.BE.seamless.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,23 +39,81 @@ public class TaskService {
         this.parsingPram = parsingPram;
     }
 
-    public TaskDetail getTask(Long taskId) {
-        TaskEntity taskEntity = taskRepository.findByIdAndIsDeletedFalse(taskId)
-            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 태스크"));
 
-       Long projectId = taskEntity.getProject().getId();
+    public Page<TaskWithOwnerDetail> getTaskList(Long projectId, Integer status, String priority, String ownerName, getList param) {
+        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
+            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
 
-       ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId).orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+        //멤버 아이디에 대한 쿼리 파라미터가 존재할때 : null일때
+        Long memberId = null;
 
-        return taskMapper.toDetail(taskEntity);
+        if (ownerName != null) {
+            MemberEntity memberEntity = memberRepository.findByName(ownerName)
+                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 멤버"));
+            memberId = memberEntity.getId();
+        }
+
+        Page<TaskEntity> taskEntities = taskRepository.findByProjectIdAndOptionalFilters(projectId, status, priority, memberId, param.toPageable());
+
+        return taskEntities.map(taskMapper::toDetailWithOwner);
     }
 
-    public Page<TaskDetail> getTaskList(Long projectId, getList param) {
-        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId).orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+    public ProjectProgress getProjectProgress(Long projectId, getList param) {
+        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
+            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
 
         Page<TaskEntity> taskEntities = taskRepository.findAllByProjectEntityIdAndIsDeletedFalse(projectId, param.toPageable());
 
-        return taskEntities.map(taskMapper::toDetail);
+        int sum = taskEntities.getContent().stream().mapToInt(TaskEntity::getProgress).sum();
+        int count = taskEntities.getContent().size();
+
+        if (count == 0) {
+            throw new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트에 할당된 태스크가 존재하지 않습니다.");
+        }
+
+        int average = sum / count;
+        String growthLevel;
+        String description;
+
+        switch (average / 25) {
+            case 0: // 0~25
+                growthLevel = "새싹";
+                description = "아직 새싹이네요. 본격적으로 프로젝트를 시작해볼까요?";
+                break;
+            case 1: // 26~50
+                growthLevel = "묘목";
+                description = "나무가 자라기 시작했어요. 팀원들과 함께 나무를 열심히 키워봐요!";
+                break;
+            case 2: // 51~75
+                growthLevel = "어린 나무";
+                description = "나무가 자라고 있어요. 프로젝트에 더욱더 박차를 가해봐요!";
+                break;
+            case 3: // 76~100
+                growthLevel = "성장한 나무";
+                description = "나무가 거의 다 자랐어요. 프로젝트 마무리까지 화이팅!";
+                break;
+            default:
+                growthLevel = "나무 성장단계";
+                description = "나무를 키워요";
+        }
+        return new ProjectProgress(projectId, average, growthLevel, description);
+    }
+
+    public Page<MemberProgress> getMemberProgress(Long projectId, getList param) {
+        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
+            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+
+        List<MemberEntity> teamMembers = project.getMemberEntities().stream().toList();
+
+        List<MemberProgress> teamMemberProgress = teamMembers.stream().map(member -> {
+            List<TaskEntity> activeTasks = taskRepository.findByOwnerIdAndProjectEntityAndIsDeletedFalse(member.getId(), project);
+
+            int averageProgress = activeTasks.isEmpty() ? 0 : (int) activeTasks.stream().mapToInt(TaskEntity::getProgress).average().orElse(0);
+
+            return new MemberProgress(member, averageProgress, activeTasks);
+        }).toList();
+
+        return new PageImpl<>(teamMemberProgress, param.toPageable(), teamMembers.size());
     }
 
     public TaskDetail createTask(HttpServletRequest req, Long projectId, TaskCreate taskCreate) {
@@ -68,7 +127,13 @@ public class TaskService {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "태스크는 프로젝트의 기한을 넘어설 수 없습니다.");
         }
 
-        MemberEntity member = memberRepository.findById(taskCreate.getMemberId())
+        List<MemberEntity> teamMembers = project.getMemberEntities().stream().toList();
+        boolean isTeamMember = teamMembers.stream().anyMatch(member -> member.getId().equals(taskCreate.getOwnerId()));
+        if (!isTeamMember) {
+            throw new BaseHandler(HttpStatus.BAD_REQUEST, "해당 프로젝트와 관련된 팀원이 아닙니다.");
+        }
+
+        MemberEntity member = memberRepository.findById(taskCreate.getOwnerId())
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 멤버"));
 
         TaskEntity taskEntity = taskMapper.toEntity(project, member, taskCreate);
@@ -91,7 +156,7 @@ public class TaskService {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "태스크는 프로젝트의 기한을 넘어설 수 없습니다.");
         }
 
-        MemberEntity member = memberRepository.findById(taskCreate.getMemberId())
+        MemberEntity member = memberRepository.findById(taskCreate.getOwnerId())
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 멤버"));
 
         TaskEntity taskEntity = taskMapper.toEntity(project, member, taskCreate);
@@ -119,7 +184,7 @@ public class TaskService {
                 throw new BaseHandler(HttpStatus.UNAUTHORIZED, "태스크 수정 권한이 없습니다.");
             }
 //            멤버 변경
-            MemberEntity member = memberRepository.findById(update.getMemberId())
+            MemberEntity member = memberRepository.findById(update.getOwnerId())
                 .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 멤버"));
 
             task.setOwner(member);
