@@ -143,7 +143,7 @@ public class MemberService {
     @Transactional
     public MemberResponseDTO updateMember(Long projectId, Long memberId, UpdateMember update, HttpServletRequest req) {
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.
-        if (parsingPram.getRole(req).equals(Role.USER.toString())) {
+        if (parsingPram.getRole(req).equals(Role.MEMBER.toString())) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"수정 권한이 없습니다.");
         }
 
