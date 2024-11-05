@@ -37,7 +37,7 @@ public class TaskController {
 
     @Operation(summary = "태스크 단건 조회")
     @GetMapping("/task/{taskId}")
-    public SingleResult<TaskDetail> getTask(@PathVariable Long taskId) {
+    public SingleResult<TaskDetail> getTask(@PathVariable("taskId") Long taskId) {
         return new SingleResult<>(taskService.getTask(taskId));
     }
 
@@ -58,7 +58,7 @@ public class TaskController {
     @Operation(summary = "태스크 생성")
     @PostMapping("/{projectId}/task")
     public SingleResult<TaskDetail> createTask(HttpServletRequest req,
-        @Valid @PathVariable Long projectId, @Valid @RequestBody TaskCreate taskCreate) {
+        @Valid @PathVariable("projectId") Long projectId, @Valid @RequestBody TaskCreate taskCreate) {
         return new SingleResult<>(taskService.createTask(req, projectId, taskCreate));
     }
 
@@ -68,7 +68,7 @@ public class TaskController {
     @Operation(summary = "태스크 수정")
     @PutMapping("/task/{taskId}")
     public SingleResult<TaskDetail> updateTask(HttpServletRequest req,
-        @Valid @PathVariable Long taskId,
+        @Valid @PathVariable("taskId") Long taskId,
         @Valid @RequestBody TaskUpdate update) {
         return new SingleResult<>(taskService.updateTask(req, taskId, update));
     }
