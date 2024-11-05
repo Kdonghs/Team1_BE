@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import team1.BE.seamless.entity.ProjectEntity;
 import team1.BE.seamless.repository.ProjectRepository;
+import team1.BE.seamless.util.auth.AesEncrypt;
 import team1.BE.seamless.util.errorException.BaseHandler;
 
 import java.time.LocalDateTime;
@@ -20,11 +21,13 @@ public class EmailSend {
 
     private JavaMailSender mailSender;
     private ProjectRepository projectRepository;
+    private final AesEncrypt aesEncrypt;
 
     @Autowired
-    EmailSend(JavaMailSender mailSender, ProjectRepository projectRepository) {
+    EmailSend(JavaMailSender mailSender, ProjectRepository projectRepository, AesEncrypt aesEncrypt) {
         this.mailSender = mailSender;
         this.projectRepository = projectRepository;
+        this.aesEncrypt = aesEncrypt;
     }
 
     public void sendProjectInvite(String email, Long projectId, String message, String subject) {
@@ -41,7 +44,7 @@ public class EmailSend {
 
 
         // 참여코드 생성 (UUID 기반 + 현재 시간)
-        String participationCode = generateParticipationCode();
+        String participationCode = generateParticipationCode(project);
 
         // 이메일 메시지 내용 생성
         message += "" + participationCode;
@@ -55,10 +58,9 @@ public class EmailSend {
     }
 
 
-    private String generateParticipationCode() {
-        String uniqueId = UUID.randomUUID().toString().substring(0, 8); // 8자리 코드임
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
-        return uniqueId + "-" + timestamp; // 참여코드 예: 1234abcd-202410161530 와 같이 생성됨.
-        // 이렇게 시간을 기준으로 만들면, 이전 or 다른 팀장의 프로젝트의 참여코드와 겹칠 일이 없게됨.
+    private String generateParticipationCode(ProjectEntity project) {
+        String code = aesEncrypt.encrypt(
+                project.getId() + "_" + project.getStartDate().withNano(0));
+        return code;
     }
 }

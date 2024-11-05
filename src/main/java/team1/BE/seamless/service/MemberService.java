@@ -78,13 +78,12 @@ public class MemberService {
     }
 
 
-    // 멤버 초기 데이터 때문에 오버로딩한 메서드임
     @Transactional
     public MemberResponseDTO createMember(MemberRequestDTO.CreateMember create) {
 
 //        프로젝트id, exp
-        Long projectId = Long.parseLong(aesEncrypt.decrypt(create.getCode()).split("_")[0]);
-        LocalDateTime exp = Util.parseDate(aesEncrypt.decrypt(create.getCode()).split("_")[1]);
+        Long projectId = Long.parseLong(aesEncrypt.decrypt(create.getattendURL()).split("_")[0]);
+        LocalDateTime exp = Util.parseDate(aesEncrypt.decrypt(create.getattendURL()).split("_")[1]);
 
 //        exp검사
         if (exp.isBefore(LocalDateTime.now())) {
@@ -112,7 +111,7 @@ public class MemberService {
         System.out.println(code);
 
 
-//      이메일로 코드 전달
+//      이메일로 참여코드 전달
         String email = create.getEmail();
         String message = "안녕하세요,\n\n" + create.getName() + "님. " +
                 "프로젝트 '" + project.getName() + "'에 초대되었습니다.\n" + "\n\n" +

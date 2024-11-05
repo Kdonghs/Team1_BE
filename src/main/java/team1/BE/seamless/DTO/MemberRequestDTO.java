@@ -17,7 +17,7 @@ public class MemberRequestDTO {
         @NotBlank(message = "이메일은 필수 입력 사항입니다.")
         private String email;
 
-        private String code;
+        private String attendURL;
 
         private String name;
 
@@ -28,9 +28,9 @@ public class MemberRequestDTO {
         public CreateMember() {
         }
 
-        public CreateMember(String email, String code, String name) {
+        public CreateMember(String email, String attendURL, String name) {
             this.email = email;
-            this.code = code;
+            this.attendURL = attendURL;
             this.name = name;
         }
 
@@ -38,8 +38,8 @@ public class MemberRequestDTO {
             return email;
         }
 
-        public String getCode() {
-            return code;
+        public String getattendURL() {
+            return attendURL;
         }
     }
 

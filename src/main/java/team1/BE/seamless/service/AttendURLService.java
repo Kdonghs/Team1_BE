@@ -20,6 +20,8 @@ public class AttendURLService {
     private final ParsingPram parsingPram;
     private final AesEncrypt aesEncrypt;
 
+    private static final String BASE_URL = "https://seamless.com/attend"; // 기본 URL 설정
+
     @Autowired
     public AttendURLService(ProjectRepository projectRepository, ParsingPram parsingPram,
         AesEncrypt aesEncrypt) {
@@ -43,11 +45,14 @@ public class AttendURLService {
         }
 
 
-//        코드는 프로젝트id + exp로 구성
+//        참여 링크는 프로젝트id + exp로 구성
 //        exp는 1일로 가정
         String code = aesEncrypt.encrypt(
-            project.getId() + "_" + LocalDateTime.now().plusDays(1).withNano(0));
-        return code;
+            project.getId() + "_" + project.getStartDate().withNano(0));
+        // URL 조립
+        String attendURL = String.format("%s?projectId=%d&code=%s", BASE_URL, projectId, code);
+
+        return attendURL;
     }
 
 }

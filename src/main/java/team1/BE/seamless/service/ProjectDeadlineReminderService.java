@@ -23,7 +23,7 @@ public class ProjectDeadlineReminderService {
         this.emailSend = emailSend;
     }
 
-    // 매일 오후 4시에 실행
+    // 오후 4시에 이메일 전송함
     @Scheduled(cron = "0 0 16 * * ?")
     public void sendDeadlineReminders() {
         List<ProjectEntity> projects = projectRepository.findAllByIsDeletedFalse();
