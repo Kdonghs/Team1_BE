@@ -73,7 +73,7 @@ public class ProjectService {
     * @return : 해당 id를 가진 프로젝트에 참여한 팀원들의 목록
     * */
     public List<MemberResponseDTO> getProjectMembers(long id) {
-        ProjectEntity projectEntity = projectRepository.findById(id)
+        ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
         return projectEntity.getMemberEntities().stream().map(memberMapper::toGetResponseDTO).toList();
     }
@@ -83,7 +83,7 @@ public class ProjectService {
      * @return : 해당 id를 가진 프로젝트에 설정된 옵션 목록
      * */
     public List<OptionDetail> getProjectOptions(long id) {
-        ProjectEntity projectEntity = projectRepository.findById(id)
+        ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
         return projectEntity.getProjectOptions().stream()
             .map(projectOption -> optionMapper.toDetail(projectOption.getOptionEntity())).toList();
@@ -139,7 +139,7 @@ public class ProjectService {
     * */
     @Transactional
     public ProjectDetail updateProject(long id, ProjectUpdate update) {
-        ProjectEntity projectEntity = projectRepository.findById(id)
+        ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
         // 기존 옵션 목록
         List<ProjectOption> projectOptions = projectEntity.getProjectOptions();
@@ -168,12 +168,8 @@ public class ProjectService {
     * */
     @Transactional
     public Long deleteProject(long id) {
-        ProjectEntity projectEntity = projectRepository.findById(id)
+        ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
-
-        if(projectEntity.getIsDeleted()) {
-            throw new BaseHandler(HttpStatus.BAD_REQUEST, "해당 프로젝트는 지워진 상태 입니다.");
-        }
 
         projectEntity.setIsDeleted(true);
         return projectEntity.getId();
