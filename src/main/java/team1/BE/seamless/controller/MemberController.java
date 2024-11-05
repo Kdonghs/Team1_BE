@@ -15,14 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team1.BE.seamless.DTO.MemberRequestDTO;
 import team1.BE.seamless.DTO.MemberResponseDTO;
-import team1.BE.seamless.entity.MemberEntity;
 import team1.BE.seamless.service.MemberService;
 import team1.BE.seamless.util.page.PageMapper;
 import team1.BE.seamless.util.page.PageResult;
 import team1.BE.seamless.util.page.SingleResult;
-
-import java.lang.reflect.Member;
-
 
 @Tag(name = "팀원 관리")
 @RequestMapping("/api/project/{projectId}/member")
@@ -46,10 +42,9 @@ public class MemberController {
 
     @Operation(summary = "팀원 전체 조회")
     @GetMapping
-    public PageResult<MemberEntity> getMemberList(@Valid @PathVariable("projectId") Long projectId,
+    public PageResult<MemberResponseDTO> getMemberList(@Valid @PathVariable("projectId") Long projectId,
         @Valid MemberRequestDTO.getMemberList memberListRequestDTO) {
-        return PageMapper.toPageResult(
-            memberService.getMemberList(projectId, memberListRequestDTO));
+        return PageMapper.toPageResult(memberService.getMemberList(projectId, memberListRequestDTO));
     }
 
 
@@ -75,7 +70,6 @@ public class MemberController {
         @PathVariable("projectId") Long projectId,
         @PathVariable("memberId") Long memberId,
         HttpServletRequest req) {
-
         return new SingleResult<>(memberService.deleteMember(projectId, memberId, req));
     }
 }

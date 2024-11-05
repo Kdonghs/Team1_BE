@@ -62,7 +62,7 @@ public class MemberService {
         return memberMapper.toGetResponseDTO(memberEntity);
     }
 
-    public Page<MemberEntity> getMemberList(@Valid Long projectId,
+    public Page<MemberResponseDTO> getMemberList(@Valid Long projectId,
         getMemberList memberListRequestDTO) {
         // 팀원인지 확인할 필요 없음. 팀원이든 팀장이든 다 가능해야하니까!
 
@@ -73,8 +73,7 @@ public class MemberService {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
         }
 
-        return memberRepository.findAllByProjectEntityIdAndIsDeleteFalse(projectId,
-            memberListRequestDTO.toPageable());
+        return memberRepository.findAllByProjectEntityIdAndIsDeleteFalse(projectId, memberListRequestDTO.toPageable()).map(memberMapper::toGetResponseDTO);
     }
 
 
