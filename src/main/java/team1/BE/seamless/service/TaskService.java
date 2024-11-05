@@ -39,19 +39,8 @@ public class TaskService {
         this.parsingPram = parsingPram;
     }
 
-    public Page<TaskWithOwnerDetail> getTaskList(Long projectId, getList param) {
-        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
-            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
 
-        Page<TaskEntity> taskEntities = taskRepository.findAllByProjectEntityIdAndIsDeletedFalse(projectId, param.toPageable());
-
-       ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
-           .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
-
-        return taskMapper.toDetail(taskEntity);
-    }
-
-    public Page<TaskDetail> getTaskList(Long projectId, Integer status, String priority, String ownerName, getList param) {
+    public Page<TaskWithOwnerDetail> getTaskList(Long projectId, Integer status, String priority, String ownerName, getList param) {
         ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
 
@@ -65,6 +54,15 @@ public class TaskService {
         }
 
         Page<TaskEntity> taskEntities = taskRepository.findByProjectIdAndOptionalFilters(projectId, status, priority, memberId, param.toPageable());
+
+        return taskEntities.map(taskMapper::toDetailWithOwner);
+    }
+
+    public ProjectProgress getProjectProgress(Long projectId, getList param) {
+        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
+            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+
+        Page<TaskEntity> taskEntities = taskRepository.findAllByProjectEntityIdAndIsDeletedFalse(projectId, param.toPageable());
 
         int sum = taskEntities.getContent().stream().mapToInt(TaskEntity::getProgress).sum();
         int count = taskEntities.getContent().size();
