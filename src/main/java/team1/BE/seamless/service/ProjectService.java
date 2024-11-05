@@ -1,5 +1,6 @@
 package team1.BE.seamless.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import team1.BE.seamless.mapper.MemberMapper;
 import team1.BE.seamless.mapper.OptionMapper;
 import team1.BE.seamless.mapper.ProjectMapper;
 import team1.BE.seamless.repository.OptionRepository;
+import team1.BE.seamless.repository.ProjectOptionRepository;
 import team1.BE.seamless.repository.ProjectRepository;
 import team1.BE.seamless.repository.UserRepository;
 import team1.BE.seamless.util.errorException.BaseHandler;
@@ -31,16 +33,18 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private final OptionRepository optionRepository;
+    private final ProjectOptionRepository projectOptionRepository;
     private final ProjectMapper projectMapper;
     private final MemberMapper memberMapper;
     private final OptionMapper optionMapper;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository,
+    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository, ProjectOptionRepository projectOptionRepository,
         OptionRepository optionRepository, ProjectMapper projectMapper, MemberMapper memberMapper, OptionMapper optionMapper) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.optionRepository = optionRepository;
+        this.projectOptionRepository = projectOptionRepository;
         this.projectMapper = projectMapper;
         this.memberMapper = memberMapper;
         this.optionMapper = optionMapper;
@@ -141,22 +145,20 @@ public class ProjectService {
     public ProjectDetail updateProject(long id, ProjectUpdate update) {
         ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
-        // 기존 옵션 목록
-        List<ProjectOption> projectOptions = projectEntity.getProjectOptions();
-        projectOptions.clear();
+
+        // 기존 옵션 삭제
+        projectOptionRepository.deleteByProjectEntity(projectEntity);
 
         // 새로운 옵션 추가
         List<OptionEntity> optionEntities = optionRepository.findByIdIn(update.getOptionIds());
+        List<ProjectOption> newProjectOptions = new ArrayList<>();
+
         for (OptionEntity optionEntity : optionEntities) {
             ProjectOption projectOption = new ProjectOption(projectEntity, optionEntity);
-            projectOptions.add(projectOption);
+            newProjectOptions.add(projectOption);
         }
 
-        projectEntity.update(
-            update.getName(),
-            update.getStartDate(),
-            update.getEndDate()
-        );
+        projectMapper.toUpdate(projectEntity, update, newProjectOptions);
 
         return projectMapper.toDetail(projectEntity);
     }
