@@ -69,7 +69,7 @@ class InviteMemberTest {
 
 
         //        새로운 멤버 생성
-        CreateMember member = new CreateMember("ex@gmail.com",response.getBody().substring(startIndex, endIndex));
+        CreateMember member = new CreateMember("ex@gmail.com",response.getBody().substring(startIndex, endIndex),"qqq");
         HttpEntity<CreateMember> request1 = new HttpEntity<>(member);
         ResponseEntity<String> response1 = restTemplate.exchange(
             url + "/api/project/1/member",
