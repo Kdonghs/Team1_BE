@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import team1.BE.seamless.DTO.ProjectDTO;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectDetail;
-import team1.BE.seamless.DTO.ProjectDTO.ProjectPeriod;
+import team1.BE.seamless.DTO.ProjectDTO.ProjectDate;
 import team1.BE.seamless.entity.OptionEntity;
 import team1.BE.seamless.entity.ProjectEntity;
 import team1.BE.seamless.entity.ProjectOption;
@@ -35,8 +35,8 @@ public class ProjectMapper {
         );
     }
 
-    public ProjectPeriod toPeriod(ProjectEntity projectEntity) {
-        return new ProjectDTO.ProjectPeriod(
+    public ProjectDate toPeriod(ProjectEntity projectEntity) {
+        return new ProjectDate(
             projectEntity.getId(),
             projectEntity.getName(),
             projectEntity.getStartDate(),

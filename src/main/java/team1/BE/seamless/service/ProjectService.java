@@ -8,11 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team1.BE.seamless.DTO.MemberResponseDTO;
 import team1.BE.seamless.DTO.OptionDTO.OptionDetail;
-import team1.BE.seamless.DTO.OptionDTO.OptionSimple;
 import team1.BE.seamless.DTO.ProjectDTO;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectCreate;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectDetail;
-import team1.BE.seamless.DTO.ProjectDTO.ProjectPeriod;
+import team1.BE.seamless.DTO.ProjectDTO.ProjectDate;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectUpdate;
 import team1.BE.seamless.entity.OptionEntity;
 import team1.BE.seamless.entity.ProjectEntity;
@@ -94,7 +93,7 @@ public class ProjectService {
     * @param param : 페이지네이션에 관한 parameter
     * @param email : 유저 토큰에서 추출한 email 정보
     * @return : 프로젝트의 Id, name, startDate, endDate 정보를 페이지네이션*/
-    public Page<ProjectPeriod> getProjectPeriod(ProjectDTO.getList param, String email) {
+    public Page<ProjectDate> getProjectPeriod(ProjectDTO.getList param, String email) {
         return projectRepository.findAllByUserEntityEmailAndIsDeletedFalse(param.toPageable(), email).map(projectMapper::toPeriod);
     }
 
