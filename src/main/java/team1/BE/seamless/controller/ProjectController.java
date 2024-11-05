@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team1.BE.seamless.DTO.MemberResponseDTO;
+import team1.BE.seamless.DTO.OptionDTO.OptionDetail;
+import team1.BE.seamless.DTO.OptionDTO.OptionSimple;
 import team1.BE.seamless.DTO.ProjectDTO;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectDetail;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectPeriod;
-import team1.BE.seamless.entity.MemberEntity;
-import team1.BE.seamless.entity.ProjectEntity;
 import team1.BE.seamless.service.ProjectService;
 import team1.BE.seamless.util.auth.ParsingPram;
 import team1.BE.seamless.util.page.ListResult;
@@ -42,8 +42,7 @@ public class ProjectController {
 
     @Operation(summary = "프로젝트 리스트 조회")
     @GetMapping
-    public PageResult<ProjectDetail> getProjectList(@Valid ProjectDTO.getList param,
-        HttpServletRequest req) {
+    public PageResult<ProjectDetail> getProjectList(@Valid ProjectDTO.getList param, HttpServletRequest req) {
         return PageMapper.toPageResult(projectService.getProjectList(param, parsingPram.getEmail(req)));
     }
 
@@ -60,10 +59,19 @@ public class ProjectController {
             projectService.getProjectPeriod(param, parsingPram.getEmail(req)));
     }
 
+    /**
+     * 이부분은 memberService에도 같은 기능이 있어서 나중에 삭제를 하거나 주석처리를 해도 무방함
+     */
     @Operation(summary = "프로젝트 멤버 조회")
     @GetMapping("/{projectId}/members")
     public ListResult<MemberResponseDTO> getProjectMembers(@Valid @PathVariable("projectId") Long id) {
         return new ListResult<>(projectService.getProjectMembers(id));
+    }
+
+    @Operation(summary = "프로젝트 옵션 조회")
+    @GetMapping("/{projectId}/options")
+    public ListResult<OptionDetail> getProjectOptions(@Valid @PathVariable("projectId") Long id) {
+        return new ListResult<>(projectService.getProjectOptions(id));
     }
 
     @Operation(summary = "프로젝트 생성")

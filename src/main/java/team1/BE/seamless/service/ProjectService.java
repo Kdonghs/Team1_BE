@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team1.BE.seamless.DTO.MemberResponseDTO;
+import team1.BE.seamless.DTO.OptionDTO.OptionDetail;
+import team1.BE.seamless.DTO.OptionDTO.OptionSimple;
 import team1.BE.seamless.DTO.ProjectDTO;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectCreate;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectDetail;
@@ -17,6 +19,7 @@ import team1.BE.seamless.entity.ProjectEntity;
 import team1.BE.seamless.entity.ProjectOption;
 import team1.BE.seamless.entity.UserEntity;
 import team1.BE.seamless.mapper.MemberMapper;
+import team1.BE.seamless.mapper.OptionMapper;
 import team1.BE.seamless.mapper.ProjectMapper;
 import team1.BE.seamless.repository.OptionRepository;
 import team1.BE.seamless.repository.ProjectRepository;
@@ -31,15 +34,17 @@ public class ProjectService {
     private final OptionRepository optionRepository;
     private final ProjectMapper projectMapper;
     private final MemberMapper memberMapper;
+    private final OptionMapper optionMapper;
 
     @Autowired
     public ProjectService(ProjectRepository projectRepository, UserRepository userRepository,
-        OptionRepository optionRepository, ProjectMapper projectMapper, MemberMapper memberMapper) {
+        OptionRepository optionRepository, ProjectMapper projectMapper, MemberMapper memberMapper, OptionMapper optionMapper) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.optionRepository = optionRepository;
         this.projectMapper = projectMapper;
         this.memberMapper = memberMapper;
+        this.optionMapper = optionMapper;
     }
 
     /**
@@ -75,6 +80,17 @@ public class ProjectService {
     }
 
     /**
+     * @param id : 프로젝트 Id
+     * @return : 해당 id를 가진 프로젝트에 설정된 옵션 목록
+     * */
+    public List<OptionDetail> getProjectOptions(long id) {
+        ProjectEntity projectEntity = projectRepository.findById(id)
+            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
+        return projectEntity.getProjectOptions().stream()
+            .map(projectOption -> optionMapper.toDetail(projectOption.getOptionEntity())).toList();
+    }
+
+    /**
     * @param param : 페이지네이션에 관한 parameter
     * @param email : 유저 토큰에서 추출한 email 정보
     * @return : 프로젝트의 Id, name, startDate, endDate 정보를 페이지네이션*/
@@ -100,14 +116,13 @@ public class ProjectService {
 
         List<OptionEntity> optionEntities = optionRepository.findByIdIn(create.getOptionIds());
 
-        List<ProjectOption> projectOptions = optionEntities.stream()
-            .map(ProjectOption::new)
-            .toList();
+        List<ProjectOption> projectOptions = optionEntities.stream().map(ProjectOption::new).toList();
 
         ProjectEntity projectEntity = projectRepository.save(
             projectMapper.toEntity(create, userEntity, projectOptions));
-        projectOptions.forEach(
-            option -> option.setProjectEntity(projectEntity)); //ProjectOption에 Project 매핑
+
+        projectOptions.forEach(option -> option.setProjectEntity(projectEntity)); //ProjectOption에 Project 매핑
+
         return projectMapper.toDetail(projectEntity);
     }
 
@@ -160,6 +175,7 @@ public class ProjectService {
         if(projectEntity.getIsDeleted()) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "해당 프로젝트는 지워진 상태 입니다.");
         }
+
         projectEntity.setIsDeleted(true);
         return projectEntity.getId();
     }
