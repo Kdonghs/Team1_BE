@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import team1.BE.seamless.DTO.TaskDTO;
 import team1.BE.seamless.DTO.TaskDTO.TaskCreate;
@@ -42,9 +43,13 @@ public class TaskController {
 
     @Operation(summary = "프로젝트 아이디로 태스크 리스트 조회 ")
     @GetMapping("/{projectId}/task")
-    public PageResult<TaskDetail> getTaskList(@PathVariable Long projectId,
+    public PageResult<TaskDetail> getTaskList(@PathVariable("projectId") Long projectId,
+        @RequestParam(value = "status", required = false) Integer status,
+        @RequestParam(value = "priority", required = false) String priority,
+        @RequestParam(value = "owner", required = false) String ownerName,
         @Valid TaskDTO.getList param) {
-        return PageMapper.toPageResult(taskService.getTaskList(projectId, param));
+
+        return PageMapper.toPageResult(taskService.getTaskList(projectId, status, priority, ownerName, param));
     }
 
     /**
