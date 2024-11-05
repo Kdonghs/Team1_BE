@@ -124,7 +124,7 @@ public class ProjectService {
         ProjectEntity projectEntity = projectRepository.save(
             projectMapper.toEntity(create, userEntity, projectOptions));
 
-        projectOptions.forEach(option -> option.setProjectEntity(projectEntity)); //ProjectOption에 Project 매핑
+        projectOptions.forEach(option -> option.setProjectEntity(projectEntity));
 
         return projectMapper.toDetail(projectEntity);
     }
@@ -135,11 +135,10 @@ public class ProjectService {
     * @return : 수정한 프로젝트의 정보
     * 플로우 :
     * 프로젝트가 존재하는지 검증 ->
-    * 기존의 ProjectOption 리스트 초기화->
+    * 기존의 ProjectOptionEntity 삭제 ->
     * DTO에 담긴 Option id들을 통해 OptionEntity 조회 ->
-    * OptionEntity를 ProjectOption으로 매핑 ->
-    * ProjectOption 리스트에 추가 ->
-    * 나머지 정보 업데이트 후 저장
+    * OptionEntity를 통해 새 ProjectOption 생성 ->
+    * 업데이트
     * */
     @Transactional
     public ProjectDetail updateProject(long id, ProjectUpdate update) {
