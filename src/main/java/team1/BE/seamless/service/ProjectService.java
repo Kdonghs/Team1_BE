@@ -67,7 +67,7 @@ public class ProjectService {
     * repository 조회시 존재 하지 않을 경우 Throw Not Found
     * */
     public ProjectDetail getProject(long id) {
-        ProjectEntity projectEntity = projectRepository.findById(id)
+        ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
         return projectMapper.toDetail(projectEntity);
     }
