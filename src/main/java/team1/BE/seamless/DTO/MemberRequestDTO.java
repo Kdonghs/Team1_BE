@@ -25,6 +25,10 @@ public class MemberRequestDTO {
             return name;
         }
 
+        public String getAttendURL() {
+            return attendURL;
+        }
+
         public CreateMember() {
         }
 
@@ -38,9 +42,6 @@ public class MemberRequestDTO {
             return email;
         }
 
-        public String getattendURL() {
-            return attendURL;
-        }
     }
 
     public static class UpdateMember {
