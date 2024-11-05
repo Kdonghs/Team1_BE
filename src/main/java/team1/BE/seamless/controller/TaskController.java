@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team1.BE.seamless.DTO.TaskDTO;
+import team1.BE.seamless.DTO.TaskDTO.MemberProgress;
+import team1.BE.seamless.DTO.TaskDTO.ProjectProgress;
 import team1.BE.seamless.DTO.TaskDTO.TaskCreate;
-import team1.BE.seamless.DTO.TaskDTO.TaskUpdate;
 import team1.BE.seamless.DTO.TaskDTO.TaskDetail;
+import team1.BE.seamless.DTO.TaskDTO.TaskUpdate;
+import team1.BE.seamless.DTO.TaskDTO.TaskWithOwnerDetail;
 import team1.BE.seamless.service.TaskService;
 import team1.BE.seamless.util.page.PageMapper;
 import team1.BE.seamless.util.page.PageResult;
@@ -34,17 +37,25 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @Operation(summary = "태스크 단건 조회")
-    @GetMapping("/task/{taskId}")
-    public SingleResult<TaskDetail> getTask(@PathVariable Long taskId) {
-        return new SingleResult<>(taskService.getTask(taskId));
-    }
-
-    @Operation(summary = "프로젝트 아이디로 태스크 리스트 조회 ")
+    @Operation(summary = "프로젝트 아이디로 태스크 리스트 조회")
     @GetMapping("/{projectId}/task")
-    public PageResult<TaskDetail> getTaskList(@PathVariable Long projectId,
+    public PageResult<TaskWithOwnerDetail> getTaskList(@PathVariable Long projectId,
         @Valid TaskDTO.getList param) {
         return PageMapper.toPageResult(taskService.getTaskList(projectId, param));
+    }
+
+    @Operation(summary = "팀원 개별 진행도 및 할당된 태스크 확인")
+    @GetMapping("/{projectId}/progress")
+    public SingleResult<ProjectProgress> getProjectProgress(@PathVariable Long projectId,
+        @Valid TaskDTO.getList param) {
+        return new SingleResult<>(taskService.getProjectProgress(projectId, param));
+    }
+
+    @Operation(summary = "팀 전체 진행도 확인")
+    @GetMapping("/{projectId}/task/progress")
+    public PageResult<MemberProgress> getMemberProgress(@PathVariable Long projectId,
+        @Valid TaskDTO.getList param) {
+        return PageMapper.toPageResult(taskService.getMemberProgress(projectId, param));
     }
 
     /**

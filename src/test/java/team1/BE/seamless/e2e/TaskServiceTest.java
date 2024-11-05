@@ -84,6 +84,7 @@ class TaskServiceTest {
 
     @Test
     public void 프로젝트_삭제시_태스크_조회_실패() {
+        // 프로젝트 삭제
         projectService.deleteProject(1L);
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
@@ -101,4 +102,5 @@ class TaskServiceTest {
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(NOT_FOUND);
     }
+
 }
