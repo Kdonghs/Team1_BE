@@ -53,10 +53,11 @@ public class ProjectController {
 
     @Operation(summary = "프로젝트 기간 리스트 조회")
     @GetMapping("/date")
-    public PageResult<ProjectDate> getProjectPeriod(@Valid ProjectDTO.getList param, HttpServletRequest req) {
+    public PageResult<ProjectDate> getProjectDate(@Valid ProjectDTO.getList param, HttpServletRequest req) {
         return PageMapper.toPageResult(
-            projectService.getProjectPeriod(param, parsingPram.getEmail(req)));
+            projectService.getProjectDate(param, parsingPram.getEmail(req)));
     }
+
 
     /**
      * 이부분은 memberService에도 같은 기능이 있어서 나중에 삭제를 하거나 주석처리를 해도 무방함

@@ -97,7 +97,7 @@ public class ProjectService {
     * @param param : 페이지네이션에 관한 parameter
     * @param email : 유저 토큰에서 추출한 email 정보
     * @return : 프로젝트의 Id, name, startDate, endDate 정보를 페이지네이션*/
-    public Page<ProjectDate> getProjectPeriod(ProjectDTO.getList param, String email) {
+    public Page<ProjectDate> getProjectDate(ProjectDTO.getList param, String email) {
         return projectRepository.findAllByUserEntityEmailAndIsDeletedFalse(param.toPageable(), email).map(projectMapper::toPeriod);
     }
 
