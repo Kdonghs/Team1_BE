@@ -10,17 +10,26 @@ import team1.BE.seamless.util.Email.EmailSend;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import team1.BE.seamless.util.MailSend;
 
 @Service
 public class ProjectDeadlineReminderService {
 
     private final ProjectRepository projectRepository;
-    private final EmailSend emailSend;
+//    private final EmailSend emailSend;
+    private final MailSend mailSend;
+
+//    @Autowired
+//    public ProjectDeadlineReminderService(ProjectRepository projectRepository, EmailSend emailSend) {
+//        this.projectRepository = projectRepository;
+//        this.emailSend = emailSend;
+//    }
+
 
     @Autowired
-    public ProjectDeadlineReminderService(ProjectRepository projectRepository, EmailSend emailSend) {
+    public ProjectDeadlineReminderService(ProjectRepository projectRepository, MailSend mailSend) {
         this.projectRepository = projectRepository;
-        this.emailSend = emailSend;
+        this.mailSend = mailSend;
     }
 
     // 오후 4시에 이메일 전송함
@@ -41,7 +50,8 @@ public class ProjectDeadlineReminderService {
                         "프로젝트 관련 작업을 마무리해 주세요.\n\n감사합니다.";
 
                 project.getMemberEntities().forEach(member ->
-                        emailSend.sendProjectInvite(member.getEmail(), project.getId(), message, subject));
+//                        emailSend.sendProjectInvite(member.getEmail(), project.getId(), message, subject));
+                    mailSend.send(member.getEmail(), subject, message));
             }
         }
     }

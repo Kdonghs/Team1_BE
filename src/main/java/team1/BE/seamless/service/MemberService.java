@@ -18,6 +18,7 @@ import team1.BE.seamless.mapper.MemberMapper;
 import team1.BE.seamless.repository.MemberRepository;
 import team1.BE.seamless.repository.ProjectRepository;
 import team1.BE.seamless.util.Email.EmailSend;
+import team1.BE.seamless.util.MailSend;
 import team1.BE.seamless.util.Util;
 import team1.BE.seamless.util.auth.AesEncrypt;
 import team1.BE.seamless.util.auth.ParsingPram;
@@ -33,17 +34,32 @@ public class MemberService {
     private final ProjectRepository projectRepository;
     private final ParsingPram parsingPram;
     private final AesEncrypt aesEncrypt;
-    private final EmailSend emailSend;
+//    private final EmailSend emailSend;
+    private final MailSend mailSend;
+
+//    @Autowired
+//    public MemberService(MemberRepository memberRepository, MemberMapper memberMapper,
+//        ProjectRepository projectRepository, ParsingPram parsingPram, AesEncrypt aesEncrypt, EmailSend emailSend) {
+//        this.memberRepository = memberRepository;
+//        this.memberMapper = memberMapper;
+//        this.projectRepository = projectRepository;
+//        this.parsingPram = parsingPram;
+//        this.aesEncrypt = aesEncrypt;
+//        this.emailSend = emailSend;
+//
+//    }
+
 
     @Autowired
     public MemberService(MemberRepository memberRepository, MemberMapper memberMapper,
-        ProjectRepository projectRepository, ParsingPram parsingPram, AesEncrypt aesEncrypt, EmailSend emailSend) {
+        ProjectRepository projectRepository, ParsingPram parsingPram, AesEncrypt aesEncrypt,
+        MailSend mailSend) {
         this.memberRepository = memberRepository;
         this.memberMapper = memberMapper;
         this.projectRepository = projectRepository;
         this.parsingPram = parsingPram;
         this.aesEncrypt = aesEncrypt;
-        this.emailSend = emailSend;
+        this.mailSend = mailSend;
     }
 
     public MemberResponseDTO getMember(Long projectId, Long memberId) {
@@ -107,19 +123,18 @@ public class MemberService {
         memberRepository.save(member);
 
 //        코드 생성
-        String code = aesEncrypt.encrypt(member.getId().toString());
-        System.out.println(code);
+        String code = aesEncrypt.encrypt(project.getId() + "_" + project.getEndDate().withNano(0));
 
 
 //      이메일로 코드 전달
-        String email = create.getEmail();
+//        String email = create.getEmail();
+        String subject = "[프로젝트 초대] 프로젝트 '" + project.getName() + "'에 참여하세요!";
         String message = "안녕하세요,\n\n" + create.getName() + "님. " +
                 "프로젝트 '" + project.getName() + "'에 초대되었습니다.\n" + "\n\n" +
                 "프로젝트에 참여하려면 초대 코드를 사용하여 입장해주세요.\n\n" +
-                "감사합니다.\n\n" + "참여 코드는 다음과 같습니다: \n" ;
-        String subject = "[프로젝트 초대] 프로젝트 '" + project.getName() + "'에 참여하세요!";
-        emailSend.sendProjectInvite(email,project.getId(), message, subject);
+                "감사합니다.\n\n" + "참여 코드는 다음과 같습니다: \n"  + code;
 
+        mailSend.send(create.getEmail(),subject,message);
 
         return memberMapper.toCreateResponseDTO(member, code);
     }

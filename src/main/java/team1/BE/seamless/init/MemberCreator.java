@@ -17,7 +17,7 @@ public class MemberCreator {
 
     public void creator() {
 
-        MemberRequestDTO.CreateMember member1 = new MemberRequestDTO.CreateMember("ex1@gmail.com","wiRjOIEryKrkU04hAWDKdiryZT8g6JlQW1qOxmzIX7A=","순호");
+        MemberRequestDTO.CreateMember member1 = new MemberRequestDTO.CreateMember("kkk951744@naver.com","wiRjOIEryKrkU04hAWDKdiryZT8g6JlQW1qOxmzIX7A=","순호");
         memberService.createMember(member1);
 
         MemberRequestDTO.CreateMember member2 = new MemberRequestDTO.CreateMember("ex2@gmail.com","wiRjOIEryKrkU04hAWDKdiryZT8g6JlQW1qOxmzIX7A=","동혁");
