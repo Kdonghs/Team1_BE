@@ -57,10 +57,10 @@ public class EmailSend {
         mailSender.send(mailMessage);
     }
 
-
+    // 참여 링크랑 너무 똑같을 것 같아서 EndDate를 기반으로 참여 코드 만듦.
     private String generateParticipationCode(ProjectEntity project) {
         String code = aesEncrypt.encrypt(
-                project.getId() + "_" + project.getStartDate().withNano(0));
+                project.getId() + "_" + project.getEndDate().withNano(0));
         return code;
     }
 }

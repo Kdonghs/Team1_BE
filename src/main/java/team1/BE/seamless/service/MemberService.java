@@ -81,22 +81,21 @@ public class MemberService {
     @Transactional
     public MemberResponseDTO createMember(MemberRequestDTO.CreateMember create) {
 
-        // 프로젝트 ID와 만료 시간 추출
-        String[] urlParts = aesEncrypt.decrypt(create.getAttendURL()).split("_");
-        Long projectId = Long.parseLong(urlParts[0]);
-        LocalDateTime exp = Util.parseDate(urlParts[1]);
+//        프로젝트id, exp
+        Long projectId = Long.parseLong(aesEncrypt.decrypt(create.getAttendURL()).split("_")[0]);
+        LocalDateTime exp = Util.parseDate(aesEncrypt.decrypt(create.getAttendURL()).split("_")[1]);
 
-        // 만료 시간 검사
+//        exp검사
         if (exp.isBefore(LocalDateTime.now())) {
-            throw new BaseHandler(HttpStatus.FORBIDDEN, "초대 코드가 만료되었습니다.");
+            throw new BaseHandler(HttpStatus.FORBIDDEN,"초대 코드가 만료되었습니다.");
         }
 
-        // 멤버 이메일 중복 여부 검사
-        if (memberRepository.findByEmailAndIsDeleteFalse(create.getEmail()).isPresent()) {
-            throw new BaseHandler(HttpStatus.UNAUTHORIZED, "이메일이 중복 됩니다.");
+//       멤버 이메일 중복 여부 검사
+        if(memberRepository.findByEmailAndIsDeleteFalse(create.getEmail()).isPresent()){
+            throw new BaseHandler(HttpStatus.UNAUTHORIZED,"이메일이 중복 됩니다.");
         }
 
-        // 프로젝트 조회
+//        프로젝트 조회
         ProjectEntity project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
 
@@ -104,24 +103,24 @@ public class MemberService {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
         }
 
-        // 멤버 생성
         MemberEntity member = memberMapper.toEntity(create, project);
         memberRepository.save(member);
 
-        // 멤버 ID로 참여 코드 생성
+//        코드 생성
         String code = aesEncrypt.encrypt(member.getId().toString());
         System.out.println(code);
 
-        // 이메일로 참여 코드 전달
+
+//      이메일로 코드 전달
         String email = create.getEmail();
         String message = "안녕하세요,\n\n" + create.getName() + "님. " +
                 "프로젝트 '" + project.getName() + "'에 초대되었습니다.\n" + "\n\n" +
                 "프로젝트에 참여하려면 초대 코드를 사용하여 입장해주세요.\n\n" +
-                "감사합니다.\n\n" + "참여 코드는 다음과 같습니다: \n" + code;
+                "감사합니다.\n\n" + "참여 코드는 다음과 같습니다: \n" ;
         String subject = "[프로젝트 초대] 프로젝트 '" + project.getName() + "'에 참여하세요!";
-        emailSend.sendProjectInvite(email, project.getId(), message, subject);
+        emailSend.sendProjectInvite(email,project.getId(), message, subject);
 
-        // 응답 DTO 생성
+
         return memberMapper.toCreateResponseDTO(member, code);
     }
 
