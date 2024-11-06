@@ -39,18 +39,37 @@ public class TaskService {
         this.parsingPram = parsingPram;
     }
 
-    public Page<TaskWithOwnerDetail> getTaskList(Long projectId, getList param) {
-        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
-            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+    public TaskDetail getTask(Long taskId) {
+        TaskEntity taskEntity = taskRepository.findByIdAndIsDeletedFalse(taskId)
+            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 태스크"));
+        Long projectId = taskEntity.getProject().getId();
 
-        Page<TaskEntity> taskEntities = taskRepository.findAllByProjectEntityIdAndIsDeletedFalse(projectId, param.toPageable());
+       ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
+           .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+        return taskMapper.toDetail(taskEntity);
+    }
+
+    public Page<TaskWithOwnerDetail> getTaskList(Long projectId, Integer status, String priority, String ownerName, getList param) {
+//        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
+//            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+
+        //멤버 아이디에 대한 쿼리 파라미터가 존재할때 : null일때
+        Long memberId = null;
+
+        if (ownerName != null) {
+            MemberEntity memberEntity = memberRepository.findByName(ownerName)
+                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 멤버"));
+            memberId = memberEntity.getId();
+        }
+
+        Page<TaskEntity> taskEntities = taskRepository.findByProjectIdAndOptionalFilters(projectId, status, priority, memberId, param.toPageable());
 
         return taskEntities.map(taskMapper::toDetailWithOwner);
     }
 
     public ProjectProgress getProjectProgress(Long projectId, getList param) {
-        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
-            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+//        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
+//            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
 
         Page<TaskEntity> taskEntities = taskRepository.findAllByProjectEntityIdAndIsDeletedFalse(projectId, param.toPageable());
 

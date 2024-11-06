@@ -43,7 +43,7 @@ public class OptionDTO {
         }
     }
 
-    public static class updateOption {
+    public static class OptionUpdate {
 
         private String name;
 
@@ -51,11 +51,11 @@ public class OptionDTO {
 
         private String optionType;
 
-        public updateOption() {
+        public OptionUpdate() {
 
         }
 
-        public updateOption(String name, String description, String optionType) {
+        public OptionUpdate(String name, String description, String optionType) {
             this.name = name;
             this.description = description;
             this.optionType = optionType;
