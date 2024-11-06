@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,21 +67,25 @@ public class MemberService {
     public MemberResponseDTO getMember(Long projectId, Long memberId) {
         // 팀원인지 확인할 필요 없음. 팀원이든 팀장이든 다 가능해야하니까!
 
-        ProjectEntity project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
-
-        if (project.getEndDate().isBefore(LocalDateTime.now())) {
-            throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
-        }
+//        ProjectEntity project = projectRepository.findById(projectId)
+//                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
+//
+//        if (project.getEndDate().isBefore(LocalDateTime.now())) {
+//            throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
+//        }
 
         MemberEntity memberEntity = memberRepository.findByProjectEntityIdAndIdAndIsDeleteFalse(projectId, memberId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
 
+        if (memberEntity.getProjectEntity().getEndDate().isBefore(LocalDateTime.now())) {
+            throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
+        }
+
         return memberMapper.toGetResponseDTO(memberEntity);
     }
 
-    public Page<MemberResponseDTO> getMemberList(@Valid Long projectId,
-        getMemberList memberListRequestDTO) {
+    public Page<MemberResponseDTO> getMemberList(Long projectId,
+        getMemberList memberList) {
         // 팀원인지 확인할 필요 없음. 팀원이든 팀장이든 다 가능해야하니까!
 
         ProjectEntity project = projectRepository.findById(projectId)
@@ -89,7 +95,15 @@ public class MemberService {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
         }
 
-        return memberRepository.findAllByProjectEntityIdAndIsDeleteFalse(projectId, memberListRequestDTO.toPageable()).map(memberMapper::toGetResponseDTO);
+//        return memberRepository.findAllByProjectEntityIdAndIsDeleteFalse(projectId, memberList.toPageable())
+//            .map(memberMapper::toGetResponseDTO);
+
+        int start = (int) memberList.toPageable().getOffset();
+        int end = Math.min((start + memberList.toPageable().getPageSize()), project.getMemberEntities().size());
+
+        return new PageImpl<>(project.getMemberEntities().subList(start, end),memberList.toPageable() ,memberList.getSize())
+            .map(memberMapper::toGetResponseDTO);
+
     }
 
 
@@ -106,9 +120,9 @@ public class MemberService {
         }
 
 //       멤버 이메일 중복 여부 검사
-        if(memberRepository.findByEmailAndIsDeleteFalse(create.getEmail()).isPresent()){
-            throw new BaseHandler(HttpStatus.UNAUTHORIZED,"이메일이 중복 됩니다.");
-        }
+//        if(memberRepository.findByEmailAndIsDeleteFalse(create.getEmail()).isPresent()){
+//            throw new BaseHandler(HttpStatus.UNAUTHORIZED,"이메일이 중복 됩니다.");
+//        }
 
 //        프로젝트 조회
         ProjectEntity project = projectRepository.findById(projectId)
@@ -116,6 +130,13 @@ public class MemberService {
 
         if (project.getEndDate().isBefore(LocalDateTime.now())) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
+        }
+
+//       멤버 이메일 중복 여부 검사
+        for (MemberEntity member : project.getMemberEntities()){
+            if (member.getEmail().equals(create.getEmail()) && Boolean.FALSE.equals(member.getIsDelete())) {
+                throw new BaseHandler(HttpStatus.UNAUTHORIZED,"이메일이 중복 됩니다.");
+            }
         }
 
         MemberEntity member = memberMapper.toEntity(create, project);
@@ -146,16 +167,20 @@ public class MemberService {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"수정 권한이 없습니다.");
         }
 
-        ProjectEntity project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
-
-        if (project.getEndDate().isBefore(LocalDateTime.now())) {
-            throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
-        }
+//        ProjectEntity project = projectRepository.findById(projectId)
+//                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
+//
+//        if (project.getEndDate().isBefore(LocalDateTime.now())) {
+//            throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
+//        }
 
         MemberEntity member = memberRepository.findByProjectEntityIdAndIdAndIsDeleteFalse(
                 projectId,memberId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
+
+        if (member.getProjectEntity().getEndDate().isBefore(LocalDateTime.now())) {
+            throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
+        }
 
         MemberEntity memberEntity = memberMapper.toUpdate(member, update);
         return memberMapper.toPutResponseDTO(memberEntity);
@@ -168,16 +193,20 @@ public class MemberService {
             throw new BaseHandler(HttpStatus.FORBIDDEN,"삭제 권한이 없습니다.");
         }
 
-        ProjectEntity project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
-
-        if (project.getEndDate().isBefore(LocalDateTime.now())) {
-            throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
-        }
+//        ProjectEntity project = projectRepository.findById(projectId)
+//                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
+//
+//        if (project.getEndDate().isBefore(LocalDateTime.now())) {
+//            throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
+//        }
 
         MemberEntity member = memberRepository.findByProjectEntityIdAndIdAndIsDeleteFalse(
                 projectId, memberId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
+
+        if (member.getProjectEntity().getEndDate().isBefore(LocalDateTime.now())) {
+            throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
+        }
 
         member.setDelete(true);
 

@@ -41,8 +41,8 @@ public class TaskService {
 
 
     public Page<TaskWithOwnerDetail> getTaskList(Long projectId, Integer status, String priority, String ownerName, getList param) {
-        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
-            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+//        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
+//            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
 
         //멤버 아이디에 대한 쿼리 파라미터가 존재할때 : null일때
         Long memberId = null;
@@ -59,8 +59,8 @@ public class TaskService {
     }
 
     public ProjectProgress getProjectProgress(Long projectId, getList param) {
-        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
-            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+//        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
+//            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
 
         Page<TaskEntity> taskEntities = taskRepository.findAllByProjectEntityIdAndIsDeletedFalse(projectId, param.toPageable());
 

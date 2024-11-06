@@ -1,6 +1,7 @@
 package team1.BE.seamless.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -87,6 +88,7 @@ public class OptionService {
     /**
      * 테스트용
      */
+    @Profile("test")
     @Transactional
     public OptionEntity createOption(OptionCreate create) {
         return optionRepository.save(optionMapper.toEntity(create));
