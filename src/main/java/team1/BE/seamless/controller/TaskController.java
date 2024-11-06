@@ -38,6 +38,12 @@ public class TaskController {
         this.taskService = taskService;
     }
 
+    @Operation(summary = "태스크 단건 조회")
+    @GetMapping("/task/{taskId}")
+    public SingleResult<TaskDetail> getTask(@PathVariable Long taskId) {
+        return new SingleResult<>(taskService.getTask(taskId));
+    }
+
     @Operation(summary = "프로젝트 아이디로 태스크 리스트 조회")
     @GetMapping("/{projectId}/task")
     public PageResult<TaskWithOwnerDetail> getTaskList(@PathVariable("projectId") Long projectId,
