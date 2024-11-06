@@ -33,7 +33,9 @@ public class MemberMapper {
         return new MemberResponseDTO("성공적으로 조회되었습니다.",
                 memberEntity.getName(),
                 memberEntity.getRole(),
-                memberEntity.getEmail());
+                memberEntity.getEmail(),
+                memberEntity.getId()
+                );
     }
 
     public MemberResponseDTO toDeleteResponseDTO(MemberEntity memberEntity) {

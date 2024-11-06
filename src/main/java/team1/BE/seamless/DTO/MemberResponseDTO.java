@@ -12,11 +12,38 @@ public class MemberResponseDTO {
 
     private String attendURL;
 
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public MemberResponseDTO(String message, String name, String role, String email) {
         this.message = message;
         this.name = name;
         this.role = role;
         this.email = email;
+    }
+
+    public MemberResponseDTO(String message, String name, String role, String email, String attendURL, Long id) {
+        this.message = message;
+        this.name = name;
+        this.role = role;
+        this.email = email;
+        this.id = id;
+        this.attendURL = attendURL;
+    }
+
+    public MemberResponseDTO(String message, String name, String role, String email, Long id) {
+        this.message = message;
+        this.name = name;
+        this.role = role;
+        this.email = email;
+        this.id = id;
     }
 
     public MemberResponseDTO(String message, String name, String role, String email, String attendURL) {
