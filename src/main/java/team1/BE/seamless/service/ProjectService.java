@@ -73,16 +73,6 @@ public class ProjectService {
     }
 
     /**
-    * @param id : 프로젝트 Id
-    * @return : 해당 id를 가진 프로젝트에 참여한 팀원들의 목록
-    * */
-    public List<MemberResponseDTO> getProjectMembers(long id) {
-        ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(id)
-            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
-        return projectEntity.getMemberEntities().stream().map(memberMapper::toGetResponseDTO).toList();
-    }
-
-    /**
      * @param id : 프로젝트 Id
      * @return : 해당 id를 가진 프로젝트에 설정된 옵션 목록
      * */

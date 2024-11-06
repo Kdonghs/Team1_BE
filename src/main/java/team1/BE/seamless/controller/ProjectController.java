@@ -59,17 +59,8 @@ public class ProjectController {
     }
 
 
-    /**
-     * 이부분은 memberService에도 같은 기능이 있어서 나중에 삭제를 하거나 주석처리를 해도 무방함
-     */
-    @Operation(summary = "프로젝트 멤버 조회")
-    @GetMapping("/{projectId}/members")
-    public ListResult<MemberResponseDTO> getProjectMembers(@Valid @PathVariable("projectId") Long id) {
-        return new ListResult<>(projectService.getProjectMembers(id));
-    }
-
     @Operation(summary = "프로젝트 옵션 조회")
-    @GetMapping("/{projectId}/options")
+    @GetMapping("/{projectId}/option")
     public ListResult<OptionDetail> getProjectOptions(@Valid @PathVariable("projectId") Long id) {
         return new ListResult<>(projectService.getProjectOptions(id));
     }
