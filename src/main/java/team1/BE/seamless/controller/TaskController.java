@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import team1.BE.seamless.DTO.TaskDTO;
 import team1.BE.seamless.DTO.TaskDTO.MemberProgress;
@@ -39,9 +40,13 @@ public class TaskController {
 
     @Operation(summary = "프로젝트 아이디로 태스크 리스트 조회")
     @GetMapping("/{projectId}/task")
-    public PageResult<TaskWithOwnerDetail> getTaskList(@PathVariable Long projectId,
+    public PageResult<TaskWithOwnerDetail> getTaskList(@PathVariable("projectId") Long projectId,
+        @RequestParam(value = "status", required = false) Integer status,
+        @RequestParam(value = "priority", required = false) String priority,
+        @RequestParam(value = "owner", required = false) String ownerName,
         @Valid TaskDTO.getList param) {
-        return PageMapper.toPageResult(taskService.getTaskList(projectId, param));
+
+        return PageMapper.toPageResult(taskService.getTaskList(projectId, status, priority, ownerName, param));
     }
 
     @Operation(summary = "팀원 개별 진행도 및 할당된 태스크 확인")
@@ -64,7 +69,7 @@ public class TaskController {
     @Operation(summary = "태스크 생성")
     @PostMapping("/{projectId}/task")
     public SingleResult<TaskDetail> createTask(HttpServletRequest req,
-        @Valid @PathVariable Long projectId, @Valid @RequestBody TaskCreate taskCreate) {
+        @Valid @PathVariable("projectId") Long projectId, @Valid @RequestBody TaskCreate taskCreate) {
         return new SingleResult<>(taskService.createTask(req, projectId, taskCreate));
     }
 
@@ -74,7 +79,7 @@ public class TaskController {
     @Operation(summary = "태스크 수정")
     @PutMapping("/task/{taskId}")
     public SingleResult<TaskDetail> updateTask(HttpServletRequest req,
-        @Valid @PathVariable Long taskId,
+        @Valid @PathVariable("taskId") Long taskId,
         @Valid @RequestBody TaskUpdate update) {
         return new SingleResult<>(taskService.updateTask(req, taskId, update));
     }

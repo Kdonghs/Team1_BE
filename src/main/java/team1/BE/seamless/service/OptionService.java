@@ -9,7 +9,7 @@ import team1.BE.seamless.DTO.OptionDTO.OptionCreate;
 import team1.BE.seamless.DTO.OptionDTO.OptionDetail;
 import team1.BE.seamless.DTO.OptionDTO.OptionSimple;
 import team1.BE.seamless.DTO.OptionDTO.getList;
-import team1.BE.seamless.DTO.OptionDTO.updateOption;
+import team1.BE.seamless.DTO.OptionDTO.OptionUpdate;
 import team1.BE.seamless.entity.OptionEntity;
 import team1.BE.seamless.entity.enums.Role;
 import team1.BE.seamless.mapper.OptionMapper;
@@ -58,7 +58,7 @@ public class OptionService {
     }
 
     @Transactional
-    public OptionDetail updateOption(Long id, updateOption update, String role) {
+    public OptionDetail updateOption(Long id, OptionUpdate update, String role) {
         if (!role.equals(Role.USER.getKey())) {
             throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 수정 가능합니다.");
         }

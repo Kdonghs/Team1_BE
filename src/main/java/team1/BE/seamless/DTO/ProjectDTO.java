@@ -2,11 +2,8 @@ package team1.BE.seamless.DTO;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.time.Duration;
@@ -135,7 +132,7 @@ public class ProjectDTO {
 
     }
 
-    public static class ProjectPeriod {
+    public static class ProjectDate {
 
         private Long id;
 
@@ -145,10 +142,10 @@ public class ProjectDTO {
 
         private LocalDateTime endDate;
 
-        public ProjectPeriod() {
+        public ProjectDate() {
         }
 
-        public ProjectPeriod(Long id, String name, LocalDateTime startDate, LocalDateTime endDate) {
+        public ProjectDate(Long id, String name, LocalDateTime startDate, LocalDateTime endDate) {
             this.id = id;
             this.name = name;
             this.startDate = startDate;

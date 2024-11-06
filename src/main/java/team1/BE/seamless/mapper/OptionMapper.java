@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import team1.BE.seamless.DTO.OptionDTO.OptionCreate;
 import team1.BE.seamless.DTO.OptionDTO.OptionDetail;
 import team1.BE.seamless.DTO.OptionDTO.OptionSimple;
-import team1.BE.seamless.DTO.OptionDTO.updateOption;
+import team1.BE.seamless.DTO.OptionDTO.OptionUpdate;
 import team1.BE.seamless.entity.OptionEntity;
 import team1.BE.seamless.entity.enums.OptionType;
 import team1.BE.seamless.util.Util;
@@ -22,7 +22,7 @@ public class OptionMapper {
         );
     }
 
-    public OptionEntity toUpdate(OptionEntity entity, updateOption update) {
+    public OptionEntity toUpdate(OptionEntity entity, OptionUpdate update) {
         return entity.Update(
             Util.isNull(update.getName()) ? entity.getName() : update.getName(),
             Util.isNull(update.getDescription())? entity.getDescription() : update.getDescription(),
