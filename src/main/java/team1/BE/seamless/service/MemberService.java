@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team1.BE.seamless.DTO.MemberRequestDTO;
-import team1.BE.seamless.DTO.MemberRequestDTO.CreateMember;
 import team1.BE.seamless.DTO.MemberRequestDTO.UpdateMember;
 import team1.BE.seamless.DTO.MemberRequestDTO.getMemberList;
 import team1.BE.seamless.DTO.MemberResponseDTO;
@@ -18,6 +17,8 @@ import team1.BE.seamless.entity.enums.Role;
 import team1.BE.seamless.mapper.MemberMapper;
 import team1.BE.seamless.repository.MemberRepository;
 import team1.BE.seamless.repository.ProjectRepository;
+import team1.BE.seamless.util.Email.EmailSend;
+import team1.BE.seamless.util.MailSend;
 import team1.BE.seamless.util.Util;
 import team1.BE.seamless.util.auth.AesEncrypt;
 import team1.BE.seamless.util.auth.ParsingPram;
@@ -33,17 +34,32 @@ public class MemberService {
     private final ProjectRepository projectRepository;
     private final ParsingPram parsingPram;
     private final AesEncrypt aesEncrypt;
-    private final InviteCodeByEmailService inviteCodeByEmailService;
+//    private final EmailSend emailSend;
+    private final MailSend mailSend;
+
+//    @Autowired
+//    public MemberService(MemberRepository memberRepository, MemberMapper memberMapper,
+//        ProjectRepository projectRepository, ParsingPram parsingPram, AesEncrypt aesEncrypt, EmailSend emailSend) {
+//        this.memberRepository = memberRepository;
+//        this.memberMapper = memberMapper;
+//        this.projectRepository = projectRepository;
+//        this.parsingPram = parsingPram;
+//        this.aesEncrypt = aesEncrypt;
+//        this.emailSend = emailSend;
+//
+//    }
+
 
     @Autowired
     public MemberService(MemberRepository memberRepository, MemberMapper memberMapper,
-        ProjectRepository projectRepository, ParsingPram parsingPram, AesEncrypt aesEncrypt, InviteCodeByEmailService inviteCodeByEmailService) {
+        ProjectRepository projectRepository, ParsingPram parsingPram, AesEncrypt aesEncrypt,
+        MailSend mailSend) {
         this.memberRepository = memberRepository;
         this.memberMapper = memberMapper;
         this.projectRepository = projectRepository;
         this.parsingPram = parsingPram;
         this.aesEncrypt = aesEncrypt;
-        this.inviteCodeByEmailService = inviteCodeByEmailService;
+        this.mailSend = mailSend;
     }
 
     public MemberResponseDTO getMember(Long projectId, Long memberId) {
@@ -62,7 +78,7 @@ public class MemberService {
         return memberMapper.toGetResponseDTO(memberEntity);
     }
 
-    public Page<MemberEntity> getMemberList(@Valid Long projectId,
+    public Page<MemberResponseDTO> getMemberList(@Valid Long projectId,
         getMemberList memberListRequestDTO) {
         // 팀원인지 확인할 필요 없음. 팀원이든 팀장이든 다 가능해야하니까!
 
@@ -73,18 +89,16 @@ public class MemberService {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
         }
 
-        return memberRepository.findAllByProjectEntityIdAndIsDeleteFalse(projectId,
-            memberListRequestDTO.toPageable());
+        return memberRepository.findAllByProjectEntityIdAndIsDeleteFalse(projectId, memberListRequestDTO.toPageable()).map(memberMapper::toGetResponseDTO);
     }
 
 
-    // 멤버 초기 데이터 때문에 오버로딩한 메서드임
     @Transactional
     public MemberResponseDTO createMember(MemberRequestDTO.CreateMember create) {
 
 //        프로젝트id, exp
-        Long projectId = Long.parseLong(aesEncrypt.decrypt(create.getCode()).split("_")[0]);
-        LocalDateTime exp = Util.parseDate(aesEncrypt.decrypt(create.getCode()).split("_")[1]);
+        Long projectId = Long.parseLong(aesEncrypt.decrypt(create.getAttendURL()).split("_")[0]);
+        LocalDateTime exp = Util.parseDate(aesEncrypt.decrypt(create.getAttendURL()).split("_")[1]);
 
 //        exp검사
         if (exp.isBefore(LocalDateTime.now())) {
@@ -108,18 +122,27 @@ public class MemberService {
         memberRepository.save(member);
 
 //        코드 생성
-        String code = aesEncrypt.encrypt(member.getId().toString());
-        System.out.println(code);
+        String code = aesEncrypt.encrypt(project.getId() + "_" + project.getEndDate().withNano(0));
 
-//        이메일로 코드 전달(추가 요망)
+
+//      이메일로 코드 전달
+//        String email = create.getEmail();
+        String subject = "[프로젝트 초대] 프로젝트 '" + project.getName() + "'에 참여하세요!";
+        String message = "안녕하세요,\n\n" + create.getName() + "님. " +
+                "프로젝트 '" + project.getName() + "'에 초대되었습니다.\n" + "\n\n" +
+                "프로젝트에 참여하려면 초대 코드를 사용하여 입장해주세요.\n\n" +
+                "감사합니다.\n\n" + "참여 코드는 다음과 같습니다: \n"  + code;
+
+        mailSend.send(create.getEmail(),subject,message);
 
         return memberMapper.toCreateResponseDTO(member, code);
     }
 
+
     @Transactional
     public MemberResponseDTO updateMember(Long projectId, Long memberId, UpdateMember update, HttpServletRequest req) {
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.
-        if (parsingPram.getRole(req).equals(Role.USER.toString())) {
+        if (parsingPram.getRole(req).equals(Role.MEMBER.toString())) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"수정 권한이 없습니다.");
         }
 
