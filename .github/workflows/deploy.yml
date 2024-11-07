@@ -151,7 +151,6 @@ jobs:
               sleep 1
             else
               kill -15 $CURRENT_PID
-              wait $CURRENT_PID
               sleep 10
             fi
 

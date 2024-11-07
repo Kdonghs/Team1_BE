@@ -1,6 +1,7 @@
 package team1.BE.seamless.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,7 +9,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team1.BE.seamless.DTO.TaskDTO.*;
+import team1.BE.seamless.DTO.TaskDTO.MemberProgress;
+import team1.BE.seamless.DTO.TaskDTO.ProjectProgress;
+import team1.BE.seamless.DTO.TaskDTO.TaskCreate;
+import team1.BE.seamless.DTO.TaskDTO.TaskDetail;
+import team1.BE.seamless.DTO.TaskDTO.TaskUpdate;
+import team1.BE.seamless.DTO.TaskDTO.TaskWithOwnerDetail;
+import team1.BE.seamless.DTO.TaskDTO.getList;
 import team1.BE.seamless.entity.MemberEntity;
 import team1.BE.seamless.entity.ProjectEntity;
 import team1.BE.seamless.entity.TaskEntity;
@@ -39,10 +46,20 @@ public class TaskService {
         this.parsingPram = parsingPram;
     }
 
+    public TaskDetail getTask(Long taskId) {
+        TaskEntity taskEntity = taskRepository.findByIdAndIsDeletedFalse(taskId)
+            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 태스크"));
+        Long projectId = taskEntity.getProject().getId();
 
-    public Page<TaskWithOwnerDetail> getTaskList(Long projectId, Integer status, String priority, String ownerName, getList param) {
         ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+        return taskMapper.toDetail(taskEntity);
+    }
+
+    public Page<TaskWithOwnerDetail> getTaskList(Long projectId, Integer status, String priority,
+        String ownerName, getList param) {
+//        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
+//            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
 
         //멤버 아이디에 대한 쿼리 파라미터가 존재할때 : null일때
         Long memberId = null;
@@ -53,16 +70,18 @@ public class TaskService {
             memberId = memberEntity.getId();
         }
 
-        Page<TaskEntity> taskEntities = taskRepository.findByProjectIdAndOptionalFilters(projectId, status, priority, memberId, param.toPageable());
+        Page<TaskEntity> taskEntities = taskRepository.findByProjectIdAndOptionalFilters(projectId,
+            status, priority, memberId, param.toPageable());
 
         return taskEntities.map(taskMapper::toDetailWithOwner);
     }
 
     public ProjectProgress getProjectProgress(Long projectId, getList param) {
-        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
-            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
+//        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
+//            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
 
-        Page<TaskEntity> taskEntities = taskRepository.findAllByProjectEntityIdAndIsDeletedFalse(projectId, param.toPageable());
+        Page<TaskEntity> taskEntities = taskRepository.findAllByProjectEntityIdAndIsDeletedFalse(
+            projectId, param.toPageable());
 
         int sum = taskEntities.getContent().stream().mapToInt(TaskEntity::getProgress).sum();
         int count = taskEntities.getContent().size();
@@ -103,17 +122,60 @@ public class TaskService {
         ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
 
-        List<MemberEntity> teamMembers = project.getMemberEntities().stream().toList();
+//        List<MemberEntity> teamMembers = project.getMemberEntities().stream().toList();
+//
+//        List<MemberProgress> teamMemberProgress = teamMembers.stream().map(member -> {
+//            List<TaskEntity> activeTasks = taskRepository.findByOwnerIdAndProjectEntityAndIsDeletedFalse(member.getId(), project);
+//
+//            int averageProgress = activeTasks.isEmpty() ? 0 : (int) activeTasks.stream().mapToInt(TaskEntity::getProgress).average().orElse(0);
+//
+//            return new MemberProgress(member, averageProgress, activeTasks);
+//        }).toList();
 
-        List<MemberProgress> teamMemberProgress = teamMembers.stream().map(member -> {
-            List<TaskEntity> activeTasks = taskRepository.findByOwnerIdAndProjectEntityAndIsDeletedFalse(member.getId(), project);
+//        return new PageImpl<>(teamMemberProgress, param.toPageable(), teamMembers.size());
 
-            int averageProgress = activeTasks.isEmpty() ? 0 : (int) activeTasks.stream().mapToInt(TaskEntity::getProgress).average().orElse(0);
+//        결과를 담을 리스트
+        List<MemberProgress> teamMemberProgress = new ArrayList<>();
 
-            return new MemberProgress(member, averageProgress, activeTasks);
-        }).toList();
+//        삭제되지 않음 멤버들
+        List<MemberEntity> memberEntities = project.getMemberEntities().stream()
+            .filter(member -> Boolean.FALSE.equals(member.getIsDelete())).toList();
 
-        return new PageImpl<>(teamMemberProgress, param.toPageable(), teamMembers.size());
+        if (param.getPage() > 0 && param.getPage() * param.getSize() >= memberEntities.size()) {
+            return new PageImpl<>(teamMemberProgress, param.toPageable(), 0);
+        }
+
+//        페이지에 해당하는 멤버들만 순회해서 연산의 수를 감소
+        int start;
+
+        if (param.getPage() * param.getSize() >= memberEntities.size()) {
+            start = 0;
+
+        } else {
+            start = param.getPage() * param.getSize();
+        }
+
+        for (MemberEntity member : memberEntities.subList(start,
+            Math.min((start + param.getSize()), project.getMemberEntities().size()))) {
+            List<TaskEntity> tasks = new ArrayList<>();
+            for (TaskEntity task : project.getTaskEntities()) {
+//                   태스크가 삭제되지 않았고, 해당 테스크의 담당이라면
+                if (Boolean.FALSE.equals(task.getIsDeleted()) && task.getOwner().equals(member)) {
+                    tasks.add(task);
+                }
+            }
+
+//               해당 멤버의 프로그레스의 평균을 사용
+            teamMemberProgress.add(new MemberProgress(
+                member
+                , (int) Math.round(tasks.stream()
+                .mapToInt(task -> task.getProgress())
+                .average()
+                .orElse(0.0))
+                , tasks));
+        }
+
+        return new PageImpl<>(teamMemberProgress, param.toPageable(), memberEntities.size());
     }
 
     public TaskDetail createTask(HttpServletRequest req, Long projectId, TaskCreate taskCreate) {
@@ -128,7 +190,8 @@ public class TaskService {
         }
 
         List<MemberEntity> teamMembers = project.getMemberEntities().stream().toList();
-        boolean isTeamMember = teamMembers.stream().anyMatch(member -> member.getId().equals(taskCreate.getOwnerId()));
+        boolean isTeamMember = teamMembers.stream()
+            .anyMatch(member -> member.getId().equals(taskCreate.getOwnerId()));
         if (!isTeamMember) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "해당 프로젝트와 관련된 팀원이 아닙니다.");
         }
