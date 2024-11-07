@@ -64,15 +64,15 @@ public class MemberService {
         this.mailSend = mailSend;
     }
 
-    public MemberResponseDTO getMember(Long projectId, Long memberId) {
-        // 팀원인지 확인할 필요 없음. 팀원이든 팀장이든 다 가능해야하니까!
+    public MemberResponseDTO getMember(Long projectId, Long memberId, HttpServletRequest req) {
+        // 팀원인지 확인하기
+        if (parsingPram.getRole(req).equals(Role.MEMBER.toString())) {
+            throw new BaseHandler(HttpStatus.UNAUTHORIZED,"권한이 없습니다.");
+        }
 
-//        ProjectEntity project = projectRepository.findById(projectId)
-//                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
-//
-//        if (project.getEndDate().isBefore(LocalDateTime.now())) {
-//            throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
-//        }
+        ProjectEntity project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
+
 
         MemberEntity memberEntity = memberRepository.findByProjectEntityIdAndIdAndIsDeleteFalse(projectId, memberId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
@@ -85,8 +85,11 @@ public class MemberService {
     }
 
     public Page<MemberResponseDTO> getMemberList(Long projectId,
-        getMemberList memberList) {
-        // 팀원인지 확인할 필요 없음. 팀원이든 팀장이든 다 가능해야하니까!
+        getMemberList memberList, HttpServletRequest req) {
+        // 팀원인지 확인하기
+        if (parsingPram.getRole(req).equals(Role.MEMBER.toString())) {
+            throw new BaseHandler(HttpStatus.UNAUTHORIZED,"권한이 없습니다.");
+        }
 
         ProjectEntity project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
@@ -163,7 +166,7 @@ public class MemberService {
     @Transactional
     public MemberResponseDTO updateMember(Long projectId, Long memberId, UpdateMember update, HttpServletRequest req) {
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.
-        if (parsingPram.getRole(req).equals(Role.MEMBER.toString())) {
+        if (parsingPram.getRole(req).equals(Role.USER.toString())) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"수정 권한이 없습니다.");
         }
 
@@ -189,7 +192,7 @@ public class MemberService {
     @Transactional
     public MemberResponseDTO deleteMember(Long projectId, Long memberId, HttpServletRequest req) {
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.)
-        if (parsingPram.getRole(req).equals(Role.MEMBER.toString())) {
+        if (parsingPram.getRole(req).equals(Role.USER.toString())) {
             throw new BaseHandler(HttpStatus.FORBIDDEN,"삭제 권한이 없습니다.");
         }
 
