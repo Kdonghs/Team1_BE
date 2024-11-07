@@ -40,7 +40,7 @@ public class TaskController {
 
     @Operation(summary = "태스크 단건 조회")
     @GetMapping("/task/{taskId}")
-    public SingleResult<TaskDetail> getTask(@PathVariable("projectId") Long taskId) {
+    public SingleResult<TaskDetail> getTask(@PathVariable("taskId") Long taskId) {
         return new SingleResult<>(taskService.getTask(taskId));
     }
 
