@@ -2,6 +2,7 @@ package team1.BE.seamless.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -98,10 +99,11 @@ public class MemberService {
 //        return memberRepository.findAllByProjectEntityIdAndIsDeleteFalse(projectId, memberList.toPageable())
 //            .map(memberMapper::toGetResponseDTO);
 
-        int start = (int) memberList.toPageable().getOffset();
-        int end = Math.min((start + memberList.toPageable().getPageSize()), project.getMemberEntities().size());
+        int start = memberList.getPage() * memberList.getSize();
+        int end = Math.min((start + memberList.getSize()), project.getMemberEntities().size());
+        List<MemberEntity> memberEntities = project.getMemberEntities().subList(start, end);
 
-        return new PageImpl<>(project.getMemberEntities().subList(start, end),memberList.toPageable() ,memberList.getSize())
+        return new PageImpl<>(memberEntities,memberList.toPageable(), project.getMemberEntities().size())
             .map(memberMapper::toGetResponseDTO);
 
     }
