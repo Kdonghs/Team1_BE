@@ -225,8 +225,13 @@ public class ProjectDTO {
 
         private List<Long> optionIds;
 
+        private int totalMembers;
+
+        private ProjectManager projectManager;
+
         public ProjectDetail() {
         }
+
 
         public ProjectDetail(
             Long id,
@@ -235,13 +240,19 @@ public class ProjectDTO {
             String imageURL,
             LocalDateTime startDate,
             LocalDateTime endDate,
-            List<Long> optionIds) {
+            List<Long> optionIds,
+            int totalMembers,
+            ProjectManager projectManager
+        ) {
             this.id = id;
             this.name = name;
             this.description = description;
+            this.imageURL = imageURL;
             this.startDate = startDate;
             this.endDate = endDate;
             this.optionIds = optionIds;
+            this.totalMembers = totalMembers;
+            this.projectManager = projectManager;
         }
 
         public Long getId() {
@@ -271,7 +282,24 @@ public class ProjectDTO {
         public List<Long> getOptionIds() {
             return optionIds;
         }
+
+        public int getTotalMembers() { return totalMembers; }
+
+        public ProjectManager getProjectManager() { return projectManager; }
     }
 
+    public static class ProjectManager {
+        private String name;
+        private String imageURL;
+
+        public ProjectManager(String name, String imageURL) {
+            this.name = name;
+            this.imageURL = imageURL;
+        }
+
+        public String getName() { return name; }
+
+        public String getImageURL() { return imageURL; }
+    }
 }
 

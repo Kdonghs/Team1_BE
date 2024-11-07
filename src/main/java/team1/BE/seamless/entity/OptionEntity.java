@@ -40,7 +40,6 @@ public class OptionEntity extends BaseEntity {
     private String description;
 
     @Column(name = "option_type")
-    @Enumerated(EnumType.STRING)
     private String optionType;
 
     @Column(name = "is_deleted")

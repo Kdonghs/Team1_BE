@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import team1.BE.seamless.DTO.ProjectDTO;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectDetail;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectDate;
+import team1.BE.seamless.DTO.ProjectDTO.ProjectManager;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectUpdate;
 import team1.BE.seamless.entity.OptionEntity;
 import team1.BE.seamless.entity.ProjectEntity;
@@ -48,7 +49,9 @@ public class ProjectMapper {
             projectEntity.getImageURL(),
             projectEntity.getStartDate(),
             projectEntity.getEndDate(),
-            projectEntity.getProjectOptions().stream().map(ProjectOption::getOptionEntity).map(OptionEntity::getId).toList()
+            projectEntity.getProjectOptions().stream().map(ProjectOption::getOptionEntity).map(OptionEntity::getId).toList(),
+            projectEntity.getMemberEntities().size(),
+            toManager(projectEntity.getUserEntity())
         );
     }
 
@@ -58,6 +61,13 @@ public class ProjectMapper {
             projectEntity.getName(),
             projectEntity.getStartDate(),
             projectEntity.getEndDate()
+        );
+    }
+
+    public ProjectManager toManager(UserEntity userEntity) {
+        return new ProjectManager(
+            userEntity.getName(),
+            userEntity.getPicture()
         );
     }
 
