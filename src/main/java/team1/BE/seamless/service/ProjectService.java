@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team1.BE.seamless.DTO.MemberResponseDTO;
 import team1.BE.seamless.DTO.OptionDTO.OptionDetail;
 import team1.BE.seamless.DTO.ProjectDTO;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectCreate;
@@ -88,7 +87,7 @@ public class ProjectService {
     * @param email : 유저 토큰에서 추출한 email 정보
     * @return : 프로젝트의 Id, name, startDate, endDate 정보를 페이지네이션*/
     public Page<ProjectDate> getProjectDate(ProjectDTO.getList param, String email) {
-        return projectRepository.findAllByUserEntityEmailAndIsDeletedFalse(param.toPageable(), email).map(projectMapper::toPeriod);
+        return projectRepository.findAllByUserEntityEmailAndIsDeletedFalse(param.toPageable(), email).map(projectMapper::toDate);
     }
 
     /**

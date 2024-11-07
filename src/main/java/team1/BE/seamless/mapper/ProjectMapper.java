@@ -55,7 +55,7 @@ public class ProjectMapper {
         );
     }
 
-    public ProjectDate toPeriod(ProjectEntity projectEntity) {
+    public ProjectDate toDate(ProjectEntity projectEntity) {
         return new ProjectDate(
             projectEntity.getId(),
             projectEntity.getName(),

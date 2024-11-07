@@ -30,6 +30,7 @@ public class ProjectEntity extends BaseEntity {
         LocalDateTime endDate) {
         this.name = name;
         this.description = description;
+        this.imageURL= imageURL;
         this.isDeleted = false;
         this.userEntity = userEntity;
         this.projectOptions = projectOptions;
