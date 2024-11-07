@@ -78,7 +78,7 @@ class InviteMemberTest {
 
         assertThat(response1.getStatusCode()).isEqualTo(OK);
 
-        startIndex = response1.getBody().indexOf("\"code\":\"") + "\"code\":\"".length();
+        startIndex = response1.getBody().indexOf("\"attendURL\":\"") + "\"attendURL\":\"".length();
         endIndex = response1.getBody().indexOf("\"", startIndex);
 
 //        멤버 생성시 반환되는 코드 추출
