@@ -1,6 +1,7 @@
 package team1.BE.seamless.e2e;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectCreate;
+import team1.BE.seamless.DTO.ProjectDTO.ProjectDetail;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectUpdate;
 import team1.BE.seamless.service.ProjectService;
 
@@ -53,13 +55,28 @@ class ProjectServiceTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(token);
     }
+    @Test
+    void 프로젝트_조회_성공() {
+        HttpEntity<ProjectDetail> requestEntity = new HttpEntity(null, headers);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/project/1",
+            GET,
+            requestEntity,
+            String.class);
+        System.out.println(responseEntity.getBody());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
+    }
+
 
     @Test
     void 프로젝트_생성_성공() {
-        ProjectCreate body = new ProjectCreate("프로젝트 이름2",
+        ProjectCreate body = new ProjectCreate(
+            "프로젝트 이름2",
+            "프로젝트 설명2",
+            "https://example.com/image2.jpg",
+            List.of(2L, 3L),
             LocalDateTime.of(2024, 11, 1, 1, 1, 1),
-            LocalDateTime.of(2024, 11, 4, 4, 4, 4),
-            List.of(2L, 3L));
+            LocalDateTime.of(2024, 11, 4, 4, 4, 4)
+        );
         HttpEntity<ProjectUpdate> requestEntity = new HttpEntity(body, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/project",
             POST,
@@ -71,7 +88,11 @@ class ProjectServiceTest {
 
     @Test
     void 프로젝트_날짜_수정_성공() {
-        ProjectUpdate body = new ProjectUpdate("프로젝트 이름1", List.of(1L, 2L, 3L),
+        ProjectUpdate body = new ProjectUpdate(
+            "프로젝트 이름1",
+            "프로젝트 설명1",
+            "https://example.com/image1.jpg",
+            List.of(1L, 2L, 3L),
             LocalDateTime.of(2024, 10, 1, 0, 0, 0),
             LocalDateTime.of(2024, 10, 4, 4, 4, 4));
         HttpEntity<ProjectUpdate> requestEntity = new HttpEntity(body, headers);
@@ -106,7 +127,11 @@ class ProjectServiceTest {
     @Test
     void 프로젝트_종료일_시작일_이전_불가() {
         // 종료일이 시작일보다 이전인 날짜 설정
-        ProjectUpdate body = new ProjectUpdate("프로젝트 이름", List.of(1L, 2L, 3L),
+        ProjectUpdate body = new ProjectUpdate(
+            "프로젝트 이름1",
+            "프로젝트 설명1",
+            "https://example.com/image1.jpg",
+            List.of(1L, 2L, 3L),
             LocalDateTime.of(2024, 10, 10, 0, 0),
             LocalDateTime.of(2024, 10, 5, 0, 0));
 
@@ -120,7 +145,11 @@ class ProjectServiceTest {
     @Test
     void 프로젝트_생성시_시작일과_종료일_간견은_1일_이상_필수() {
         // 1일보다 작은 갭을 설정
-        ProjectUpdate body = new ProjectUpdate("프로젝트 이름", List.of(1L, 2L, 3L),
+        ProjectUpdate body = new ProjectUpdate(
+            "프로젝트 이름1",
+            "프로젝트 설명1",
+            "https://example.com/image1.jpg",
+            List.of(1L, 2L, 3L),
             LocalDateTime.of(2024, 10, 10, 0, 0),
             LocalDateTime.of(2024, 10, 10, 23, 59));
 
