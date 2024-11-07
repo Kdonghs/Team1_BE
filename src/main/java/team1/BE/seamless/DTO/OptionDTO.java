@@ -2,7 +2,6 @@ package team1.BE.seamless.DTO;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import team1.BE.seamless.entity.enums.OptionType;
 import team1.BE.seamless.util.page.PageParam;
 
 public class OptionDTO {
@@ -83,10 +82,10 @@ public class OptionDTO {
         public OptionSimple() {
         }
 
-        public OptionSimple(Long id, String name, OptionType optionType) {
+        public OptionSimple(Long id, String name, String optionType) {
             this.id = id;
             this.name = name;
-            this.optionType = optionType.toString();
+            this.optionType = optionType;
         }
 
         public Long getId() {
@@ -113,12 +112,12 @@ public class OptionDTO {
         public OptionDetail() {
         }
 
-        public OptionDetail(Long id, String name, String description, OptionType optionType,
+        public OptionDetail(Long id, String name, String description, String optionType,
             LocalDateTime createdAt, LocalDateTime updatedAt) {
             this.id = id;
             this.name = name;
             this.description = description;
-            this.optionType = optionType.toString();
+            this.optionType = optionType;
             this.createdAt = createdAt;
             this.updatedAt = updatedAt;
         }

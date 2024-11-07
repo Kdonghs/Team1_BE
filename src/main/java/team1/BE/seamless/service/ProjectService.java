@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team1.BE.seamless.DTO.MemberResponseDTO;
 import team1.BE.seamless.DTO.OptionDTO.OptionDetail;
 import team1.BE.seamless.DTO.ProjectDTO;
 import team1.BE.seamless.DTO.ProjectDTO.ProjectCreate;
@@ -62,22 +61,22 @@ public class ProjectService {
     }
 
     /**
-    * @param id : 프로젝트 Id
+    * @param projectId : 프로젝트 Id
     * @return : 해당 Id의 프로젝트의 정보를 반환
     * repository 조회시 존재 하지 않을 경우 Throw Not Found
     * */
-    public ProjectDetail getProject(long id) {
-        ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(id)
+    public ProjectDetail getProject(long projectId) {
+        ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
         return projectMapper.toDetail(projectEntity);
     }
 
     /**
-     * @param id : 프로젝트 Id
+     * @param projectId : 프로젝트 Id
      * @return : 해당 id를 가진 프로젝트에 설정된 옵션 목록
      * */
-    public List<OptionDetail> getProjectOptions(long id) {
-        ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(id)
+    public List<OptionDetail> getProjectOptions(long projectId) {
+        ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
         return projectEntity.getProjectOptions().stream()
             .map(projectOption -> optionMapper.toDetail(projectOption.getOptionEntity())).toList();
@@ -88,7 +87,7 @@ public class ProjectService {
     * @param email : 유저 토큰에서 추출한 email 정보
     * @return : 프로젝트의 Id, name, startDate, endDate 정보를 페이지네이션*/
     public Page<ProjectDate> getProjectDate(ProjectDTO.getList param, String email) {
-        return projectRepository.findAllByUserEntityEmailAndIsDeletedFalse(param.toPageable(), email).map(projectMapper::toPeriod);
+        return projectRepository.findAllByUserEntityEmailAndIsDeletedFalse(param.toPageable(), email).map(projectMapper::toDate);
     }
 
     /**
@@ -104,8 +103,14 @@ public class ProjectService {
     * */
     @Transactional
     public ProjectDetail createProject(ProjectCreate create, String email) {
+        //token의 이메일 정보를 통해 사용자 검증
         UserEntity userEntity = userRepository.findByEmailAndIsDeleteFalse(email)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "사용자가 존재하지 않음"));
+
+        //옵션이 존재 하는지
+        create.getOptionIds()
+            .forEach(id -> optionRepository.findById(id).
+                orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 옵션이 존재하지 않음")));
 
         List<OptionEntity> optionEntities = optionRepository.findByIdIn(create.getOptionIds());
 
@@ -120,7 +125,7 @@ public class ProjectService {
     }
 
     /**
-    * @param id : 프로젝트 Id
+    * @param projectId : 프로젝트 Id
     * @param update : 프로젝트 업데이트 시 필요한 정보를 담은 DTO
     * @return : 수정한 프로젝트의 정보
     * 플로우 :
@@ -131,12 +136,17 @@ public class ProjectService {
     * 업데이트
     * */
     @Transactional
-    public ProjectDetail updateProject(long id, ProjectUpdate update) {
-        ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(id)
+    public ProjectDetail updateProject(long projectId, ProjectUpdate update) {
+        ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
 
         // 기존 옵션 삭제
         projectOptionRepository.deleteByProjectEntity(projectEntity);
+
+        //옵션이 존재 하는지
+        update.getOptionIds()
+            .forEach(id -> optionRepository.findById(id).
+                orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 옵션이 존재하지 않음")));
 
         // 새로운 옵션 추가
         List<OptionEntity> optionEntities = optionRepository.findByIdIn(update.getOptionIds());
@@ -153,13 +163,13 @@ public class ProjectService {
     }
 
     /**
-    * @param id : 프로젝트 Id
+    * @param projectId : 프로젝트 Id
     * @return : 삭제한 프로젝트의 Id
     * 프로젝트의 존재 검증 후 존재 시 삭제
     * */
     @Transactional
-    public Long deleteProject(long id) {
-        ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(id)
+    public Long deleteProject(long projectId) {
+        ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
 
         projectEntity.setIsDeleted(true);
