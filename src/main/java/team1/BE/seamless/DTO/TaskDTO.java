@@ -62,6 +62,9 @@ public class TaskDTO {
             this.progress = progress;
         }
 
+        public TaskCreate() {
+        }
+
         public String getName() {
             return name;
         }

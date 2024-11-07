@@ -40,7 +40,7 @@ public class TaskController {
 
     @Operation(summary = "태스크 단건 조회")
     @GetMapping("/task/{taskId}")
-    public SingleResult<TaskDetail> getTask(@PathVariable Long taskId) {
+    public SingleResult<TaskDetail> getTask(@PathVariable("projectId") Long taskId) {
         return new SingleResult<>(taskService.getTask(taskId));
     }
 
@@ -57,14 +57,14 @@ public class TaskController {
 
     @Operation(summary = "팀원 개별 진행도 및 할당된 태스크 확인")
     @GetMapping("/{projectId}/progress")
-    public SingleResult<ProjectProgress> getProjectProgress(@PathVariable Long projectId,
+    public SingleResult<ProjectProgress> getProjectProgress(@PathVariable("projectId") Long projectId,
         @Valid TaskDTO.getList param) {
         return new SingleResult<>(taskService.getProjectProgress(projectId, param));
     }
 
     @Operation(summary = "팀 전체 진행도 확인")
     @GetMapping("/{projectId}/task/progress")
-    public PageResult<MemberProgress> getMemberProgress(@PathVariable Long projectId,
+    public PageResult<MemberProgress> getMemberProgress(@PathVariable("projectId") Long projectId,
         @Valid TaskDTO.getList param) {
         return PageMapper.toPageResult(taskService.getMemberProgress(projectId, param));
     }
@@ -95,7 +95,7 @@ public class TaskController {
      */
     @Operation(summary = "태스크 삭제")
     @DeleteMapping("/task/{taskId}")
-    public SingleResult<Long> deleteTask(HttpServletRequest req, @PathVariable Long taskId) {
+    public SingleResult<Long> deleteTask(HttpServletRequest req, @PathVariable("taskId") Long taskId) {
         return new SingleResult<>(taskService.deleteTask(req, taskId));
     }
 }
