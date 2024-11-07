@@ -55,14 +55,14 @@ public class TaskController {
         return PageMapper.toPageResult(taskService.getTaskList(projectId, status, priority, ownerName, param));
     }
 
-    @Operation(summary = "팀원 개별 진행도 및 할당된 태스크 확인")
+    @Operation(summary = "팀 전체 진행도 확인")
     @GetMapping("/{projectId}/progress")
     public SingleResult<ProjectProgress> getProjectProgress(@PathVariable Long projectId,
         @Valid TaskDTO.getList param) {
         return new SingleResult<>(taskService.getProjectProgress(projectId, param));
     }
 
-    @Operation(summary = "팀 전체 진행도 확인")
+    @Operation(summary = "팀원 개별 진행도 및 할당된 태스크 확인")
     @GetMapping("/{projectId}/task/progress")
     public PageResult<MemberProgress> getMemberProgress(@PathVariable Long projectId,
         @Valid TaskDTO.getList param) {
