@@ -23,6 +23,7 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
     Optional<TaskEntity> findByIdAndProjectEntityUserEntityEmail(Long id, String email);
 
     @Query(value = "SELECT * FROM taskss t WHERE t.project_id = :projectId " +
+        "AND (t.is_deleted = false) " +
         "AND (:status IS NULL OR t.status = :status) " +
         "AND (:priority IS NULL OR t.priority = :priority) " +
         "AND (:memberId IS NULL OR t.member_id = :memberId)",
