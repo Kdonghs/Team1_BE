@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import team1.BE.seamless.entity.MemberEntity;
 import team1.BE.seamless.entity.TaskEntity;
 import team1.BE.seamless.entity.enums.Priority;
+import team1.BE.seamless.entity.enums.Status;
 import team1.BE.seamless.util.errorException.BaseHandler;
 import team1.BE.seamless.util.page.PageParam;
 
@@ -31,7 +32,7 @@ public class TaskDTO {
         private Long ownerId;
 
         @NotNull(message = "진행 상태(status)는 필수 입력 사항입니다.")
-        private Integer status;
+        private Status status;
 
         @NotNull(message = "중요도(priority)는 필수 입력 사항입니다.")
         private Priority priority;
@@ -48,7 +49,7 @@ public class TaskDTO {
         private LocalDateTime endDate;
 
         public TaskCreate(String name, String description, Long ownerId, LocalDateTime startDate,
-            LocalDateTime endDate, Priority priority, Integer status, Integer progress) {
+            LocalDateTime endDate, Priority priority, Status status, Integer progress) {
             if (endDate.isBefore(startDate)) {
                 throw new BaseHandler(HttpStatus.BAD_REQUEST, "종료시간은 시작시간보다 이전일 수 없습니다.");
             }
@@ -93,7 +94,7 @@ public class TaskDTO {
             return priority;
         }
 
-        public Integer getStatus() {
+        public Status getStatus() {
             return status;
         }
     }
@@ -110,7 +111,7 @@ public class TaskDTO {
         @Max(value = 100, message = "진행도(progress)는 최대 100이어야 합니다.")
         private Integer progress;
 
-        private Integer status;
+        private Status status;
 
         private Priority priority;
 
@@ -120,7 +121,7 @@ public class TaskDTO {
 
         public TaskUpdate(String name, String description, Integer progress, Long ownerId,
             LocalDateTime startDate,
-            LocalDateTime endDate, Priority priority, Integer status) {
+            LocalDateTime endDate, Priority priority, Status status) {
             if (endDate.isBefore(startDate)) {
                 throw new BaseHandler(HttpStatus.BAD_REQUEST, "종료시간은 시작시간보다 이전일 수 없습니다.");
             }
@@ -158,7 +159,7 @@ public class TaskDTO {
             return endDate;
         }
 
-        public Integer getStatus() {
+        public Status getStatus() {
             return status;
         }
 
@@ -185,11 +186,11 @@ public class TaskDTO {
 
         private Priority priority;
 
-        private Integer status;
+        private Status status;
 
         public TaskDetail(Long id, String name, String description, Long ownerId, Integer progress,
             LocalDateTime startDate, LocalDateTime endDate, Priority priority,
-            Integer status) {
+            Status status) {
             this.id = id;
             this.name = name;
             this.description = description;
@@ -246,7 +247,7 @@ public class TaskDTO {
             return priority;
         }
 
-        public Integer getStatus() {
+        public Status getStatus() {
             return status;
         }
     }
@@ -269,11 +270,11 @@ public class TaskDTO {
 
         private Priority priority;
 
-        private Integer status;
+        private Status status;
 
         public TaskWithOwnerDetail(Long id, String name, String description, MemberEntity owner,
             Integer progress,
-            LocalDateTime startDate, LocalDateTime endDate, Priority priority, Integer status) {
+            LocalDateTime startDate, LocalDateTime endDate, Priority priority, Status status) {
             this.id = id;
             this.name = name;
             this.description = description;
@@ -317,7 +318,7 @@ public class TaskDTO {
             return priority;
         }
 
-        public Integer getStatus() {
+        public Status getStatus() {
             return status;
         }
     }
