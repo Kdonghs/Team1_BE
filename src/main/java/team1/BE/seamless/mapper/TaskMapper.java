@@ -23,7 +23,8 @@ public class TaskMapper {
             member,
             taskCreate.getStartDate(),
             taskCreate.getEndDate(),
-            taskCreate.getProgress());
+            taskCreate.getProgress(),
+            taskCreate.getStatus());
     }
 
     public TaskEntity toUpdate(TaskEntity task, TaskUpdate update) {
