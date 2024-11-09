@@ -1,12 +1,9 @@
 package team1.BE.seamless.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-import java.util.List;
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,14 +17,11 @@ import team1.BE.seamless.entity.enums.Role;
 import team1.BE.seamless.mapper.MemberMapper;
 import team1.BE.seamless.repository.MemberRepository;
 import team1.BE.seamless.repository.ProjectRepository;
-import team1.BE.seamless.util.Email.EmailSend;
 import team1.BE.seamless.util.MailSend;
 import team1.BE.seamless.util.Util;
 import team1.BE.seamless.util.auth.AesEncrypt;
 import team1.BE.seamless.util.auth.ParsingPram;
 import team1.BE.seamless.util.errorException.BaseHandler;
-
-import java.time.LocalDateTime;
 
 @Service
 public class MemberService {
@@ -92,22 +86,7 @@ public class MemberService {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"권한이 없습니다.");
         }
 
-        ProjectEntity project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
-
-        if (project.getEndDate().isBefore(LocalDateTime.now())) {
-            throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
-        }
-
-//        return memberRepository.findAllByProjectEntityIdAndIsDeleteFalse(projectId, memberList.toPageable())
-//            .map(memberMapper::toGetResponseDTO);
-
-        int start = memberList.getPage() * memberList.getSize();
-        int end = Math.min((start + memberList.getSize()), project.getMemberEntities().size());
-        List<MemberEntity> memberEntities = project.getMemberEntities().subList(start, end);
-
-        return new PageImpl<>(memberEntities,memberList.toPageable(), project.getMemberEntities().size())
-            .map(memberMapper::toGetResponseDTO);
+         return memberRepository.findAllByProjectEntityIdAndIsDeleteFalse(projectId,memberList.toPageable()).map(memberMapper::toGetResponseDTO);
 
     }
 
