@@ -25,11 +25,12 @@ public class TaskEntity {
         MemberEntity member,
         LocalDateTime startDate,
         LocalDateTime endDate,
-        Integer progress) {
+        Integer progress,
+        Status status) {
         this.name = name;
         this.description = description;
         this.progress = progress;
-        this.status = Status.PENDING;
+        this.status = status;
         this.priority = priority;
         this.isDeleted = false;
         this.projectEntity = project;
