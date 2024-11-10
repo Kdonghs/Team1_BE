@@ -34,18 +34,16 @@ public class ProjectService {
     private final OptionRepository optionRepository;
     private final ProjectOptionRepository projectOptionRepository;
     private final ProjectMapper projectMapper;
-    private final MemberMapper memberMapper;
     private final OptionMapper optionMapper;
 
     @Autowired
     public ProjectService(ProjectRepository projectRepository, UserRepository userRepository, ProjectOptionRepository projectOptionRepository,
-        OptionRepository optionRepository, ProjectMapper projectMapper, MemberMapper memberMapper, OptionMapper optionMapper) {
+        OptionRepository optionRepository, ProjectMapper projectMapper, OptionMapper optionMapper) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.optionRepository = optionRepository;
         this.projectOptionRepository = projectOptionRepository;
         this.projectMapper = projectMapper;
-        this.memberMapper = memberMapper;
         this.optionMapper = optionMapper;
     }
 
