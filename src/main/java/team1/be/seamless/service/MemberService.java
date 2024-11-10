@@ -103,11 +103,6 @@ public class MemberService {
             throw new BaseHandler(HttpStatus.FORBIDDEN,"초대 코드가 만료되었습니다.");
         }
 
-//       멤버 이메일 중복 여부 검사
-//        if(memberRepository.findByEmailAndIsDeleteFalse(create.getEmail()).isPresent()){
-//            throw new BaseHandler(HttpStatus.UNAUTHORIZED,"이메일이 중복 됩니다.");
-//        }
-
 //        프로젝트 조회
         ProjectEntity project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
@@ -131,12 +126,20 @@ public class MemberService {
 
 
 //      이메일로 코드 전달
-//        String email = create.getEmail();
+
         String subject = "[프로젝트 초대] 프로젝트 '" + project.getName() + "'에 참여하세요!";
-        String message = "안녕하세요,\n\n" + create.getName() + "님. " +
-                "프로젝트 '" + project.getName() + "'에 초대되었습니다.\n" + "\n\n" +
-                "프로젝트에 참여하려면 초대 코드를 사용하여 입장해주세요.\n\n" +
-                "감사합니다.\n\n" + "참여 코드는 다음과 같습니다: \n"  + code;
+        String message = """
+            안녕하세요,
+            
+            %s님.
+            프로젝트 '%s'에 초대되었습니다.
+            
+            프로젝트에 참여하려면 초대 코드를 사용하여 입장해주세요.
+            
+            감사합니다.
+            
+            참여 코드는 다음과 같습니다:
+            %s""".formatted(create.getName(), project.getName(), code);
 
         mailSend.send(create.getEmail(),subject,message);
 

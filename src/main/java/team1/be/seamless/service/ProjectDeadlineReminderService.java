@@ -44,12 +44,14 @@ public class ProjectDeadlineReminderService {
             // 마감일이 14일, 7일, 3일, 1일 남았을 때 이메일 전송
             if (daysUntilDeadline == 14 || daysUntilDeadline == 7 || daysUntilDeadline == 3 || daysUntilDeadline == 1) {
                 String subject = "[프로젝트 마감 임박 알림] '" + project.getName() + "' 프로젝트";
-                String message = "안녕하세요,\n\n" +
-                        "프로젝트 '" + project.getName() + "'의 마감 기한이 " + daysUntilDeadline + "일 남았습니다.\n\n" +
-                        "프로젝트 관련 작업을 마무리해 주세요.\n\n감사합니다.";
+                String message = """
+                        프로젝트 %s의 마감 기한이 %d
+                        
+                        프로젝트 관련 작업을 마무리해 주세요.
+                        
+                        감사합니다.""".formatted(project.getName(),daysUntilDeadline);
 
                 project.getMemberEntities().forEach(member ->
-//                        emailSend.sendProjectInvite(member.getEmail(), project.getId(), message, subject));
                     mailSend.send(member.getEmail(), subject, message));
             }
         }
