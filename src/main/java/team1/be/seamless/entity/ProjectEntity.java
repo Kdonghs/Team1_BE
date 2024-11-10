@@ -25,7 +25,7 @@ public class ProjectEntity extends BaseEntity {
         String description,
         String imageURL,
         UserEntity userEntity,
-        List<ProjectOption> projectOptions,
+        List<ProjectOptionEntity> projectOptionEntities,
         LocalDateTime startDate,
         LocalDateTime endDate) {
         this.name = name;
@@ -33,7 +33,7 @@ public class ProjectEntity extends BaseEntity {
         this.imageURL= imageURL;
         this.isDeleted = false;
         this.userEntity = userEntity;
-        this.projectOptions = projectOptions;
+        this.projectOptionEntities = projectOptionEntities;
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -63,7 +63,7 @@ public class ProjectEntity extends BaseEntity {
     private List<MemberEntity> memberEntities = new ArrayList<>();
 
     @OneToMany(mappedBy = "projectEntity", cascade = CascadeType.ALL)
-    private List<ProjectOption> projectOptions = new ArrayList<>();
+    private List<ProjectOptionEntity> projectOptionEntities = new ArrayList<>();
 
     @OneToMany(mappedBy = "projectEntity", cascade = CascadeType.ALL)
     private List<TaskEntity> taskEntities = new ArrayList<>();
@@ -102,8 +102,8 @@ public class ProjectEntity extends BaseEntity {
         return memberEntities;
     }
 
-    public List<ProjectOption> getProjectOptions() {
-        return projectOptions;
+    public List<ProjectOptionEntity> getProjectOptions() {
+        return projectOptionEntities;
     }
 
     public List<TaskEntity> getTaskEntities() {
@@ -138,8 +138,8 @@ public class ProjectEntity extends BaseEntity {
         this.memberEntities = memberEntities;
     }
 
-    public void setProjectOptions(List<ProjectOption> projectOptions) {
-        this.projectOptions = projectOptions;
+    public void setProjectOptions(List<ProjectOptionEntity> projectOptionEntities) {
+        this.projectOptionEntities = projectOptionEntities;
     }
 
     public void setTaskEntity(List<TaskEntity> taskEntities) {
@@ -160,13 +160,13 @@ public class ProjectEntity extends BaseEntity {
         String imageURL,
         LocalDateTime startDate,
         LocalDateTime endDate,
-        List<ProjectOption> projectOptions) {
+        List<ProjectOptionEntity> projectOptionEntities) {
         this.name = name;
         this.description = description;
         this.imageURL = imageURL;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.projectOptions = projectOptions;
+        this.projectOptionEntities = projectOptionEntities;
         return this;
     }
 

@@ -10,18 +10,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity(name = "project_optionss")
-public class ProjectOption extends BaseEntity {
+public class ProjectOptionEntity extends BaseEntity {
 
-    public ProjectOption() {
+    public ProjectOptionEntity() {
 
     }
 
-    public ProjectOption(OptionEntity optionEntity) {
+    public ProjectOptionEntity(OptionEntity optionEntity) {
         this.isDeleted = false;
         this.optionEntity = optionEntity;
     }
 
-    public ProjectOption(ProjectEntity projectEntity, OptionEntity optionEntity) {
+    public ProjectOptionEntity(ProjectEntity projectEntity, OptionEntity optionEntity) {
         this.isDeleted = false;
         this.projectEntity = projectEntity;
         this.optionEntity = optionEntity;

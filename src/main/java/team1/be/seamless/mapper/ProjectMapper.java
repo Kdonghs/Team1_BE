@@ -10,7 +10,7 @@ import team1.be.seamless.dto.ProjectDTO.ProjectManager;
 import team1.be.seamless.dto.ProjectDTO.ProjectUpdate;
 import team1.be.seamless.entity.OptionEntity;
 import team1.be.seamless.entity.ProjectEntity;
-import team1.be.seamless.entity.ProjectOption;
+import team1.be.seamless.entity.ProjectOptionEntity;
 import team1.be.seamless.entity.UserEntity;
 import team1.be.seamless.util.Util;
 
@@ -18,26 +18,26 @@ import team1.be.seamless.util.Util;
 public class ProjectMapper {
 
     public ProjectEntity toEntity(ProjectDTO.ProjectCreate create, UserEntity userEntity,
-        List<ProjectOption> projectOptions) {
+        List<ProjectOptionEntity> projectOptionEntities) {
         return new ProjectEntity(
             create.getName(),
             create.getDescription(),
             create.getImageURL(),
             userEntity,
-            projectOptions,
+            projectOptionEntities,
             create.getStartDate(),
             create.getEndDate()
         );
     }
 
-    public ProjectEntity toUpdate(ProjectEntity entity, ProjectUpdate update, List<ProjectOption> projectOptions) {
+    public ProjectEntity toUpdate(ProjectEntity entity, ProjectUpdate update, List<ProjectOptionEntity> projectOptionEntities) {
         return entity.update(
             Util.isNull(update.getName()) ? entity.getName() : update.getName(),
             Util.isNull(update.getDescription()) ? entity.getDescription() : update.getDescription(),
             Util.isNull(update.getImageURL()) ? entity.getImageURL() : update.getImageURL(),
             Util.isNull(update.getStartDate().toString())? entity.getStartDate() : update.getStartDate(),
             Util.isNull(update.getEndDate().toString())? entity.getEndDate() : update.getEndDate(),
-            projectOptions
+            projectOptionEntities
         );
     }
 
@@ -50,7 +50,7 @@ public class ProjectMapper {
             projectEntity.getStartDate(),
             projectEntity.getEndDate(),
             projectEntity.getProjectOptions().stream()
-                .map(ProjectOption::getOptionEntity).map(OptionEntity::getId).toList(),
+                .map(ProjectOptionEntity::getOptionEntity).map(OptionEntity::getId).toList(),
             projectEntity.getMemberEntities().stream()
                 .filter(entity -> !entity.getIsDelete()).toList().size(),
             toManager(projectEntity.getUserEntity())

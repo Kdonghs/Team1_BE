@@ -44,7 +44,7 @@ public class OptionEntity extends BaseEntity {
     private boolean isDeleted;
 
     @OneToMany(mappedBy = "optionEntity", cascade = CascadeType.ALL)
-    private List<ProjectOption> options;
+    private List<ProjectOptionEntity> options;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -72,7 +72,7 @@ public class OptionEntity extends BaseEntity {
         return isDeleted;
     }
 
-    public List<ProjectOption> getOptions() {
+    public List<ProjectOptionEntity> getOptions() {
         return options;
     }
 
@@ -90,7 +90,7 @@ public class OptionEntity extends BaseEntity {
         return updatedAt;
     }
 
-    public void setOptions(List<ProjectOption> options) {
+    public void setOptions(List<ProjectOptionEntity> options) {
         this.options = options;
     }
 

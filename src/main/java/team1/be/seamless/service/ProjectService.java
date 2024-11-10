@@ -15,7 +15,7 @@ import team1.be.seamless.dto.ProjectDTO.ProjectDate;
 import team1.be.seamless.dto.ProjectDTO.ProjectUpdate;
 import team1.be.seamless.entity.OptionEntity;
 import team1.be.seamless.entity.ProjectEntity;
-import team1.be.seamless.entity.ProjectOption;
+import team1.be.seamless.entity.ProjectOptionEntity;
 import team1.be.seamless.entity.UserEntity;
 import team1.be.seamless.mapper.MemberMapper;
 import team1.be.seamless.mapper.OptionMapper;
@@ -114,12 +114,13 @@ public class ProjectService {
 
         List<OptionEntity> optionEntities = optionRepository.findByIdIn(create.getOptionIds());
 
-        List<ProjectOption> projectOptions = optionEntities.stream().map(ProjectOption::new).toList();
+        List<ProjectOptionEntity> projectOptionEntities = optionEntities.stream().map(
+            ProjectOptionEntity::new).toList();
 
         ProjectEntity projectEntity = projectRepository.save(
-            projectMapper.toEntity(create, userEntity, projectOptions));
+            projectMapper.toEntity(create, userEntity, projectOptionEntities));
 
-        projectOptions.forEach(option -> option.setProjectEntity(projectEntity));
+        projectOptionEntities.forEach(option -> option.setProjectEntity(projectEntity));
 
         return projectMapper.toDetail(projectEntity);
     }
@@ -150,14 +151,14 @@ public class ProjectService {
 
         // 새로운 옵션 추가
         List<OptionEntity> optionEntities = optionRepository.findByIdIn(update.getOptionIds());
-        List<ProjectOption> newProjectOptions = new ArrayList<>();
+        List<ProjectOptionEntity> newProjectOptionEntities = new ArrayList<>();
 
         for (OptionEntity optionEntity : optionEntities) {
-            ProjectOption projectOption = new ProjectOption(projectEntity, optionEntity);
-            newProjectOptions.add(projectOption);
+            ProjectOptionEntity projectOptionEntity = new ProjectOptionEntity(projectEntity, optionEntity);
+            newProjectOptionEntities.add(projectOptionEntity);
         }
 
-        projectMapper.toUpdate(projectEntity, update, newProjectOptions);
+        projectMapper.toUpdate(projectEntity, update, newProjectOptionEntities);
 
         return projectMapper.toDetail(projectEntity);
     }
