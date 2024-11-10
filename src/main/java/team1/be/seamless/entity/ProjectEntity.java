@@ -170,5 +170,8 @@ public class ProjectEntity extends BaseEntity {
         return this;
     }
 
+    public boolean isExpired() {
+        return this.endDate.isBefore(LocalDateTime.now());
+    }
 
 }

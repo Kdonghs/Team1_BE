@@ -65,14 +65,14 @@ public class MemberService {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"권한이 없습니다.");
         }
 
-        ProjectEntity project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
+//        ProjectEntity project = projectRepository.findById(projectId)
+//                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
 
 
         MemberEntity memberEntity = memberRepository.findByProjectEntityIdAndIdAndIsDeleteFalse(projectId, memberId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
 
-        if (memberEntity.getProjectEntity().getEndDate().isBefore(LocalDateTime.now())) {
+        if (memberEntity.getProjectEntity().isExpired()) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
         }
 
@@ -107,7 +107,7 @@ public class MemberService {
         ProjectEntity project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
 
-        if (project.getEndDate().isBefore(LocalDateTime.now())) {
+        if (project.isExpired()) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
         }
 
@@ -165,7 +165,7 @@ public class MemberService {
                 projectId,memberId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
 
-        if (member.getProjectEntity().getEndDate().isBefore(LocalDateTime.now())) {
+        if (member.getProjectEntity().isExpired()) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
         }
 
@@ -191,7 +191,7 @@ public class MemberService {
                 projectId, memberId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
 
-        if (member.getProjectEntity().getEndDate().isBefore(LocalDateTime.now())) {
+        if (member.getProjectEntity().isExpired()) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
         }
 
