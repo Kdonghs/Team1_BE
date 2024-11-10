@@ -5,14 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ParsingPram {
+public class ParsingParam {
 
 
     private final JwtToken jwtToken;
     private static final String AUTHORIZATION_HEADER = "Authorization";
 
     @Autowired
-    public ParsingPram(JwtToken jwtToken) {
+    public ParsingParam(JwtToken jwtToken) {
         this.jwtToken = jwtToken;
     }
 

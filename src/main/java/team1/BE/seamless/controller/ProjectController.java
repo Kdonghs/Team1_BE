@@ -18,7 +18,7 @@ import team1.BE.seamless.dto.ProjectDTO;
 import team1.BE.seamless.dto.ProjectDTO.ProjectDetail;
 import team1.BE.seamless.dto.ProjectDTO.ProjectDate;
 import team1.BE.seamless.service.ProjectService;
-import team1.BE.seamless.util.auth.ParsingPram;
+import team1.BE.seamless.util.auth.ParsingParam;
 import team1.BE.seamless.util.page.ListResult;
 import team1.BE.seamless.util.page.PageMapper;
 import team1.BE.seamless.util.page.PageResult;
@@ -30,18 +30,18 @@ import team1.BE.seamless.util.page.SingleResult;
 public class ProjectController {
 
     private final ProjectService projectService;
-    private final ParsingPram parsingPram;
+    private final ParsingParam parsingParam;
 
     @Autowired
-    public ProjectController(ProjectService projectService, ParsingPram parsingPram) {
+    public ProjectController(ProjectService projectService, ParsingParam parsingParam) {
         this.projectService = projectService;
-        this.parsingPram = parsingPram;
+        this.parsingParam = parsingParam;
     }
 
     @Operation(summary = "프로젝트 리스트 조회")
     @GetMapping
     public PageResult<ProjectDetail> getProjectList(@Valid ProjectDTO.getList param, HttpServletRequest req) {
-        return PageMapper.toPageResult(projectService.getProjectList(param, parsingPram.getEmail(req)));
+        return PageMapper.toPageResult(projectService.getProjectList(param, parsingParam.getEmail(req)));
     }
 
     @Operation(summary = "프로젝트 조회")
@@ -54,7 +54,7 @@ public class ProjectController {
     @GetMapping("/date")
     public PageResult<ProjectDate> getProjectDate(@Valid ProjectDTO.getList param, HttpServletRequest req) {
         return PageMapper.toPageResult(
-            projectService.getProjectDate(param, parsingPram.getEmail(req)));
+            projectService.getProjectDate(param, parsingParam.getEmail(req)));
     }
 
 
@@ -68,7 +68,7 @@ public class ProjectController {
     @PostMapping
     public SingleResult<ProjectDetail> createProject(
         @Valid @RequestBody ProjectDTO.ProjectCreate create, HttpServletRequest req) {
-        return new SingleResult<>(projectService.createProject(create, parsingPram.getEmail(req)));
+        return new SingleResult<>(projectService.createProject(create, parsingParam.getEmail(req)));
     }
 
     @Operation(summary = "프로젝트 설정 수정")

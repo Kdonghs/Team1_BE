@@ -20,7 +20,7 @@ import team1.BE.seamless.repository.ProjectRepository;
 import team1.BE.seamless.util.MailSend;
 import team1.BE.seamless.util.Util;
 import team1.BE.seamless.util.auth.AesEncrypt;
-import team1.BE.seamless.util.auth.ParsingPram;
+import team1.BE.seamless.util.auth.ParsingParam;
 import team1.BE.seamless.util.errorException.BaseHandler;
 
 @Service
@@ -29,7 +29,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
     private final ProjectRepository projectRepository;
-    private final ParsingPram parsingPram;
+    private final ParsingParam parsingParam;
     private final AesEncrypt aesEncrypt;
 //    private final EmailSend emailSend;
     private final MailSend mailSend;
@@ -49,19 +49,19 @@ public class MemberService {
 
     @Autowired
     public MemberService(MemberRepository memberRepository, MemberMapper memberMapper,
-        ProjectRepository projectRepository, ParsingPram parsingPram, AesEncrypt aesEncrypt,
+        ProjectRepository projectRepository, ParsingParam parsingParam, AesEncrypt aesEncrypt,
         MailSend mailSend) {
         this.memberRepository = memberRepository;
         this.memberMapper = memberMapper;
         this.projectRepository = projectRepository;
-        this.parsingPram = parsingPram;
+        this.parsingParam = parsingParam;
         this.aesEncrypt = aesEncrypt;
         this.mailSend = mailSend;
     }
 
     public MemberResponseDTO getMember(Long projectId, Long memberId, HttpServletRequest req) {
         // 팀원인지 확인하기
-        if (parsingPram.getRole(req).equals(Role.MEMBER.toString())) {
+        if (parsingParam.getRole(req).equals(Role.MEMBER.toString())) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"권한이 없습니다.");
         }
 
@@ -82,7 +82,7 @@ public class MemberService {
     public Page<MemberResponseDTO> getMemberList(Long projectId,
         getMemberList memberList, HttpServletRequest req) {
         // 팀원인지 확인하기
-        if (parsingPram.getRole(req).equals(Role.MEMBER.toString())) {
+        if (parsingParam.getRole(req).equals(Role.MEMBER.toString())) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"권한이 없습니다.");
         }
 
@@ -147,7 +147,7 @@ public class MemberService {
     @Transactional
     public MemberResponseDTO updateMember(Long projectId, Long memberId, UpdateMember update, HttpServletRequest req) {
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.
-        if (parsingPram.getRole(req).equals(Role.USER.toString())) {
+        if (parsingParam.getRole(req).equals(Role.USER.toString())) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"수정 권한이 없습니다.");
         }
 
@@ -173,7 +173,7 @@ public class MemberService {
     @Transactional
     public MemberResponseDTO deleteMember(Long projectId, Long memberId, HttpServletRequest req) {
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.)
-        if (parsingPram.getRole(req).equals(Role.USER.toString())) {
+        if (parsingParam.getRole(req).equals(Role.USER.toString())) {
             throw new BaseHandler(HttpStatus.FORBIDDEN,"삭제 권한이 없습니다.");
         }
 

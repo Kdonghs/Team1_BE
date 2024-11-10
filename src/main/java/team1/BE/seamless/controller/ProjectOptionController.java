@@ -17,7 +17,7 @@ import team1.BE.seamless.dto.OptionDTO;
 import team1.BE.seamless.dto.OptionDTO.OptionDetail;
 import team1.BE.seamless.dto.OptionDTO.OptionSimple;
 import team1.BE.seamless.service.OptionService;
-import team1.BE.seamless.util.auth.ParsingPram;
+import team1.BE.seamless.util.auth.ParsingParam;
 import team1.BE.seamless.util.page.PageMapper;
 import team1.BE.seamless.util.page.PageResult;
 import team1.BE.seamless.util.page.SingleResult;
@@ -28,12 +28,12 @@ import team1.BE.seamless.util.page.SingleResult;
 public class ProjectOptionController {
 
     private final OptionService optionService;
-    private final ParsingPram parsingPram;
+    private final ParsingParam parsingParam;
 
     @Autowired
-    public ProjectOptionController(OptionService optionService, ParsingPram parsingPram) {
+    public ProjectOptionController(OptionService optionService, ParsingParam parsingParam) {
         this.optionService = optionService;
-        this.parsingPram = parsingPram;
+        this.parsingParam = parsingParam;
     }
 
     @Operation(summary = "프로젝트 옵션 리스트 조회")
@@ -41,21 +41,21 @@ public class ProjectOptionController {
     public PageResult<OptionSimple> getOptionList(HttpServletRequest req,
         @Valid OptionDTO.getList param) {
         return PageMapper.toPageResult(
-            optionService.getProjectOptionList(param, parsingPram.getRole(req)));
+            optionService.getProjectOptionList(param, parsingParam.getRole(req)));
     }
 
     @Operation(summary = "프로젝트 옵션 조회")
     @GetMapping("/{optionId}")
     public SingleResult<OptionDetail> getOption(HttpServletRequest req,
         @Valid @PathVariable("optionId") Long id) {
-        return new SingleResult<>(optionService.getOption(id, parsingPram.getRole(req)));
+        return new SingleResult<>(optionService.getOption(id, parsingParam.getRole(req)));
     }
 
     @Operation(summary = "옵션 생성")
     @PostMapping
     public SingleResult<OptionDetail> createOption(HttpServletRequest req,
         @Valid @RequestBody OptionDTO.OptionCreate create) {
-        return new SingleResult<>(optionService.createOption(create, parsingPram.getRole(req)));
+        return new SingleResult<>(optionService.createOption(create, parsingParam.getRole(req)));
     }
 
     @Operation(summary = "옵션 수정")
@@ -63,14 +63,14 @@ public class ProjectOptionController {
     public SingleResult<OptionDetail> updateOption(HttpServletRequest req,
         @Valid @PathVariable("optionId") Long id,
         @Valid @RequestBody OptionDTO.OptionUpdate update) {
-        return new SingleResult<>(optionService.updateOption(id, update, parsingPram.getRole(req)));
+        return new SingleResult<>(optionService.updateOption(id, update, parsingParam.getRole(req)));
     }
 
     @Operation(summary = "옵션 삭제")
     @DeleteMapping("/{optionId}")
     public SingleResult<OptionDetail> deleteOption(HttpServletRequest req,
         @Valid @PathVariable("optionId") Long id) {
-        return new SingleResult<>(optionService.deleteOption(id, parsingPram.getRole(req)));
+        return new SingleResult<>(optionService.deleteOption(id, parsingParam.getRole(req)));
     }
 
 }

@@ -11,7 +11,7 @@ import team1.BE.seamless.dto.UserDTO.UserUpdate;
 import team1.BE.seamless.entity.UserEntity;
 import team1.BE.seamless.mapper.UserMapper;
 import team1.BE.seamless.repository.UserRepository;
-import team1.BE.seamless.util.auth.ParsingPram;
+import team1.BE.seamless.util.auth.ParsingParam;
 import team1.BE.seamless.util.errorException.BaseHandler;
 
 @Service
@@ -19,25 +19,25 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final ParsingPram parsingPram;
+    private final ParsingParam parsingParam;
 
     @Autowired
     public UserService(UserRepository userRepository, UserMapper userMapper,
-        ParsingPram parsingPram) {
+        ParsingParam parsingParam) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-        this.parsingPram = parsingPram;
+        this.parsingParam = parsingParam;
     }
 
     public UserDetails getUser(HttpServletRequest req) {
-        UserEntity user = userRepository.findByEmailAndIsDeleteFalse(parsingPram.getEmail(req))
+        UserEntity user = userRepository.findByEmailAndIsDeleteFalse(parsingParam.getEmail(req))
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다."));
         return userMapper.toUserDetails(user);
     }
 
     @Transactional
     public UserSimple updateUser(HttpServletRequest req, UserUpdate update) {
-        UserEntity user = userRepository.findByEmailAndIsDeleteFalse(parsingPram.getEmail(req))
+        UserEntity user = userRepository.findByEmailAndIsDeleteFalse(parsingParam.getEmail(req))
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다."));
 
         userMapper.toUpdate(user, update);
@@ -47,7 +47,7 @@ public class UserService {
 
     @Transactional
     public UserSimple deleteUser(HttpServletRequest req) {
-        UserEntity user = userRepository.findByEmailAndIsDeleteFalse(parsingPram.getEmail(req))
+        UserEntity user = userRepository.findByEmailAndIsDeleteFalse(parsingParam.getEmail(req))
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다."));
 
         user.setIsDelete();
