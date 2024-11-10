@@ -26,6 +26,6 @@ public class ProjectCreator {
                 List.of(1L, 2L, 3L),
                 LocalDateTime.of(2024, 10, 1, 0, 0, 0),
                 LocalDateTime.of(2025, 10, 1, 0, 0, 0)
-            ),"user1@google.com");
+            ), "user1@google.com");
     }
 }

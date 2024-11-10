@@ -28,7 +28,8 @@ public class AttendURLService {
     }
 
     public String generateAttendURL(HttpServletRequest req, Long projectId) {
-        ProjectEntity project = projectRepository.findByIdAndUserEntityEmailAndIsDeletedFalse(projectId,
+        ProjectEntity project = projectRepository.findByIdAndUserEntityEmailAndIsDeletedFalse(
+                projectId,
                 parsingParam.getEmail(req))
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
 
@@ -39,15 +40,14 @@ public class AttendURLService {
 
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.)
         if (Role.MEMBER.isRole(parsingParam.getRole(req))) {
-            throw new BaseHandler(HttpStatus.UNAUTHORIZED,"생성 권한이 없습니다.");
+            throw new BaseHandler(HttpStatus.UNAUTHORIZED, "생성 권한이 없습니다.");
         }
-
 
 //        참여 링크를 URL 형식으로 내려줄 필요가 없음. code랑 비슷한 형식으로 내려주면 프론트쪽에서 URL 형식으로 바꿔줄거임
 //        참여 링크는 프로젝트id + exp로 구성
 //        exp는 1일로 가정
         String attendURL = aesEncrypt.encrypt(
-                project.getId() + "_" + LocalDateTime.now().plusDays(1).withNano(0));
+            project.getId() + "_" + LocalDateTime.now().plusDays(1).withNano(0));
         return attendURL;
     }
 

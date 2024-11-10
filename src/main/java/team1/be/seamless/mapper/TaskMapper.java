@@ -29,9 +29,11 @@ public class TaskMapper {
 
     public TaskEntity toUpdate(TaskEntity task, TaskUpdate update) {
         task.setName(Util.isNull(update.getName()) ? task.getName() : update.getName());
-        task.setDescription(Util.isNull(update.getDescription()) ? task.getDescription() : update.getDescription());
+        task.setDescription(
+            Util.isNull(update.getDescription()) ? task.getDescription() : update.getDescription());
         task.setProgress(update.getProgress() == null ? task.getProgress() : update.getProgress());
-        task.setStartDate(update.getStartDate() == null ? task.getStartDate() : update.getStartDate());
+        task.setStartDate(
+            update.getStartDate() == null ? task.getStartDate() : update.getStartDate());
         task.setEndDate(update.getEndDate() == null ? task.getEndDate() : update.getEndDate());
         task.setStatus(update.getStatus() == null ? task.getStatus() : update.getStatus());
         task.setPriority(update.getPriority() == null ? task.getPriority() : update.getPriority());

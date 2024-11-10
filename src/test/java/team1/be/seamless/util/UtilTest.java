@@ -1,6 +1,5 @@
 package team1.be.seamless.util;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -13,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class UtilTest {
 
     @Test
-    void 빈칸_검사(){
+    void 빈칸_검사() {
 //        given
         String text1 = " ";
         String text2 = "";
@@ -33,7 +32,7 @@ class UtilTest {
     }
 
     @Test
-    void 로컬데이트타임_파싱_성공(){
+    void 로컬데이트타임_파싱_성공() {
 //        given
         String date1 = LocalDate.now().toString();
 
@@ -45,7 +44,7 @@ class UtilTest {
     }
 
     @Test
-    void 로컬데이트타임_파싱_실패_형식오류(){
+    void 로컬데이트타임_파싱_실패_형식오류() {
 //        given
         String date1 = "2024-05-24T27:66:10";
 

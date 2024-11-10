@@ -40,7 +40,8 @@ class TaskE2ETest {
     private ProjectService projectService;
 
     @Autowired
-    public TaskE2ETest(TestRestTemplate restTemplate, TaskService taskService, ProjectService projectService) {
+    public TaskE2ETest(TestRestTemplate restTemplate, TaskService taskService,
+        ProjectService projectService) {
         this.restTemplate = restTemplate;
         this.taskService = taskService;
         this.projectService = projectService;
@@ -71,7 +72,8 @@ class TaskE2ETest {
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
 
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/project/1/task", POST, requestEntity, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+            url + port + "/api/project/1/task", POST, requestEntity, String.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
     }
@@ -85,7 +87,8 @@ class TaskE2ETest {
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
 
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/project/1/task", POST, requestEntity, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+            url + port + "/api/project/1/task", POST, requestEntity, String.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
     }
@@ -97,7 +100,8 @@ class TaskE2ETest {
 
         HttpEntity<Long> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/project/task/1", GET, requestEntity, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+            url + port + "/api/project/task/1", GET, requestEntity, String.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(NOT_FOUND);
     }

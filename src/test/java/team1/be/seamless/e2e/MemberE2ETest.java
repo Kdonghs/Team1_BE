@@ -43,14 +43,16 @@ class MemberE2ETest {
     @BeforeEach
     public void setUp() {
 //        새로운 멤버 생성
-        CreateMember member = new CreateMember("ex@gmail.com","sv_XKCT5j5Sm0msQw-mEAmstJ5tq9uBh6c8_QLhzKGo=","랄랄랄");
+        CreateMember member = new CreateMember("ex@gmail.com",
+            "sv_XKCT5j5Sm0msQw-mEAmstJ5tq9uBh6c8_QLhzKGo=", "랄랄랄");
         HttpEntity<CreateMember> request1 = new HttpEntity<>(member);
         ResponseEntity<String> response1 = restTemplate.exchange(
-                url + port + "/api/project/1/member",
-                POST,
+            url + port + "/api/project/1/member",
+            POST,
             request1, String.class);
 
-        int startIndex = response1.getBody().indexOf("\"attendURL\":\"") + "\"attendURL\":\"".length();
+        int startIndex =
+            response1.getBody().indexOf("\"attendURL\":\"") + "\"attendURL\":\"".length();
         int endIndex = response1.getBody().indexOf("\"", startIndex);
 
 //        멤버 생성시 반환되는 코드 추출
@@ -94,10 +96,10 @@ class MemberE2ETest {
         HttpEntity<UpdateMember> requestEntity = new HttpEntity<>(updateInfo, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                url + "1", // 테스트 Member ID
-                PUT,
-                requestEntity,
-                String.class);
+            url + "1", // 테스트 Member ID
+            PUT,
+            requestEntity,
+            String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(OK);
     }

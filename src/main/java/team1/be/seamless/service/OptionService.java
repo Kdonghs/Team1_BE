@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import team1.be.seamless.dto.OptionDTO.OptionCreate;
 import team1.be.seamless.dto.OptionDTO.OptionDetail;
 import team1.be.seamless.dto.OptionDTO.OptionSimple;
-import team1.be.seamless.dto.OptionDTO.getList;
 import team1.be.seamless.dto.OptionDTO.OptionUpdate;
+import team1.be.seamless.dto.OptionDTO.getList;
 import team1.be.seamless.entity.OptionEntity;
 import team1.be.seamless.entity.enums.Role;
 import team1.be.seamless.mapper.OptionMapper;
@@ -35,7 +35,8 @@ public class OptionService {
             throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 조회 가능합니다.");
         }
 
-        return optionRepository.findAllByIsDeletedFalse(param.toPageable()).map(optionMapper::toSimple);
+        return optionRepository.findAllByIsDeletedFalse(param.toPageable())
+            .map(optionMapper::toSimple);
     }
 
     public OptionDetail getOption(Long id, String role) {

@@ -2,6 +2,7 @@ package team1.be.seamless.util.Email;
 // 팀원이 초대링크에 해당하는 페이지에서 이름, 이메일을 작성하여
 // 요청을 보낼 때의 서비스 계층
 
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,8 +13,6 @@ import team1.be.seamless.repository.ProjectRepository;
 import team1.be.seamless.util.auth.AesEncrypt;
 import team1.be.seamless.util.errorException.BaseHandler;
 
-import java.time.LocalDateTime;
-
 @Service
 public class EmailSend {
 
@@ -22,7 +21,8 @@ public class EmailSend {
     private final AesEncrypt aesEncrypt;
 
     @Autowired
-    EmailSend(JavaMailSender mailSender, ProjectRepository projectRepository, AesEncrypt aesEncrypt) {
+    EmailSend(JavaMailSender mailSender, ProjectRepository projectRepository,
+        AesEncrypt aesEncrypt) {
         this.mailSender = mailSender;
         this.projectRepository = projectRepository;
         this.aesEncrypt = aesEncrypt;
@@ -31,7 +31,7 @@ public class EmailSend {
     public void sendProjectInvite(String email, Long projectId, String message, String subject) {
         // 프로젝트 존재 검증
         ProjectEntity project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
+            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
 
         // 프로젝트 종료 기간 검증
         if (project.getEndDate().isBefore(LocalDateTime.now())) {
@@ -40,13 +40,11 @@ public class EmailSend {
 
         // 팀원인지 팀장인지 검증은 필요없음.(어차피 이 post요청은 아무 권한 없는 사람이 보내는 것이기 때문임)
 
-
         // 참여코드 생성 (UUID 기반 + 현재 시간)
         String participationCode = generateParticipationCode(project);
 
         // 이메일 메시지 내용 생성
         message += "" + participationCode;
-
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(email);
@@ -58,7 +56,7 @@ public class EmailSend {
     // 참여 링크랑 너무 똑같을 것 같아서 EndDate를 기반으로 참여 코드 만듦.
     private String generateParticipationCode(ProjectEntity project) {
         String code = aesEncrypt.encrypt(
-                project.getId() + "_" + project.getEndDate().withNano(0));
+            project.getId() + "_" + project.getEndDate().withNano(0));
         return code;
     }
 }

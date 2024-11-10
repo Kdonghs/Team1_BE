@@ -46,7 +46,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
-        HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) throws Exception {
+        HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository)
+        throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .cors() // CORS 설정 활성화
@@ -68,11 +69,11 @@ public class SecurityConfig {
                         "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js")
                     .permitAll()
 //                인증, h2
-                    .requestMatchers("/h2-console/**", "/auth/**","/api/test/**").permitAll()
+                    .requestMatchers("/h2-console/**", "/auth/**", "/api/test/**").permitAll()
 //                멤버 생성
-                    .requestMatchers(HttpMethod.POST,"/api/project/**/member/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/project/**/member/**").permitAll()
 //                멤버 조회
-                    .requestMatchers(HttpMethod.GET,"/api/project/**/member/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/project/**/member/**").permitAll()
                     .anyRequest()
                     .authenticated()
             )

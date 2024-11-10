@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team1.be.seamless.dto.OptionDTO.OptionDetail;
 import team1.be.seamless.dto.ProjectDTO;
-import team1.be.seamless.dto.ProjectDTO.ProjectDetail;
 import team1.be.seamless.dto.ProjectDTO.ProjectDate;
+import team1.be.seamless.dto.ProjectDTO.ProjectDetail;
 import team1.be.seamless.service.ProjectService;
 import team1.be.seamless.util.auth.ParsingParam;
 import team1.be.seamless.util.page.ListResult;
@@ -40,8 +40,10 @@ public class ProjectController {
 
     @Operation(summary = "프로젝트 리스트 조회")
     @GetMapping
-    public PageResult<ProjectDetail> getProjectList(@Valid ProjectDTO.getList param, HttpServletRequest req) {
-        return PageMapper.toPageResult(projectService.getProjectList(param, parsingParam.getEmail(req)));
+    public PageResult<ProjectDetail> getProjectList(@Valid ProjectDTO.getList param,
+        HttpServletRequest req) {
+        return PageMapper.toPageResult(
+            projectService.getProjectList(param, parsingParam.getEmail(req)));
     }
 
     @Operation(summary = "프로젝트 조회")
@@ -52,7 +54,8 @@ public class ProjectController {
 
     @Operation(summary = "프로젝트 기간 리스트 조회")
     @GetMapping("/date")
-    public PageResult<ProjectDate> getProjectDate(@Valid ProjectDTO.getList param, HttpServletRequest req) {
+    public PageResult<ProjectDate> getProjectDate(@Valid ProjectDTO.getList param,
+        HttpServletRequest req) {
         return PageMapper.toPageResult(
             projectService.getProjectDate(param, parsingParam.getEmail(req)));
     }

@@ -210,7 +210,8 @@ public class ProjectDTO {
 
     }
 
-    public static class ProjectDetail{
+    public static class ProjectDetail {
+
         private Long id;
 
         private String name;
@@ -283,12 +284,17 @@ public class ProjectDTO {
             return optionIds;
         }
 
-        public int getTotalMembers() { return totalMembers; }
+        public int getTotalMembers() {
+            return totalMembers;
+        }
 
-        public ProjectManager getProjectManager() { return projectManager; }
+        public ProjectManager getProjectManager() {
+            return projectManager;
+        }
     }
 
     public static class ProjectManager {
+
         private String name;
         private String imageURL;
 
@@ -297,9 +303,13 @@ public class ProjectDTO {
             this.imageURL = imageURL;
         }
 
-        public String getName() { return name; }
+        public String getName() {
+            return name;
+        }
 
-        public String getImageURL() { return imageURL; }
+        public String getImageURL() {
+            return imageURL;
+        }
     }
 }
 

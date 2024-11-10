@@ -2,6 +2,9 @@ package team1.be.seamless.service;
 // 팀원이 초대링크에 해당하는 페이지에서 이름, 이메일을 작성하여
 // 요청을 보낼 때의 서비스 계층
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
@@ -10,10 +13,6 @@ import org.springframework.stereotype.Service;
 import team1.be.seamless.entity.ProjectEntity;
 import team1.be.seamless.repository.ProjectRepository;
 import team1.be.seamless.util.errorException.BaseHandler;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 
 @Service
 public class InviteCodeByEmailService {
@@ -30,26 +29,24 @@ public class InviteCodeByEmailService {
     public void sendProjectInvite(String email, Long projectId, String name) {
         // 프로젝트 존재 검증
         ProjectEntity project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
+            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
 
         // 프로젝트 종료 기간 검증
         if (project.isExpired()) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
-        } 
+        }
 
         // 팀원인지 팀장인지 검증은 필요없음.(어차피 이 post요청은 아무 권한 없는 사람이 보내는 것이기 때문임)
-
 
         // 참여코드 생성 (UUID 기반 + 현재 시간)
         String participationCode = generateParticipationCode();
 
         // 이메일 메시지 내용 생성
         String message = "안녕하세요,\n\n" + name + "님. " +
-                "프로젝트 '" + project.getName() + "'에 초대되었습니다.\n" +
-                "참여 코드는 다음과 같습니다: " + participationCode + "\n\n" +
-                "프로젝트에 참여하려면 초대 코드를 사용하여 입장해주세요.\n\n" +
-                "감사합니다.";
-
+            "프로젝트 '" + project.getName() + "'에 초대되었습니다.\n" +
+            "참여 코드는 다음과 같습니다: " + participationCode + "\n\n" +
+            "프로젝트에 참여하려면 초대 코드를 사용하여 입장해주세요.\n\n" +
+            "감사합니다.";
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(email);

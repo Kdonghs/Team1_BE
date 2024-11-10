@@ -29,10 +29,12 @@ public class InviteCodeByEmailController {
     @PostMapping("/invite")
     public SingleResult<String> inviteMemberToProject(@RequestBody InviteRequestDTO inviteRequest) {
         try {
-            inviteService.sendProjectInvite(inviteRequest.getEmail(), inviteRequest.getProjectId(), inviteRequest.getName());
+            inviteService.sendProjectInvite(inviteRequest.getEmail(), inviteRequest.getProjectId(),
+                inviteRequest.getName());
             return new SingleResult<>("팀원의 이메일로 프로젝트 초대코드 전송이 성공적으로 처리되었습니다.");
         } catch (Exception e) {
-            throw new BaseHandler(HttpStatus.BAD_REQUEST,"이메일로 프로젝트 초대코드 전송이 실패되었습니다. : " + e.getMessage());
+            throw new BaseHandler(HttpStatus.BAD_REQUEST,
+                "이메일로 프로젝트 초대코드 전송이 실패되었습니다. : " + e.getMessage());
         }
     }
 }

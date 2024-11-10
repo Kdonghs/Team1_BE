@@ -43,16 +43,19 @@ public class MemberController {
 
     @Operation(summary = "팀원 전체 조회")
     @GetMapping
-    public PageResult<MemberResponseDTO> getMemberList(@Valid @PathVariable("projectId") Long projectId,
+    public PageResult<MemberResponseDTO> getMemberList(
+        @Valid @PathVariable("projectId") Long projectId,
         HttpServletRequest req,
         @Valid MemberRequestDTO.getMemberList memberListRequestDTO) {
-        return PageMapper.toPageResult(memberService.getMemberList(projectId, memberListRequestDTO, req));
+        return PageMapper.toPageResult(
+            memberService.getMemberList(projectId, memberListRequestDTO, req));
     }
 
 
     @Operation(summary = "새 팀원 추가")
     @PostMapping
-    public SingleResult<MemberResponseDTO> createMember(@Valid @RequestBody MemberRequestDTO.CreateMember Create) {
+    public SingleResult<MemberResponseDTO> createMember(
+        @Valid @RequestBody MemberRequestDTO.CreateMember Create) {
         return new SingleResult<>(memberService.createMember(Create));
     }
 

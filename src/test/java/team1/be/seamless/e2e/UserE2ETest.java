@@ -29,7 +29,6 @@ class UserE2ETest {
     private HttpHeaders headers = new HttpHeaders();
 
 
-
     @Autowired
     public UserE2ETest(TestRestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -56,7 +55,7 @@ class UserE2ETest {
 
     @Test
     void 유저정보_수정_테스트_실패_url() {
-        UserUpdate body = new UserUpdate("name1","qwer1234");
+        UserUpdate body = new UserUpdate("name1", "qwer1234");
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user",

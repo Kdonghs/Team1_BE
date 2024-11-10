@@ -18,9 +18,9 @@ public class AesEncrypt {
 
     public AesEncrypt(@Value("${code.secretKey}") String secretString,
         @Value("${code.vector}") String vector
-        ) {
+    ) {
         secretKey = new SecretKeySpec(secretString.getBytes(), ALGORITHM);
-        IV_STRING=vector;
+        IV_STRING = vector;
     }
 
     // 암호화
@@ -29,7 +29,7 @@ public class AesEncrypt {
         try {
             Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             IvParameterSpec iv = new IvParameterSpec(IV_STRING.getBytes());
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey,iv);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
             encryptedBytes = cipher.doFinal(data.getBytes("UTF-8"));
         } catch (Exception e) {
             e.printStackTrace();

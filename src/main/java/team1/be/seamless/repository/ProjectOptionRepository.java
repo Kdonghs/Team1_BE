@@ -7,6 +7,7 @@ import team1.be.seamless.entity.ProjectOptionEntity;
 
 @Repository
 public interface ProjectOptionRepository extends JpaRepository<ProjectOptionEntity, Long> {
+
     void deleteByProjectEntity(ProjectEntity projectEntity);
 
 }

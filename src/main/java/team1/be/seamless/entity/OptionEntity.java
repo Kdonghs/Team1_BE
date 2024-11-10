@@ -100,7 +100,7 @@ public class OptionEntity extends BaseEntity {
 
     public OptionEntity Update(String name, String description, String optionType) {
         this.name = name;
-        this.description=description;
+        this.description = description;
         this.optionType = optionType;
         return this;
     }

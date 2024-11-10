@@ -4,8 +4,8 @@ package team1.be.seamless.mapper;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import team1.be.seamless.dto.ProjectDTO;
-import team1.be.seamless.dto.ProjectDTO.ProjectDetail;
 import team1.be.seamless.dto.ProjectDTO.ProjectDate;
+import team1.be.seamless.dto.ProjectDTO.ProjectDetail;
 import team1.be.seamless.dto.ProjectDTO.ProjectManager;
 import team1.be.seamless.dto.ProjectDTO.ProjectUpdate;
 import team1.be.seamless.entity.OptionEntity;
@@ -30,13 +30,16 @@ public class ProjectMapper {
         );
     }
 
-    public ProjectEntity toUpdate(ProjectEntity entity, ProjectUpdate update, List<ProjectOptionEntity> projectOptionEntities) {
+    public ProjectEntity toUpdate(ProjectEntity entity, ProjectUpdate update,
+        List<ProjectOptionEntity> projectOptionEntities) {
         return entity.update(
             Util.isNull(update.getName()) ? entity.getName() : update.getName(),
-            Util.isNull(update.getDescription()) ? entity.getDescription() : update.getDescription(),
+            Util.isNull(update.getDescription()) ? entity.getDescription()
+                : update.getDescription(),
             Util.isNull(update.getImageURL()) ? entity.getImageURL() : update.getImageURL(),
-            Util.isNull(update.getStartDate().toString())? entity.getStartDate() : update.getStartDate(),
-            Util.isNull(update.getEndDate().toString())? entity.getEndDate() : update.getEndDate(),
+            Util.isNull(update.getStartDate().toString()) ? entity.getStartDate()
+                : update.getStartDate(),
+            Util.isNull(update.getEndDate().toString()) ? entity.getEndDate() : update.getEndDate(),
             projectOptionEntities
         );
     }

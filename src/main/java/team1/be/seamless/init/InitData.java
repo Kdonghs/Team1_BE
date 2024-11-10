@@ -18,7 +18,7 @@ public class InitData {
 
     @Autowired
     public InitData(TestCreator testCreator, ProjectCreator projectCreator, UserCreator userCreator,
-                    OptionCreator optionCreator, MemberCreator memberCreator, TaskCreator taskCreator) {
+        OptionCreator optionCreator, MemberCreator memberCreator, TaskCreator taskCreator) {
         this.testCreator = testCreator;
         this.projectCreator = projectCreator;
         this.userCreator = userCreator;

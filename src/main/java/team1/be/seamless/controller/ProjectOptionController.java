@@ -63,7 +63,8 @@ public class ProjectOptionController {
     public SingleResult<OptionDetail> updateOption(HttpServletRequest req,
         @Valid @PathVariable("optionId") Long id,
         @Valid @RequestBody OptionDTO.OptionUpdate update) {
-        return new SingleResult<>(optionService.updateOption(id, update, parsingParam.getRole(req)));
+        return new SingleResult<>(
+            optionService.updateOption(id, update, parsingParam.getRole(req)));
     }
 
     @Operation(summary = "옵션 삭제")

@@ -53,7 +53,7 @@ public class TestService {
 
     public Token TestTokenCreate(Long userId) {
         UserEntity user = userRepository.findById(userId)
-            .orElseThrow(()-> new BaseHandler(HttpStatus.FORBIDDEN, "유저 없음"));
+            .orElseThrow(() -> new BaseHandler(HttpStatus.FORBIDDEN, "유저 없음"));
 
         String token = jwtToken.createUserToken(user);
 

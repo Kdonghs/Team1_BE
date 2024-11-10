@@ -16,7 +16,8 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
 
     Optional<TaskEntity> findByIdAndIsDeletedFalse(Long id);
 
-    List<TaskEntity> findByOwnerIdAndProjectEntityAndIsDeletedFalse(Long memberId, ProjectEntity project);
+    List<TaskEntity> findByOwnerIdAndProjectEntityAndIsDeletedFalse(Long memberId,
+        ProjectEntity project);
 
     Page<TaskEntity> findAllByProjectEntityIdAndIsDeletedFalse(Long projectId, Pageable pageable);
 

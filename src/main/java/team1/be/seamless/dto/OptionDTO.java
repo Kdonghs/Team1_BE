@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import team1.be.seamless.util.page.PageParam;
 
 public class OptionDTO {
+
     public static class getList extends PageParam {
 
     }
@@ -74,7 +75,8 @@ public class OptionDTO {
 
     }
 
-    public static class OptionSimple{
+    public static class OptionSimple {
+
         private Long id;
         private String name;
         private String optionType;
@@ -101,7 +103,8 @@ public class OptionDTO {
         }
     }
 
-    public static class OptionDetail{
+    public static class OptionDetail {
+
         private Long id;
         private String name;
         private String description;

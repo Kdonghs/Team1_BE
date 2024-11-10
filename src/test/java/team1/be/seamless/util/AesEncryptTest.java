@@ -1,6 +1,6 @@
 package team1.be.seamless.util;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ class AesEncryptTest {
     }
 
     @Test
-    void 평문_암호화_후_복호화(){
+    void 평문_암호화_후_복호화() {
 //        given
         String plane = "평문 테스트";
 //        when

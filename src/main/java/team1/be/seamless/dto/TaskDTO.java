@@ -274,7 +274,8 @@ public class TaskDTO {
 
         public TaskWithOwnerDetail(Long id, String name, String description, MemberEntity owner,
             Integer progress,
-            LocalDateTime startDate, LocalDateTime endDate, Priority priority, TaskStatus taskStatus) {
+            LocalDateTime startDate, LocalDateTime endDate, Priority priority,
+            TaskStatus taskStatus) {
             this.id = id;
             this.name = name;
             this.description = description;
@@ -356,6 +357,7 @@ public class TaskDTO {
             return imageURL;
         }
     }
+
     public static class ProjectProgress {
 
         private Long projectId;
@@ -392,16 +394,19 @@ public class TaskDTO {
     }
 
     public static class MemberProgress {
+
         private OwnerDetail teamMember;
 
         private Integer progress;
 
         private List<TaskDetail> activeTasks;
 
-        public MemberProgress(MemberEntity teamMember, Integer progress, List<TaskEntity> activeTasks) {
+        public MemberProgress(MemberEntity teamMember, Integer progress,
+            List<TaskEntity> activeTasks) {
             this.teamMember = new OwnerDetail(teamMember);
             this.progress = progress;
-            this.activeTasks = activeTasks.stream().map(TaskDetail::new).collect(Collectors.toList());
+            this.activeTasks = activeTasks.stream().map(TaskDetail::new)
+                .collect(Collectors.toList());
         }
 
         public OwnerDetail getTeamMember() {

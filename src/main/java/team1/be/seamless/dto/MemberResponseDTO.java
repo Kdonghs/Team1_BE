@@ -29,7 +29,8 @@ public class MemberResponseDTO {
         this.email = email;
     }
 
-    public MemberResponseDTO(String message, String name, String role, String email, String attendURL, Long id) {
+    public MemberResponseDTO(String message, String name, String role, String email,
+        String attendURL, Long id) {
         this.message = message;
         this.name = name;
         this.role = role;
@@ -46,7 +47,8 @@ public class MemberResponseDTO {
         this.id = id;
     }
 
-    public MemberResponseDTO(String message, String name, String role, String email, String attendURL) {
+    public MemberResponseDTO(String message, String name, String role, String email,
+        String attendURL) {
         this.message = message;
         this.name = name;
         this.role = role;

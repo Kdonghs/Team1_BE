@@ -11,7 +11,7 @@ import team1.be.seamless.util.page.SingleResult;
 class PageTest {
 
     @Test
-    void singleResult(){
+    void singleResult() {
 //        given
         String[] test = "test".split("");
 
@@ -23,16 +23,15 @@ class PageTest {
     }
 
     @Test
-    void page의_데이터는_페이지여야_한다(){
+    void page의_데이터는_페이지여야_한다() {
 //        given
         String test = "test";
 
 //        when
         Page<String> page = new PageImpl<>(Arrays.stream(test.split("")).toList());
 
-
 //        then
-        assertEquals(test, String.join("",page.stream().toList()));
+        assertEquals(test, String.join("", page.stream().toList()));
 
     }
 }

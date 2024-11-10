@@ -58,18 +58,19 @@ class InviteMemberTest {
     void 멤버초대링크_멤버생성_멤버토큰받아오기() {
         HttpEntity<UpdateMember> requestEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response = restTemplate.exchange(
-                url + "/api/project/1/invite-link",
-                POST,
-                requestEntity,
-                String.class);
+            url + "/api/project/1/invite-link",
+            POST,
+            requestEntity,
+            String.class);
         assertThat(response.getStatusCode()).isEqualTo(OK);
 
-        int startIndex = response.getBody().indexOf("\"resultData\":\"") + "\"resultData\":\"".length();
+        int startIndex =
+            response.getBody().indexOf("\"resultData\":\"") + "\"resultData\":\"".length();
         int endIndex = response.getBody().indexOf("\"", startIndex);
 
-
         //        새로운 멤버 생성
-        CreateMember member = new CreateMember("ex@gmail.com",response.getBody().substring(startIndex, endIndex),"qqq");
+        CreateMember member = new CreateMember("ex@gmail.com",
+            response.getBody().substring(startIndex, endIndex), "qqq");
         HttpEntity<CreateMember> request1 = new HttpEntity<>(member);
         ResponseEntity<String> response1 = restTemplate.exchange(
             url + "/api/project/1/member",

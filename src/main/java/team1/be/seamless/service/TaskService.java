@@ -225,7 +225,7 @@ public class TaskService {
 
 //        수정 권한이 있는지 검증
 //        팀장
-        if (Role.USER.isRole(parsingParam.getRole(req))){
+        if (Role.USER.isRole(parsingParam.getRole(req))) {
             if (!task.getProject().getUserEntity().getEmail().equals(parsingParam.getEmail(req))) {
                 throw new BaseHandler(HttpStatus.UNAUTHORIZED, "태스크 수정 권한이 없습니다.");
             }
@@ -236,7 +236,7 @@ public class TaskService {
             task.setOwner(member);
         }
 //        팀원
-        if (Role.MEMBER.isRole(parsingParam.getRole(req))){
+        if (Role.MEMBER.isRole(parsingParam.getRole(req))) {
             if (!task.getOwner().getEmail().equals(parsingParam.getEmail(req))) {
                 throw new BaseHandler(HttpStatus.UNAUTHORIZED, "태스크 수정 권한이 없습니다.");
             }

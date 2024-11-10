@@ -56,7 +56,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserEntity createUser( UserSimple simple) {
+    public UserEntity createUser(UserSimple simple) {
         return userRepository.findByEmailAndIsDeleteFalse(simple.getEmail())
             .orElseGet(() -> userRepository.save(
                 userMapper.toEntity(
