@@ -31,7 +31,7 @@ public class OptionService {
     }
 
     public Page<OptionSimple> getProjectOptionList(getList param, String role) {
-        if (!role.equals(Role.USER.getKey())) {
+        if (Role.MEMBER.isRole(role)) {
             throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 조회 가능합니다.");
         }
 
@@ -39,7 +39,7 @@ public class OptionService {
     }
 
     public OptionDetail getOption(Long id, String role) {
-        if (!role.equals(Role.USER.getKey())) {
+        if (Role.MEMBER.isRole(role)) {
             throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 조회 가능합니다.");
         }
 
@@ -49,7 +49,7 @@ public class OptionService {
 
     @Transactional
     public OptionDetail createOption(OptionCreate create, String role) {
-        if (!role.equals(Role.USER.getKey())) {
+        if (Role.MEMBER.isRole(role)) {
             throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 생성 가능합니다.");
         }
         OptionEntity optionEntity = optionMapper.toEntity(create);
@@ -60,7 +60,7 @@ public class OptionService {
 
     @Transactional
     public OptionDetail updateOption(Long id, OptionUpdate update, String role) {
-        if (!role.equals(Role.USER.getKey())) {
+        if (Role.MEMBER.isRole(role)) {
             throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 수정 가능합니다.");
         }
         OptionEntity option = optionRepository.findByIdAndIsDeletedFalse(id)
@@ -73,7 +73,7 @@ public class OptionService {
 
     @Transactional
     public OptionDetail deleteOption(Long id, String role) {
-        if (!role.equals(Role.USER.getKey())) {
+        if (Role.MEMBER.isRole(role)) {
             throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 삭제 가능합니다.");
         }
 
