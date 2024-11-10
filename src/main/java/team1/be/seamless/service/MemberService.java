@@ -114,7 +114,7 @@ public class MemberService {
 //       멤버 이메일 중복 여부 검사
         for (MemberEntity member : project.getMemberEntities()){
             if (member.getEmail().equals(create.getEmail()) && Boolean.FALSE.equals(member.getIsDelete())) {
-                throw new BaseHandler(HttpStatus.UNAUTHORIZED,"이메일이 중복 됩니다.");
+                throw new BaseHandler(HttpStatus.CONFLICT,"이메일이 중복 됩니다.");
             }
         }
 
