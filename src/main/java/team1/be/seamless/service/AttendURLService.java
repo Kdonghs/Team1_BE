@@ -38,7 +38,7 @@ public class AttendURLService {
         }
 
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.)
-        if (parsingParam.getRole(req).equals(Role.MEMBER.toString())) {
+        if (Role.MEMBER.isRole(parsingParam.getRole(req))) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"생성 권한이 없습니다.");
         }
 

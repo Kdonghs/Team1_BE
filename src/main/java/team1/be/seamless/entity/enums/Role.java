@@ -20,4 +20,8 @@ public enum Role {
     public String getTitle() {
         return title;
     }
+
+    public boolean isRole(String role) {
+        return this.key.equals(role);
+    }
 }

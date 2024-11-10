@@ -11,6 +11,7 @@ import team1.be.seamless.dto.MemberRequestDTO;
 import team1.be.seamless.dto.MemberRequestDTO.UpdateMember;
 import team1.be.seamless.dto.MemberRequestDTO.getMemberList;
 import team1.be.seamless.dto.MemberResponseDTO;
+import team1.be.seamless.dto.TestDTO.create;
 import team1.be.seamless.entity.MemberEntity;
 import team1.be.seamless.entity.ProjectEntity;
 import team1.be.seamless.entity.enums.Role;
@@ -31,21 +32,7 @@ public class MemberService {
     private final ProjectRepository projectRepository;
     private final ParsingParam parsingParam;
     private final AesEncrypt aesEncrypt;
-//    private final EmailSend emailSend;
     private final MailSend mailSend;
-
-//    @Autowired
-//    public MemberService(MemberRepository memberRepository, MemberMapper memberMapper,
-//        ProjectRepository projectRepository, ParsingPram parsingPram, AesEncrypt aesEncrypt, EmailSend emailSend) {
-//        this.memberRepository = memberRepository;
-//        this.memberMapper = memberMapper;
-//        this.projectRepository = projectRepository;
-//        this.parsingPram = parsingPram;
-//        this.aesEncrypt = aesEncrypt;
-//        this.emailSend = emailSend;
-//
-//    }
-
 
     @Autowired
     public MemberService(MemberRepository memberRepository, MemberMapper memberMapper,
@@ -61,13 +48,9 @@ public class MemberService {
 
     public MemberResponseDTO getMember(Long projectId, Long memberId, HttpServletRequest req) {
         // 팀원인지 확인하기
-        if (parsingParam.getRole(req).equals(Role.MEMBER.toString())) {
+        if (Role.MEMBER.isRole(parsingParam.getRole(req))){
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"권한이 없습니다.");
         }
-
-//        ProjectEntity project = projectRepository.findById(projectId)
-//                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
-
 
         MemberEntity memberEntity = memberRepository.findByProjectEntityIdAndIdAndIsDeleteFalse(projectId, memberId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
@@ -82,7 +65,7 @@ public class MemberService {
     public Page<MemberResponseDTO> getMemberList(Long projectId,
         getMemberList memberList, HttpServletRequest req) {
         // 팀원인지 확인하기
-        if (parsingParam.getRole(req).equals(Role.MEMBER.toString())) {
+        if (Role.MEMBER.isRole(parsingParam.getRole(req))){
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"권한이 없습니다.");
         }
 
@@ -150,16 +133,9 @@ public class MemberService {
     @Transactional
     public MemberResponseDTO updateMember(Long projectId, Long memberId, UpdateMember update, HttpServletRequest req) {
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.
-        if (parsingParam.getRole(req).equals(Role.USER.toString())) {
+        if (Role.MEMBER.isRole(update.getRole())) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"수정 권한이 없습니다.");
         }
-
-//        ProjectEntity project = projectRepository.findById(projectId)
-//                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
-//
-//        if (project.getEndDate().isBefore(LocalDateTime.now())) {
-//            throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
-//        }
 
         MemberEntity member = memberRepository.findByProjectEntityIdAndIdAndIsDeleteFalse(
                 projectId,memberId)
@@ -176,16 +152,9 @@ public class MemberService {
     @Transactional
     public MemberResponseDTO deleteMember(Long projectId, Long memberId, HttpServletRequest req) {
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.)
-        if (parsingParam.getRole(req).equals(Role.USER.toString())) {
+        if (Role.MEMBER.isRole(parsingParam.getRole(req).toString())) {
             throw new BaseHandler(HttpStatus.FORBIDDEN,"삭제 권한이 없습니다.");
         }
-
-//        ProjectEntity project = projectRepository.findById(projectId)
-//                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
-//
-//        if (project.getEndDate().isBefore(LocalDateTime.now())) {
-//            throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
-//        }
 
         MemberEntity member = memberRepository.findByProjectEntityIdAndIdAndIsDeleteFalse(
                 projectId, memberId)
