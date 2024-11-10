@@ -1,4 +1,4 @@
-package team1.BE.seamless.DTO;
+package team1.BE.seamless.dto;
 
 import java.util.Collection;
 import java.util.Collections;

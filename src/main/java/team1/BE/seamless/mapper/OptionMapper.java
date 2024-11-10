@@ -1,14 +1,12 @@
 package team1.BE.seamless.mapper;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import team1.BE.seamless.DTO.OptionDTO.OptionCreate;
-import team1.BE.seamless.DTO.OptionDTO.OptionDetail;
-import team1.BE.seamless.DTO.OptionDTO.OptionSimple;
-import team1.BE.seamless.DTO.OptionDTO.OptionUpdate;
+import team1.BE.seamless.dto.OptionDTO.OptionCreate;
+import team1.BE.seamless.dto.OptionDTO.OptionDetail;
+import team1.BE.seamless.dto.OptionDTO.OptionSimple;
+import team1.BE.seamless.dto.OptionDTO.OptionUpdate;
 import team1.BE.seamless.entity.OptionEntity;
 import team1.BE.seamless.util.Util;
-import team1.BE.seamless.util.errorException.BaseHandler;
 
 @Component
 public class OptionMapper {

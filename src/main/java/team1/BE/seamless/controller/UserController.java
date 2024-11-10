@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import team1.BE.seamless.DTO.UserDTO.UserDetails;
-import team1.BE.seamless.DTO.UserDTO.UserSimple;
-import team1.BE.seamless.DTO.UserDTO.UserUpdate;
+import team1.BE.seamless.dto.UserDTO.UserDetails;
+import team1.BE.seamless.dto.UserDTO.UserSimple;
+import team1.BE.seamless.dto.UserDTO.UserUpdate;
 import team1.BE.seamless.service.UserService;
 import team1.BE.seamless.util.page.SingleResult;
 

@@ -20,9 +20,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import team1.BE.seamless.DTO.ProjectDTO.ProjectCreate;
-import team1.BE.seamless.DTO.ProjectDTO.ProjectDetail;
-import team1.BE.seamless.DTO.ProjectDTO.ProjectUpdate;
+import team1.BE.seamless.dto.ProjectDTO.ProjectCreate;
+import team1.BE.seamless.dto.ProjectDTO.ProjectDetail;
+import team1.BE.seamless.dto.ProjectDTO.ProjectUpdate;
 import team1.BE.seamless.service.ProjectService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

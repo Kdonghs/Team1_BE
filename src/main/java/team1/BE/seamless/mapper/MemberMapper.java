@@ -1,9 +1,9 @@
 package team1.BE.seamless.mapper;
 
 import org.springframework.stereotype.Component;
-import team1.BE.seamless.DTO.MemberRequestDTO.CreateMember;
-import team1.BE.seamless.DTO.MemberRequestDTO.UpdateMember;
-import team1.BE.seamless.DTO.MemberResponseDTO;
+import team1.BE.seamless.dto.MemberRequestDTO.CreateMember;
+import team1.BE.seamless.dto.MemberRequestDTO.UpdateMember;
+import team1.BE.seamless.dto.MemberResponseDTO;
 import team1.BE.seamless.entity.MemberEntity;
 import team1.BE.seamless.entity.ProjectEntity;
 

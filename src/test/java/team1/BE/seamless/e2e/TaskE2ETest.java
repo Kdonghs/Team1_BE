@@ -19,7 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import team1.BE.seamless.DTO.TaskDTO.TaskCreate;
+import team1.BE.seamless.dto.TaskDTO.TaskCreate;
 import team1.BE.seamless.entity.enums.Priority;
 import team1.BE.seamless.entity.enums.Status;
 import team1.BE.seamless.service.ProjectService;

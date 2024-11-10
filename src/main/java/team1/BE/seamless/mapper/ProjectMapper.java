@@ -3,11 +3,11 @@ package team1.BE.seamless.mapper;
 
 import java.util.List;
 import org.springframework.stereotype.Component;
-import team1.BE.seamless.DTO.ProjectDTO;
-import team1.BE.seamless.DTO.ProjectDTO.ProjectDetail;
-import team1.BE.seamless.DTO.ProjectDTO.ProjectDate;
-import team1.BE.seamless.DTO.ProjectDTO.ProjectManager;
-import team1.BE.seamless.DTO.ProjectDTO.ProjectUpdate;
+import team1.BE.seamless.dto.ProjectDTO;
+import team1.BE.seamless.dto.ProjectDTO.ProjectDetail;
+import team1.BE.seamless.dto.ProjectDTO.ProjectDate;
+import team1.BE.seamless.dto.ProjectDTO.ProjectManager;
+import team1.BE.seamless.dto.ProjectDTO.ProjectUpdate;
 import team1.BE.seamless.entity.OptionEntity;
 import team1.BE.seamless.entity.ProjectEntity;
 import team1.BE.seamless.entity.ProjectOption;

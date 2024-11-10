@@ -21,7 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-import team1.BE.seamless.DTO.AuthDTO.PrincipalDetails;
+import team1.BE.seamless.dto.AuthDTO.PrincipalDetails;
 import team1.BE.seamless.entity.MemberEntity;
 import team1.BE.seamless.entity.UserEntity;
 import team1.BE.seamless.entity.enums.Role;

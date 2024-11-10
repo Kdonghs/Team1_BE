@@ -2,7 +2,7 @@ package team1.BE.seamless.init;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import team1.BE.seamless.DTO.UserDTO.UserSimple;
+import team1.BE.seamless.dto.UserDTO.UserSimple;
 import team1.BE.seamless.service.UserService;
 
 @Component

@@ -1,10 +1,10 @@
 package team1.BE.seamless.mapper;
 
 import org.springframework.stereotype.Component;
-import team1.BE.seamless.DTO.TaskDTO.TaskCreate;
-import team1.BE.seamless.DTO.TaskDTO.TaskDetail;
-import team1.BE.seamless.DTO.TaskDTO.TaskUpdate;
-import team1.BE.seamless.DTO.TaskDTO.TaskWithOwnerDetail;
+import team1.BE.seamless.dto.TaskDTO.TaskCreate;
+import team1.BE.seamless.dto.TaskDTO.TaskDetail;
+import team1.BE.seamless.dto.TaskDTO.TaskUpdate;
+import team1.BE.seamless.dto.TaskDTO.TaskWithOwnerDetail;
 import team1.BE.seamless.entity.MemberEntity;
 import team1.BE.seamless.entity.ProjectEntity;
 import team1.BE.seamless.entity.TaskEntity;

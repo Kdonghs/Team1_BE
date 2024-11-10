@@ -16,8 +16,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import team1.BE.seamless.DTO.UserDTO.UserUpdate;
-import team1.BE.seamless.service.UserService;
+import team1.BE.seamless.dto.UserDTO.UserUpdate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserE2ETest {

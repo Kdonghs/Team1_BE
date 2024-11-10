@@ -1,14 +1,13 @@
 package team1.BE.seamless.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team1.BE.seamless.DTO.UserDTO.UserDetails;
-import team1.BE.seamless.DTO.UserDTO.UserSimple;
-import team1.BE.seamless.DTO.UserDTO.UserUpdate;
+import team1.BE.seamless.dto.UserDTO.UserDetails;
+import team1.BE.seamless.dto.UserDTO.UserSimple;
+import team1.BE.seamless.dto.UserDTO.UserUpdate;
 import team1.BE.seamless.entity.UserEntity;
 import team1.BE.seamless.mapper.UserMapper;
 import team1.BE.seamless.repository.UserRepository;

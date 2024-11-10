@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import team1.BE.seamless.DTO.InviteRequestDTO;
+import team1.BE.seamless.dto.InviteRequestDTO;
 import team1.BE.seamless.service.InviteCodeByEmailService;
 import team1.BE.seamless.util.errorException.BaseHandler;
 import team1.BE.seamless.util.page.SingleResult;

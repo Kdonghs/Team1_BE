@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import team1.BE.seamless.DTO.ProjectDTO.ProjectCreate;
+import team1.BE.seamless.dto.ProjectDTO.ProjectCreate;
 import team1.BE.seamless.service.ProjectService;
 
 @Component

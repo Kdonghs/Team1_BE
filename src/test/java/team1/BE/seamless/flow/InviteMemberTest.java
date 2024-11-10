@@ -15,8 +15,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import team1.BE.seamless.DTO.MemberRequestDTO.CreateMember;
-import team1.BE.seamless.DTO.MemberRequestDTO.UpdateMember;
+import team1.BE.seamless.dto.MemberRequestDTO.CreateMember;
+import team1.BE.seamless.dto.MemberRequestDTO.UpdateMember;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class InviteMemberTest {

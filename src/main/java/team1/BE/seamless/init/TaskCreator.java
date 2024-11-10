@@ -3,7 +3,7 @@ package team1.BE.seamless.init;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import team1.BE.seamless.DTO.TaskDTO.TaskCreate;
+import team1.BE.seamless.dto.TaskDTO.TaskCreate;
 import team1.BE.seamless.entity.enums.Priority;
 import team1.BE.seamless.entity.enums.Status;
 import team1.BE.seamless.service.TaskService;

@@ -1,4 +1,4 @@
-package team1.BE.seamless.DTO;
+package team1.BE.seamless.dto;
 
 // 팀원이 초대링크에 해당하는 페이지에서 이름, 이메일을 작성하여
 // 요청을 보낼 때의 DTO

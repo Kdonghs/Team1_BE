@@ -1,6 +1,5 @@
-package team1.BE.seamless.DTO;
+package team1.BE.seamless.dto;
 
-import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import org.hibernate.validator.constraints.URL;
 
