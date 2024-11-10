@@ -25,7 +25,7 @@ import team1.BE.seamless.DTO.MemberRequestDTO.UpdateMember;
 import team1.BE.seamless.entity.MemberEntity;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class MemberServiceTest {
+class MemberE2ETest {
 
     @LocalServerPort
     private int port;
@@ -36,7 +36,7 @@ class MemberServiceTest {
     private HttpHeaders headers = new HttpHeaders();
 
     @Autowired
-    public MemberServiceTest(TestRestTemplate restTemplate) {
+    public MemberE2ETest(TestRestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

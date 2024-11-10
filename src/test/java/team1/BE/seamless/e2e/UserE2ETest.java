@@ -5,8 +5,6 @@ import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +20,7 @@ import team1.BE.seamless.DTO.UserDTO.UserUpdate;
 import team1.BE.seamless.service.UserService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserServiceTest {
+class UserE2ETest {
 
     @LocalServerPort
     private int port;
@@ -31,13 +29,11 @@ class UserServiceTest {
     private String token;
     private HttpHeaders headers = new HttpHeaders();
 
-    private final UserService userService;
 
 
     @Autowired
-    public UserServiceTest(TestRestTemplate restTemplate, UserService userService) {
+    public UserE2ETest(TestRestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.userService = userService;
     }
 
     /**

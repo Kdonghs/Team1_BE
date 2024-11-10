@@ -1,7 +1,6 @@
 package team1.BE.seamless.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -28,7 +27,7 @@ import team1.BE.seamless.service.TaskService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TaskServiceTest {
+class TaskE2ETest {
 
     @LocalServerPort
     private int port;
@@ -41,7 +40,7 @@ class TaskServiceTest {
     private ProjectService projectService;
 
     @Autowired
-    public TaskServiceTest(TestRestTemplate restTemplate, TaskService taskService, ProjectService projectService) {
+    public TaskE2ETest(TestRestTemplate restTemplate, TaskService taskService, ProjectService projectService) {
         this.restTemplate = restTemplate;
         this.taskService = taskService;
         this.projectService = projectService;
