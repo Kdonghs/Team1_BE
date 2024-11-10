@@ -48,7 +48,7 @@ public class MemberService {
 
     public MemberResponseDTO getMember(Long projectId, Long memberId, HttpServletRequest req) {
         // 팀원인지 확인하기
-        if (Role.MEMBER.isRole(parsingParam.getRole(req))){
+        if (Role.MEMBER.isRole(parsingParam.getRole(req))) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"권한이 없습니다.");
         }
 
@@ -65,7 +65,7 @@ public class MemberService {
     public Page<MemberResponseDTO> getMemberList(Long projectId,
         getMemberList memberList, HttpServletRequest req) {
         // 팀원인지 확인하기
-        if (Role.MEMBER.isRole(parsingParam.getRole(req))){
+        if (Role.MEMBER.isRole(parsingParam.getRole(req))) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"권한이 없습니다.");
         }
 
@@ -133,7 +133,7 @@ public class MemberService {
     @Transactional
     public MemberResponseDTO updateMember(Long projectId, Long memberId, UpdateMember update, HttpServletRequest req) {
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.
-        if (Role.MEMBER.isRole(update.getRole())) {
+        if (Role.MEMBER.isRole(parsingParam.getRole(req))) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED,"수정 권한이 없습니다.");
         }
 
@@ -152,7 +152,7 @@ public class MemberService {
     @Transactional
     public MemberResponseDTO deleteMember(Long projectId, Long memberId, HttpServletRequest req) {
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.)
-        if (Role.MEMBER.isRole(parsingParam.getRole(req).toString())) {
+        if (Role.MEMBER.isRole(parsingParam.getRole(req))) {
             throw new BaseHandler(HttpStatus.FORBIDDEN,"삭제 권한이 없습니다.");
         }
 
