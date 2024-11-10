@@ -33,7 +33,7 @@ public class InviteCodeByEmailService {
                 .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
 
         // 프로젝트 종료 기간 검증
-        if (project.getEndDate().isBefore(LocalDateTime.now())) {
+        if (project.isExpired()) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
         } 
 

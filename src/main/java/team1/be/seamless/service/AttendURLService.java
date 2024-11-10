@@ -33,7 +33,7 @@ public class AttendURLService {
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
 
         //현재 시간이 프로젝트 종료 기한을 넘어섰는지 체크
-        if (project.getEndDate().isBefore(LocalDateTime.now())) {
+        if (project.isExpired()) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
         }
 
