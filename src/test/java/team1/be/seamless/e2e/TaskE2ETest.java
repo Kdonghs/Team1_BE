@@ -21,7 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import team1.be.seamless.dto.TaskDTO.TaskCreate;
 import team1.be.seamless.entity.enums.Priority;
-import team1.be.seamless.entity.enums.Status;
+import team1.be.seamless.entity.enums.TaskStatus;
 import team1.be.seamless.service.ProjectService;
 import team1.be.seamless.service.TaskService;
 
@@ -67,7 +67,7 @@ class TaskE2ETest {
         TaskCreate body = new TaskCreate("태스크1", "첫번째 태스크입니다.",
             1L, LocalDateTime.of(2001, 10, 10, 0, 0),
             LocalDateTime.of(2025, 5, 3, 1, 0, 0),
-            Priority.HIGH, Status.IN_PROGRESS, 1);
+            Priority.HIGH, TaskStatus.IN_PROGRESS, 1);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
 
@@ -81,7 +81,7 @@ class TaskE2ETest {
         TaskCreate body = new TaskCreate("태스크1", "첫번째 태스크입니다.",
             1L, LocalDateTime.of(2024, 12, 1, 0, 0),
             LocalDateTime.of(2100, 5, 3, 1, 0, 0),
-            Priority.HIGH, Status.IN_PROGRESS, 1);
+            Priority.HIGH, TaskStatus.IN_PROGRESS, 1);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
 
