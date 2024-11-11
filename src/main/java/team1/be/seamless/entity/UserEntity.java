@@ -20,7 +20,7 @@ import team1.be.seamless.entity.enums.Role;
 
 @Entity(name = "userss")
 @EntityListeners(AuditingEntityListener.class)
-public class UserEntity {
+public class UserEntity extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
