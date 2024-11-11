@@ -2,9 +2,7 @@ package team1.be.seamless.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,17 +12,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import team1.be.seamless.dto.TestDTO;
 import team1.be.seamless.dto.TestDTO.create;
-import team1.be.seamless.dto.UserDTO.UserDetails;
-import team1.be.seamless.dto.UserDTO.UserSimple;
-import team1.be.seamless.dto.UserDTO.UserUpdate;
 import team1.be.seamless.entity.TestEntity;
-import team1.be.seamless.entity.UserEntity;
-import team1.be.seamless.entity.enums.Role;
 import team1.be.seamless.mapper.UserMapper;
 import team1.be.seamless.repository.TestRepository;
-import team1.be.seamless.repository.UserRepository;
 import team1.be.seamless.util.auth.JwtToken;
-import team1.be.seamless.util.auth.Token;
 
 @ExtendWith(MockitoExtension.class)
 class TestServiceTest {
