@@ -78,15 +78,6 @@ public class OptionService {
         return optionMapper.toDetail(option);
     }
 
-    /**
-     * 테스트용
-     */
-    @Profile("test")
-    @Transactional
-    public OptionEntity createOption(OptionCreate create) {
-        return optionRepository.save(optionMapper.toEntity(create));
-    }
-
     private void authRole(String role) {
         if(!Role.ADMIN.isRole(role)) {
             throw new BaseHandler(HttpStatus.FORBIDDEN, "관리자만 접근 가능합니다.");
