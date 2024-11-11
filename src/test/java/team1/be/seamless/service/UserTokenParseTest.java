@@ -1,4 +1,4 @@
-package team1.be.seamless.e2e;
+package team1.be.seamless.service;
 
 import static org.springframework.http.HttpMethod.POST;
 
