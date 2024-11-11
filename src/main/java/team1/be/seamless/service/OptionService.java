@@ -31,18 +31,14 @@ public class OptionService {
     }
 
     public Page<OptionSimple> getProjectOptionList(getList param, String role) {
-        if (Role.MEMBER.isRole(role)) {
-            throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 조회 가능합니다.");
-        }
+        authRole(role);
 
         return optionRepository.findAllByIsDeletedFalse(param.toPageable())
             .map(optionMapper::toSimple);
     }
 
     public OptionDetail getOption(Long id, String role) {
-        if (Role.MEMBER.isRole(role)) {
-            throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 조회 가능합니다.");
-        }
+        authRole(role);
 
         return optionMapper.toDetail(optionRepository.findByIdAndIsDeletedFalse(id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당하는 옵션이 존재하지 않습니다.")));
@@ -50,9 +46,8 @@ public class OptionService {
 
     @Transactional
     public OptionDetail createOption(OptionCreate create, String role) {
-        if (Role.MEMBER.isRole(role)) {
-            throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 생성 가능합니다.");
-        }
+        authRole(role);
+
         OptionEntity optionEntity = optionMapper.toEntity(create);
         optionRepository.save(optionEntity);
 
@@ -61,9 +56,8 @@ public class OptionService {
 
     @Transactional
     public OptionDetail updateOption(Long id, OptionUpdate update, String role) {
-        if (Role.MEMBER.isRole(role)) {
-            throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 수정 가능합니다.");
-        }
+        authRole(role);
+
         OptionEntity option = optionRepository.findByIdAndIsDeletedFalse(id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당하는 옵션이 존재하지 않습니다."));
 
@@ -74,9 +68,7 @@ public class OptionService {
 
     @Transactional
     public OptionDetail deleteOption(Long id, String role) {
-        if (Role.MEMBER.isRole(role)) {
-            throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 삭제 가능합니다.");
-        }
+        authRole(role);
 
         OptionEntity option = optionRepository.findByIdAndIsDeletedFalse(id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당하는 옵션이 존재하지 않습니다."));
@@ -93,6 +85,12 @@ public class OptionService {
     @Transactional
     public OptionEntity createOption(OptionCreate create) {
         return optionRepository.save(optionMapper.toEntity(create));
+    }
+
+    private void authRole(String role) {
+        if(!Role.USER.isRole(role)) {
+            throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 조회 가능합니다.");
+        }
     }
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import team1.be.seamless.dto.ProjectDTO.ProjectCreate;
+import team1.be.seamless.entity.enums.Role;
 import team1.be.seamless.service.ProjectService;
 
 @Component
@@ -26,6 +27,6 @@ public class ProjectCreator {
                 List.of(1L, 2L, 3L),
                 LocalDateTime.of(2024, 10, 1, 0, 0, 0),
                 LocalDateTime.of(2025, 10, 1, 0, 0, 0)
-            ), "user1@google.com");
+            ), "user1@google.com", Role.USER.getKey());
     }
 }
