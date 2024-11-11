@@ -13,7 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtToken jwtToken;
-    private static final String URI = "/auth/success";
+    private static final String URI = "/api/auth/success";
 
     @Autowired
     public OAuth2SuccessHandler(JwtToken jwtToken) {
