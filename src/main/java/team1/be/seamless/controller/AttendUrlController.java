@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team1.be.seamless.service.AttendURLService;
+import team1.be.seamless.util.auth.ParsingParam;
 import team1.be.seamless.util.page.SingleResult;
 
 @Tag(name = "참여 링크 생성")
@@ -16,10 +17,12 @@ import team1.be.seamless.util.page.SingleResult;
 public class AttendUrlController {
 
     private final AttendURLService attendURLService;
+    private final ParsingParam parsingParam;
 
     @Autowired
-    public AttendUrlController(AttendURLService attendURLService) {
+    public AttendUrlController(AttendURLService attendURLService, ParsingParam parsingParam) {
         this.attendURLService = attendURLService;
+        this.parsingParam = parsingParam;
     }
 
     /**
@@ -29,6 +32,7 @@ public class AttendUrlController {
     @PostMapping("/api/project/{projectId}/invite-link")
     public SingleResult<String> generateInviteLink(HttpServletRequest req,
         @Valid @PathVariable("projectId") Long projectId) {
-        return new SingleResult<>(attendURLService.generateAttendURL(req, projectId));
+        return new SingleResult<>(attendURLService.generateAttendURL(parsingParam.getEmail(req),
+            parsingParam.getRole(req), projectId));
     }
 }

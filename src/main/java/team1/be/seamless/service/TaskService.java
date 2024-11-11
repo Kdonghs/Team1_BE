@@ -35,16 +35,14 @@ public class TaskService {
     private final ProjectRepository projectRepository;
     private final MemberRepository memberRepository;
     private final TaskMapper taskMapper;
-    private final ParsingParam parsingParam;
 
     @Autowired
     public TaskService(TaskRepository taskRepository, ProjectRepository projectRepository,
-        MemberRepository memberRepository, TaskMapper taskMapper, ParsingParam parsingParam) {
+        MemberRepository memberRepository, TaskMapper taskMapper) {
         this.taskRepository = taskRepository;
         this.projectRepository = projectRepository;
         this.memberRepository = memberRepository;
         this.taskMapper = taskMapper;
-        this.parsingParam = parsingParam;
     }
 
     public TaskDetail getTask(Long taskId) {
@@ -160,9 +158,9 @@ public class TaskService {
         return new PageImpl<>(teamMemberProgress, param.toPageable(), memberEntities.size());
     }
 
-    public TaskDetail createTask(HttpServletRequest req, Long projectId, TaskCreate taskCreate) {
+    public TaskDetail createTask(String email, Long projectId, TaskCreate taskCreate) {
         ProjectEntity project = projectRepository.findByIdAndUserEntityEmailAndIsDeletedFalse(
-                projectId, parsingParam.getEmail(req))
+                projectId, email)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
 
 //        태스크의 일정 검증
@@ -213,7 +211,7 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskDetail updateTask(HttpServletRequest req, Long taskId, TaskUpdate update) {
+    public TaskDetail updateTask(String role, String email, Long taskId, TaskUpdate update) {
         TaskEntity task = taskRepository.findByIdAndIsDeletedFalse(taskId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 태스크"));
 
@@ -225,8 +223,8 @@ public class TaskService {
 
 //        수정 권한이 있는지 검증
 //        팀장
-        if (Role.USER.isRole(parsingParam.getRole(req))) {
-            if (!task.getProject().getUserEntity().getEmail().equals(parsingParam.getEmail(req))) {
+        if (Role.USER.isRole(role)) {
+            if (!task.getProject().getUserEntity().getEmail().equals(email)) {
                 throw new BaseHandler(HttpStatus.UNAUTHORIZED, "태스크 수정 권한이 없습니다.");
             }
 //            멤버 변경
@@ -236,8 +234,8 @@ public class TaskService {
             task.setOwner(member);
         }
 //        팀원
-        if (Role.MEMBER.isRole(parsingParam.getRole(req))) {
-            if (!task.getOwner().getEmail().equals(parsingParam.getEmail(req))) {
+        if (Role.MEMBER.isRole(role)) {
+            if (!task.getOwner().getEmail().equals(email)) {
                 throw new BaseHandler(HttpStatus.UNAUTHORIZED, "태스크 수정 권한이 없습니다.");
             }
         }
@@ -248,9 +246,12 @@ public class TaskService {
     }
 
     @Transactional
-    public Long deleteTask(HttpServletRequest req, Long taskId) {
-        TaskEntity task = taskRepository.findByIdAndProjectEntityUserEntityEmail(taskId,
-                parsingParam.getEmail(req))
+    public Long deleteTask(String role, String email, Long taskId) {
+
+        if (!Role.USER.isRole(role)) {
+            throw new BaseHandler(HttpStatus.UNAUTHORIZED,"태스크 삭제 권한이 없습니다.");
+        }
+        TaskEntity task = taskRepository.findByIdAndProjectEntityUserEntityEmail(taskId,email)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 태스크"));
 
         task.setDeleted(true);

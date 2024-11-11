@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import team1.be.seamless.dto.TaskDTO.TaskDetail;
 import team1.be.seamless.dto.TaskDTO.TaskUpdate;
 import team1.be.seamless.dto.TaskDTO.TaskWithOwnerDetail;
 import team1.be.seamless.service.TaskService;
+import team1.be.seamless.util.auth.ParsingParam;
 import team1.be.seamless.util.page.PageMapper;
 import team1.be.seamless.util.page.PageResult;
 import team1.be.seamless.util.page.SingleResult;
@@ -32,10 +34,12 @@ import team1.be.seamless.util.page.SingleResult;
 public class TaskController {
 
     private final TaskService taskService;
+    private final ParsingParam parsingParam;
 
     @Autowired
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, ParsingParam parsingParam) {
         this.taskService = taskService;
+        this.parsingParam = parsingParam;
     }
 
     @Operation(summary = "태스크 단건 조회")
@@ -79,7 +83,7 @@ public class TaskController {
     public SingleResult<TaskDetail> createTask(HttpServletRequest req,
         @Valid @PathVariable("projectId") Long projectId,
         @Valid @RequestBody TaskCreate taskCreate) {
-        return new SingleResult<>(taskService.createTask(req, projectId, taskCreate));
+        return new SingleResult<>(taskService.createTask(parsingParam.getEmail(req), projectId, taskCreate));
     }
 
     /**
@@ -90,7 +94,7 @@ public class TaskController {
     public SingleResult<TaskDetail> updateTask(HttpServletRequest req,
         @Valid @PathVariable("taskId") Long taskId,
         @Valid @RequestBody TaskUpdate update) {
-        return new SingleResult<>(taskService.updateTask(req, taskId, update));
+        return new SingleResult<>(taskService.updateTask(parsingParam.getRole(req), parsingParam.getEmail(req), taskId, update));
     }
 
     /**
@@ -100,6 +104,6 @@ public class TaskController {
     @DeleteMapping("/task/{taskId}")
     public SingleResult<Long> deleteTask(HttpServletRequest req,
         @PathVariable("taskId") Long taskId) {
-        return new SingleResult<>(taskService.deleteTask(req, taskId));
+        return new SingleResult<>(taskService.deleteTask(parsingParam.getRole(req), parsingParam.getEmail(req), taskId));
     }
 }
