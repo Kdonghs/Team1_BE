@@ -19,25 +19,22 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final ParsingParam parsingParam;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserMapper userMapper,
-        ParsingParam parsingParam) {
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-        this.parsingParam = parsingParam;
     }
 
-    public UserDetails getUser(HttpServletRequest req) {
-        UserEntity user = userRepository.findByEmailAndIsDeleteFalse(parsingParam.getEmail(req))
+    public UserDetails getUser(String email) {
+        UserEntity user = userRepository.findByEmailAndIsDeleteFalse(email)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다."));
         return userMapper.toUserDetails(user);
     }
 
     @Transactional
-    public UserSimple updateUser(HttpServletRequest req, UserUpdate update) {
-        UserEntity user = userRepository.findByEmailAndIsDeleteFalse(parsingParam.getEmail(req))
+    public UserSimple updateUser(String email, UserUpdate update) {
+        UserEntity user = userRepository.findByEmailAndIsDeleteFalse(email)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다."));
 
         userMapper.toUpdate(user, update);
@@ -46,8 +43,8 @@ public class UserService {
     }
 
     @Transactional
-    public UserSimple deleteUser(HttpServletRequest req) {
-        UserEntity user = userRepository.findByEmailAndIsDeleteFalse(parsingParam.getEmail(req))
+    public UserSimple deleteUser(String email) {
+        UserEntity user = userRepository.findByEmailAndIsDeleteFalse(email)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다."));
 
         user.setIsDelete();

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team1.be.seamless.dto.MemberRequestDTO;
 import team1.be.seamless.dto.MemberResponseDTO;
 import team1.be.seamless.service.MemberService;
+import team1.be.seamless.util.auth.ParsingParam;
 import team1.be.seamless.util.page.PageMapper;
 import team1.be.seamless.util.page.PageResult;
 import team1.be.seamless.util.page.SingleResult;
@@ -25,11 +26,13 @@ import team1.be.seamless.util.page.SingleResult;
 @RestController
 public class MemberController {
 
-    MemberService memberService;
+    private final MemberService memberService;
+    private final ParsingParam parsingParam;
 
     @Autowired
-    MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService, ParsingParam parsingParam) {
         this.memberService = memberService;
+        this.parsingParam = parsingParam;
     }
 
     @Operation(summary = "팀원 개별 조회")
@@ -38,7 +41,7 @@ public class MemberController {
         @Valid @PathVariable("projectId") Long projectId,
         @Valid @PathVariable("memberId") Long memberId,
         HttpServletRequest req) {
-        return new SingleResult<>(memberService.getMember(projectId, memberId, req));
+        return new SingleResult<>(memberService.getMember(projectId, memberId, parsingParam.getRole(req)));
     }
 
     @Operation(summary = "팀원 전체 조회")
@@ -48,7 +51,7 @@ public class MemberController {
         HttpServletRequest req,
         @Valid MemberRequestDTO.getMemberList memberListRequestDTO) {
         return PageMapper.toPageResult(
-            memberService.getMemberList(projectId, memberListRequestDTO, req));
+            memberService.getMemberList(projectId, memberListRequestDTO, parsingParam.getRole(req)));
     }
 
 
@@ -66,7 +69,7 @@ public class MemberController {
         @PathVariable("memberId") Long memberId,
         @RequestBody MemberRequestDTO.UpdateMember update,
         HttpServletRequest req) {
-        return new SingleResult<>(memberService.updateMember(projectId, memberId, update, req));
+        return new SingleResult<>(memberService.updateMember(projectId, memberId, update, parsingParam.getRole(req)));
     }
 
     @Operation(summary = "팀원 삭제")
@@ -75,6 +78,6 @@ public class MemberController {
         @PathVariable("projectId") Long projectId,
         @PathVariable("memberId") Long memberId,
         HttpServletRequest req) {
-        return new SingleResult<>(memberService.deleteMember(projectId, memberId, req));
+        return new SingleResult<>(memberService.deleteMember(projectId, memberId, parsingParam.getRole(req)));
     }
 }

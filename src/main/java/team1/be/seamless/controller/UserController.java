@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import team1.be.seamless.dto.UserDTO.UserDetails;
 import team1.be.seamless.dto.UserDTO.UserSimple;
 import team1.be.seamless.dto.UserDTO.UserUpdate;
+import team1.be.seamless.mapper.UserMapper;
 import team1.be.seamless.service.UserService;
+import team1.be.seamless.util.auth.ParsingParam;
 import team1.be.seamless.util.page.SingleResult;
 
 @Tag(name = "유저 구현")
@@ -23,29 +25,31 @@ import team1.be.seamless.util.page.SingleResult;
 public class UserController {
 
     private final UserService userService;
+    private final ParsingParam parsingParam;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ParsingParam parsingParam) {
         this.userService = userService;
+        this.parsingParam = parsingParam;
     }
 
     @Operation(summary = "유저 정보 조회")
     @GetMapping
     public SingleResult<UserDetails> getUser(HttpServletRequest req) {
-        return new SingleResult<>(userService.getUser(req));
+        return new SingleResult<>(userService.getUser(parsingParam.getEmail(req)));
     }
 
     @Operation(summary = "유저 정보 수정")
     @PutMapping
     public SingleResult<UserSimple> updateUser(HttpServletRequest req, @Valid @RequestBody
     UserUpdate update) {
-        return new SingleResult<>(userService.updateUser(req, update));
+        return new SingleResult<>(userService.updateUser(parsingParam.getEmail(req), update));
     }
 
     @Operation(summary = "유저 정보 삭제")
     @DeleteMapping
     public SingleResult<UserSimple> deleteUser(HttpServletRequest req) {
-        return new SingleResult<>(userService.deleteUser(req));
+        return new SingleResult<>(userService.deleteUser(parsingParam.getEmail(req)));
     }
 
 }
