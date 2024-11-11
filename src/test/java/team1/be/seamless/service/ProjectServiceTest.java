@@ -86,15 +86,15 @@ public class ProjectServiceTest {
             "https://example.com/user1.jpg"
         );
 
-        optionEntity1 = new OptionEntity("옵션 1", "옵션 설명1", "타입1");
-        optionEntity2 = new OptionEntity("옵션 2", "옵션 설명2", "타입2");
+        optionEntity1 = new OptionEntity("옵션1", "옵션 설명1", "타입1");
+        optionEntity2 = new OptionEntity("옵션2", "옵션 설명2", "타입2");
 
         ProjectOptionEntity projectOption1 = new ProjectOptionEntity(optionEntity1);
         ProjectOptionEntity projectOption2 = new ProjectOptionEntity(optionEntity2);
         projectOptions = List.of(projectOption1, projectOption2);
 
         projectEntity1 = new ProjectEntity(
-            "프로젝트 1",
+            "프로젝트1",
             "프로젝트 설명1",
             "https://example.com/project1.jpg",
             userEntity,
@@ -104,7 +104,7 @@ public class ProjectServiceTest {
         );
 
         projectEntity2 = new ProjectEntity(
-            "프로젝트 2",
+            "프로젝트2",
             "프로젝트 설명2",
             "https://example.com/project2.jpg",
             userEntity,
@@ -186,7 +186,7 @@ public class ProjectServiceTest {
     void createProject_생성_성공() {
         // Given
         ProjectDTO.ProjectCreate create = new ProjectDTO.ProjectCreate(
-            "프로젝트 1",
+            "프로젝트1",
             "프로젝트 설명1",
             "https://example.com/project1.jpg",
             List.of(1L, 2L),
@@ -207,7 +207,7 @@ public class ProjectServiceTest {
 
         ProjectDTO.ProjectDetail projectDetail = new ProjectDTO.ProjectDetail(
             1L,
-            "프로젝트 1",
+            "프로젝트1",
             "프로젝트 설명1",
             "https://example.com/project1.jpg",
             LocalDateTime.of(2024,11,21,0,0,0),
@@ -232,7 +232,7 @@ public class ProjectServiceTest {
     void 프로젝트_수정_검증() {
         // Given
         ProjectDTO.ProjectUpdate update = new ProjectDTO.ProjectUpdate(
-            "프로젝트 2",
+            "프로젝트2",
             "프로젝트 설명2",
             "https://example.com/project2.jpg",
             List.of(1L, 2L),
@@ -247,7 +247,7 @@ public class ProjectServiceTest {
 
         ProjectDTO.ProjectDetail projectDetail = new ProjectDTO.ProjectDetail(
             1L,
-            "프로젝트 2",
+            "프로젝트2",
             "프로젝트 설명2",
             "https://example.com/project2.jpg",
             LocalDateTime.of(2024,11,21,0,0,0),
@@ -268,7 +268,7 @@ public class ProjectServiceTest {
 
         // Then
         assertThat(result).isEqualTo(projectDetail);
-        assertThat(result.getName()).isEqualTo("프로젝트 2");
+        assertThat(result.getName()).isEqualTo("프로젝트2");
         assertThat(result.getDescription()).isEqualTo("프로젝트 설명2");
         assertThat(result.getImageURL()).isEqualTo("https://example.com/project2.jpg");
         then(projectOptionRepository).should().deleteByProjectEntity(projectEntity1);
