@@ -1,5 +1,4 @@
-package team1.BE.seamless.service;
-
+package team1.be.seamless.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,7 +6,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.*;
@@ -31,15 +29,14 @@ import team1.be.seamless.repository.OptionRepository;
 import team1.be.seamless.repository.ProjectOptionRepository;
 import team1.be.seamless.repository.ProjectRepository;
 import team1.be.seamless.repository.UserRepository;
-import team1.be.seamless.service.ProjectService;
 import team1.be.seamless.util.errorException.BaseHandler;
-
 
 @ExtendWith(MockitoExtension.class)
 public class ProjectServiceTest {
 
     @InjectMocks
     private ProjectService projectService;
+
     @Mock
     private ProjectRepository projectRepository;
 
@@ -62,6 +59,12 @@ public class ProjectServiceTest {
 
     private String role;
 
+    private ProjectDTO.getList param;
+
+    private ProjectEntity projectEntity1;
+
+    private ProjectEntity projectEntity2;
+
     private UserEntity userEntity;
 
     private OptionEntity optionEntity1;
@@ -75,6 +78,7 @@ public class ProjectServiceTest {
     void setUp() {
         email = "user@example.com";
         role = Role.USER.getKey();
+        param = new ProjectDTO.getList();
 
         userEntity = new UserEntity(
             "사용자1",
@@ -82,20 +86,37 @@ public class ProjectServiceTest {
             "https://example.com/user1.jpg"
         );
 
-        optionEntity1 = new OptionEntity("Option1", "Description1", "TypeA");
-        optionEntity2 = new OptionEntity("Option2", "Description2", "TypeB");
+        optionEntity1 = new OptionEntity("옵션 1", "옵션 설명1", "타입1");
+        optionEntity2 = new OptionEntity("옵션 2", "옵션 설명2", "타입2");
 
         ProjectOptionEntity projectOption1 = new ProjectOptionEntity(optionEntity1);
         ProjectOptionEntity projectOption2 = new ProjectOptionEntity(optionEntity2);
         projectOptions = List.of(projectOption1, projectOption2);
+
+        projectEntity1 = new ProjectEntity(
+            "프로젝트 1",
+            "프로젝트 설명1",
+            "https://example.com/project1.jpg",
+            userEntity,
+            projectOptions,
+            LocalDateTime.of(2024,11,21,0,0,0),
+            LocalDateTime.of(2025,11,21,0,0,0)
+        );
+
+        projectEntity2 = new ProjectEntity(
+            "프로젝트 2",
+            "프로젝트 설명2",
+            "https://example.com/project2.jpg",
+            userEntity,
+            projectOptions,
+            LocalDateTime.of(2024,11,21,0,0,0),
+            LocalDateTime.of(2025,11,21,0,0,0)
+        );
     }
 
     @Test
     void 프로젝트_리스트_페이지네이션_반환_검증() {
         //Given
-        ProjectDTO.getList param = new ProjectDTO.getList();
-        ProjectEntity projectEntity1 = new ProjectEntity();
-        ProjectEntity projectEntity2 = new ProjectEntity();
         Page<ProjectEntity> projects = new PageImpl<>(List.of(projectEntity1, projectEntity2));
         given(projectRepository.findAllByUserEntityEmailAndIsDeletedFalse(param.toPageable(), email)).willReturn(projects);
 
@@ -111,7 +132,7 @@ public class ProjectServiceTest {
     void 존재_하지_않는_프로젝트_조회_시_예외() {
         // Given
         long projectId = 1L;
-        given(projectRepository.findByIdAndIsDeletedFalse(1L)).willReturn(Optional.empty());
+        given(projectRepository.findByIdAndIsDeletedFalse(projectId)).willReturn(Optional.empty());
 
         // When / Then
         assertThatThrownBy(() -> projectService.getProject(projectId, role))
@@ -123,8 +144,13 @@ public class ProjectServiceTest {
     void 프로젝트에_적용된_옵션들_조회() {
         // Given
         long projectId = 1L;
-        ProjectEntity projectEntity = new ProjectEntity();
-        given(projectRepository.findByIdAndIsDeletedFalse(1L)).willReturn(Optional.of(projectEntity));
+        given(projectRepository.findByIdAndIsDeletedFalse(projectId)).willReturn(Optional.of(projectEntity1));
+
+        OptionDetail optionDetail1 = new OptionDetail();
+        OptionDetail optionDetail2 = new OptionDetail();
+
+        given(optionMapper.toDetail(optionEntity1)).willReturn(optionDetail1);
+        given(optionMapper.toDetail(optionEntity2)).willReturn(optionDetail2);
 
         // When
         List<OptionDetail> result = projectService.getProjectOptions(projectId, role);
@@ -132,14 +158,13 @@ public class ProjectServiceTest {
         // Then
         assertThat(result).isNotNull();
         then(projectRepository).should().findByIdAndIsDeletedFalse(projectId);
+        then(optionMapper).should().toDetail(optionEntity1);
+        then(optionMapper).should().toDetail(optionEntity2);
     }
 
     @Test
     void 프로젝트_기간_조회() {
         //Given
-        ProjectDTO.getList param = new ProjectDTO.getList();
-        ProjectEntity projectEntity1 = new ProjectEntity();
-        ProjectEntity projectEntity2 = new ProjectEntity();
         Page<ProjectEntity> projects = new PageImpl<>(List.of(projectEntity1, projectEntity2));
         given(projectRepository.findAllByUserEntityEmailAndIsDeletedFalse(param.toPageable(), email)).willReturn(projects);
 
@@ -161,8 +186,8 @@ public class ProjectServiceTest {
     void createProject_생성_성공() {
         // Given
         ProjectDTO.ProjectCreate create = new ProjectDTO.ProjectCreate(
-            "New Project",
-            "Description",
+            "프로젝트 1",
+            "프로젝트 설명1",
             "https://example.com/project1.jpg",
             List.of(1L, 2L),
             LocalDateTime.of(2024,11,21,0,0,0),
@@ -176,23 +201,14 @@ public class ProjectServiceTest {
 
         given(optionRepository.findByIdIn(create.getOptionIds())).willReturn(List.of(optionEntity1, optionEntity2));
 
-        ProjectEntity projectEntity = new ProjectEntity(
-            create.getName(),
-            create.getDescription(),
-            create.getImageURL(),
-            userEntity,
-            projectOptions,
-            create.getStartDate(),
-            create.getEndDate()
-        );
 
-        given(projectMapper.toEntity(any(ProjectDTO.ProjectCreate.class), any(UserEntity.class), anyList())).willReturn(projectEntity);
-        given(projectRepository.save(projectEntity)).willReturn(projectEntity);
+        given(projectMapper.toEntity(any(ProjectDTO.ProjectCreate.class), any(UserEntity.class), anyList())).willReturn(projectEntity1);
+        given(projectRepository.save(projectEntity1)).willReturn(projectEntity1);
 
         ProjectDTO.ProjectDetail projectDetail = new ProjectDTO.ProjectDetail(
             1L,
-            "New Project",
-            "Description",
+            "프로젝트 1",
+            "프로젝트 설명1",
             "https://example.com/project1.jpg",
             LocalDateTime.of(2024,11,21,0,0,0),
             LocalDateTime.of(2025,11,21,0,0,0),
@@ -200,7 +216,7 @@ public class ProjectServiceTest {
             0,
             null
         );
-        given(projectMapper.toDetail(projectEntity)).willReturn(projectDetail);
+        given(projectMapper.toDetail(projectEntity1)).willReturn(projectDetail);
 
         // When
         ProjectDTO.ProjectDetail result = projectService.createProject(create, email, role);
@@ -209,15 +225,15 @@ public class ProjectServiceTest {
         assertThat(result).isEqualTo(projectDetail);
         then(userRepository).should().findByEmailAndIsDeleteFalse(email);
         then(optionRepository).should().findByIdIn(create.getOptionIds());
-        then(projectRepository).should().save(projectEntity);
+        then(projectRepository).should().save(projectEntity1);
     }
 
     @Test
     void 프로젝트_수정_검증() {
         // Given
         ProjectDTO.ProjectUpdate update = new ProjectDTO.ProjectUpdate(
-            "New Project 2",
-            "Description 2",
+            "프로젝트 2",
+            "프로젝트 설명2",
             "https://example.com/project2.jpg",
             List.of(1L, 2L),
             LocalDateTime.of(2024,11,21,0,0,0),
@@ -229,31 +245,10 @@ public class ProjectServiceTest {
 
         given(optionRepository.findByIdIn(update.getOptionIds())).willReturn(List.of(optionEntity1, optionEntity2));
 
-
-        ProjectEntity exitsProjectEntity = new ProjectEntity(
-            "New Project",
-            "Description",
-            "https://example.com/project1.jpg",
-            userEntity,
-            projectOptions,
-            LocalDateTime.of(2024,11,21,0,0,0),
-            LocalDateTime.of(2025,11,21,0,0,0)
-        );
-
-        ProjectEntity updatedProjectEntity = new ProjectEntity(
-            "New Project 2",
-            "Description 2",
-            "https://example.com/project2.jpg",
-            userEntity,
-            projectOptions,
-            LocalDateTime.of(2024,11,21,0,0,0),
-            LocalDateTime.of(2025,11,21,0,0,0)
-        );
-
         ProjectDTO.ProjectDetail projectDetail = new ProjectDTO.ProjectDetail(
             1L,
-            "New Project 2",
-            "Description 2",
+            "프로젝트 2",
+            "프로젝트 설명2",
             "https://example.com/project2.jpg",
             LocalDateTime.of(2024,11,21,0,0,0),
             LocalDateTime.of(2025,11,21,0,0,0),
@@ -262,9 +257,9 @@ public class ProjectServiceTest {
             null
         );
 
-        given(projectRepository.findByIdAndIsDeletedFalse(1L)).willReturn(Optional.of(exitsProjectEntity));
+        given(projectRepository.findByIdAndIsDeletedFalse(1L)).willReturn(Optional.of(projectEntity1));
 
-        given(projectMapper.toUpdate(any(ProjectEntity.class), any(ProjectDTO.ProjectUpdate.class), anyList())).willReturn(updatedProjectEntity);
+        given(projectMapper.toUpdate(any(ProjectEntity.class), any(ProjectDTO.ProjectUpdate.class), anyList())).willReturn(projectEntity2);
 
         given(projectMapper.toDetail(any(ProjectEntity.class))).willReturn(projectDetail);
 
@@ -273,10 +268,10 @@ public class ProjectServiceTest {
 
         // Then
         assertThat(result).isEqualTo(projectDetail);
-        assertThat(result.getName()).isEqualTo("New Project 2");
-        assertThat(result.getDescription()).isEqualTo("Description 2");
+        assertThat(result.getName()).isEqualTo("프로젝트 2");
+        assertThat(result.getDescription()).isEqualTo("프로젝트 설명2");
         assertThat(result.getImageURL()).isEqualTo("https://example.com/project2.jpg");
-        then(projectOptionRepository).should().deleteByProjectEntity(exitsProjectEntity);
+        then(projectOptionRepository).should().deleteByProjectEntity(projectEntity1);
         then(optionRepository).should().findByIdIn(update.getOptionIds());
     }
 
