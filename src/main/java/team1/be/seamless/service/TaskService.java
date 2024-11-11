@@ -1,6 +1,5 @@
 package team1.be.seamless.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import team1.be.seamless.mapper.TaskMapper;
 import team1.be.seamless.repository.MemberRepository;
 import team1.be.seamless.repository.ProjectRepository;
 import team1.be.seamless.repository.TaskRepository;
-import team1.be.seamless.util.auth.ParsingParam;
 import team1.be.seamless.util.errorException.BaseHandler;
 
 @Service
