@@ -192,7 +192,7 @@ public class ProjectService {
 
     private void authRole(String role) {
         if(!Role.USER.isRole(role)) {
-            throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 조회 가능합니다.");
+            throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 권한이 존재 합니다.");
         }
     }
 
