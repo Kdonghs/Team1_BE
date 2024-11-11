@@ -2,6 +2,7 @@ package team1.be.seamless.service;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,7 @@ public class TestService {
         return testRepository.findAll(param.toPageable());
     }
 
+    @Profile("test")
     public TestEntity getTest(long get) {
         TestEntity entity = testRepository.findById(get)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않음"));
@@ -44,6 +46,7 @@ public class TestService {
         return entity;
     }
 
+    @Profile("test")
     public TestEntity createTest(@Valid create create) {
         TestEntity entity = new TestEntity(create.getName());
         System.out.println(entity);
@@ -51,6 +54,7 @@ public class TestService {
         return entity;
     }
 
+    @Profile("test")
     public Token TestTokenCreate(Long userId) {
         UserEntity user = userRepository.findById(userId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.FORBIDDEN, "유저 없음"));
