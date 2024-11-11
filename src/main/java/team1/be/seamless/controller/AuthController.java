@@ -39,14 +39,14 @@ public class AuthController {
     @Profile("test")
     @Operation(summary = "인증 코드 생성(테스트용)")
     @GetMapping("/memberCode/create")
-    public SingleResult<String> memberCodeCreate() {
+    public SingleResult<String> attendUrlCreate() {
         return new SingleResult<>(authService.memberCodeCreate());
     }
 
     @Profile("test")
     @Operation(summary = "인증 코드 복호화(테스트용)")
     @GetMapping("/memberCode/decode")
-    public SingleResult<String> memberCodeDecode(@Valid @RequestParam String memberCode) {
+    public SingleResult<String> aesDecode(@Valid @RequestParam String memberCode) {
         return new SingleResult<>(authService.memberCodeDecode(memberCode));
     }
 }

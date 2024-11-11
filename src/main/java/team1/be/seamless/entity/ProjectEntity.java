@@ -174,4 +174,8 @@ public class ProjectEntity extends BaseEntity {
         return this.endDate.isBefore(LocalDateTime.now());
     }
 
+    public boolean isActive() {
+        return Boolean.FALSE.equals(isDeleted);
+    }
+
 }

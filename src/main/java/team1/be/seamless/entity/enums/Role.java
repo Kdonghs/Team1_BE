@@ -1,9 +1,9 @@
 package team1.be.seamless.entity.enums;
 
 public enum Role {
-    ADMIN("ROLE_ADMIN", "관리자"),
-    USER("ROLE_USER", "사용자"),
-    MEMBER("ROLE_MEMBER", "프로젝트 멤버");
+    ADMIN("ADMIN", "관리자"),
+    USER("USER", "사용자"),
+    MEMBER("MEMBER", "프로젝트 멤버");
 
     private final String key;
     private final String title;

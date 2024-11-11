@@ -15,7 +15,7 @@ import team1.be.seamless.entity.enums.Priority;
 import team1.be.seamless.entity.enums.TaskStatus;
 
 @Entity(name = "taskss")
-public class TaskEntity {
+public class TaskEntity extends BaseEntity{
 
     public TaskEntity(
         String name,

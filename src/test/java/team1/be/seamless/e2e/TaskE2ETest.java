@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import team1.be.seamless.dto.TaskDTO.TaskCreate;
 import team1.be.seamless.entity.enums.Priority;
+import team1.be.seamless.entity.enums.Role;
 import team1.be.seamless.entity.enums.TaskStatus;
 import team1.be.seamless.service.ProjectService;
 import team1.be.seamless.service.TaskService;
@@ -35,7 +36,6 @@ class TaskE2ETest {
     private final TestRestTemplate restTemplate;
     private String token;
     private HttpHeaders headers = new HttpHeaders();
-
     private TaskService taskService;
     private ProjectService projectService;
 
@@ -96,7 +96,7 @@ class TaskE2ETest {
     @Test
     public void 프로젝트_삭제시_태스크_조회_실패() {
         // 프로젝트 삭제
-        projectService.deleteProject(1L);
+        projectService.deleteProject(1L, Role.USER.toString());
 
         HttpEntity<Long> requestEntity = new HttpEntity<>(headers);
 
