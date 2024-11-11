@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import team1.be.seamless.dto.UserDTO.UserDetails;
 import team1.be.seamless.dto.UserDTO.UserSimple;
 import team1.be.seamless.dto.UserDTO.UserUpdate;
-import team1.be.seamless.mapper.UserMapper;
 import team1.be.seamless.service.UserService;
 import team1.be.seamless.util.auth.ParsingParam;
 import team1.be.seamless.util.page.SingleResult;

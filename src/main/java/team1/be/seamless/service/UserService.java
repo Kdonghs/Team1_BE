@@ -1,7 +1,7 @@
 package team1.be.seamless.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +11,6 @@ import team1.be.seamless.dto.UserDTO.UserUpdate;
 import team1.be.seamless.entity.UserEntity;
 import team1.be.seamless.mapper.UserMapper;
 import team1.be.seamless.repository.UserRepository;
-import team1.be.seamless.util.auth.ParsingParam;
 import team1.be.seamless.util.errorException.BaseHandler;
 
 @Service
@@ -52,6 +51,7 @@ public class UserService {
         return userMapper.toUserSimple(user);
     }
 
+    @Profile("test")
     @Transactional
     public UserEntity createUser(UserSimple simple) {
         return userRepository.findByEmailAndIsDeleteFalse(simple.getEmail())

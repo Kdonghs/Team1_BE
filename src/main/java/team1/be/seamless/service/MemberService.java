@@ -1,6 +1,5 @@
 package team1.be.seamless.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,6 @@ import team1.be.seamless.repository.ProjectRepository;
 import team1.be.seamless.util.MailSend;
 import team1.be.seamless.util.Util;
 import team1.be.seamless.util.auth.AesEncrypt;
-import team1.be.seamless.util.auth.ParsingParam;
 import team1.be.seamless.util.errorException.BaseHandler;
 
 @Service
