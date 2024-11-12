@@ -131,6 +131,8 @@ public class ProjectDTO {
             LocalDateTime startDate,
             LocalDateTime endDate) {
             this.name = name;
+            this.description = description;
+            this.imageURL = imageURL;
             this.optionIds = optionIds;
             this.startDate = startDate;
             this.endDate = endDate;
