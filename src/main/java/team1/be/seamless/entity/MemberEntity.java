@@ -19,6 +19,10 @@ public class MemberEntity extends BaseEntity {
 
     }
 
+    public MemberEntity(ProjectEntity project) {
+        this.projectEntity = project;
+    }
+
     public MemberEntity(String name, String role, String email, String imageURL,
         ProjectEntity projectEntity) {//Task 오류나서 생성자 새로 만들어놓음
         this.name = name;
