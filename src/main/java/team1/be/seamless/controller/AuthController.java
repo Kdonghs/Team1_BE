@@ -26,7 +26,7 @@ public class AuthController {
     }
 
     @GetMapping("/success")
-    public SingleResult<Token> temp(@RequestParam("accessToken") String accessToken) {
+    public SingleResult<Token> AccessTokenToJson(@RequestParam("accessToken") String accessToken) {
         return new SingleResult<>(new Token(accessToken));
     }
 
