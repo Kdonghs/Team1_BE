@@ -1,5 +1,6 @@
 package team1.be.seamless.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -32,6 +33,7 @@ public class TaskDTO {
         private Long ownerId;
 
         @NotNull(message = "진행 상태(status)는 필수 입력 사항입니다.")
+        @JsonProperty("taskStatus")
         private TaskStatus taskStatus;
 
         @NotNull(message = "중요도(priority)는 필수 입력 사항입니다.")
