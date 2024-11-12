@@ -210,7 +210,6 @@ public class TaskDTO {
             this.description = task.getDescription();
             this.ownerId = task.getId();
             this.progress = task.getProgress();
-            this.description = task.getDescription();
             this.startDate = task.getStartDate();
             this.endDate = task.getEndDate();
             this.taskStatus = task.getStatus();
