@@ -25,10 +25,10 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @GetMapping("/success")
-    public SingleResult<Token> AccessTokenToJson(@RequestParam("accessToken") String accessToken) {
-        return new SingleResult<>(new Token(accessToken));
-    }
+//    @GetMapping("/success")
+//    public SingleResult<Token> temp(@RequestParam("accessToken") String accessToken) {
+//        return new SingleResult<>(new Token(accessToken));
+//    }
 
     @Operation(summary = "인증 코드로 멤버 토큰 반환")
     @GetMapping("/memberCode")

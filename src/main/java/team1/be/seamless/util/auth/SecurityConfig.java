@@ -14,9 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import team1.be.seamless.service.AuthService;
-import team1.be.seamless.util.errorException.SecurityEntryPoint;
 import team1.be.seamless.util.fiter.TokenAuthenticationFilter;
-import team1.be.seamless.util.fiter.TokenExceptionFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -25,23 +23,14 @@ public class SecurityConfig {
     private final AuthService authService;
     private final OAuth2SuccessHandler successHandler;
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
-    private final TokenExceptionFilter tokenExceptionFilter;
-    private final SecurityEntryPoint SecurityException;
-    private final HttpCookieOAuth2AuthorizationRequestRepository authorizationRequestRepository;
 
 
     @Autowired
     public SecurityConfig(AuthService authService, OAuth2SuccessHandler successHandler,
-        TokenAuthenticationFilter tokenAuthenticationFilter,
-        TokenExceptionFilter tokenExceptionFilter,
-        SecurityEntryPoint securityException,
-        HttpCookieOAuth2AuthorizationRequestRepository authorizationRequestRepository) {
+        TokenAuthenticationFilter tokenAuthenticationFilter) {
         this.authService = authService;
         this.successHandler = successHandler;
         this.tokenAuthenticationFilter = tokenAuthenticationFilter;
-        this.tokenExceptionFilter = tokenExceptionFilter;
-        SecurityException = securityException;
-        this.authorizationRequestRepository = authorizationRequestRepository;
     }
 
     @Bean
@@ -86,8 +75,7 @@ public class SecurityConfig {
                 .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository)
             )
 
-            .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(tokenExceptionFilter, tokenAuthenticationFilter.getClass());
+            .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
