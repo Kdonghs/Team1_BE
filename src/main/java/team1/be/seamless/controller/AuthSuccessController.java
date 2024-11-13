@@ -29,6 +29,6 @@ public class AuthSuccessController {
 
     @Profile("test")
     public void TestUrl(){
-        returnURL="localhost:3000";
+        returnURL="http://localhost:3000";
     }
 }
