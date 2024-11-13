@@ -114,7 +114,7 @@ public class MemberService {
         memberRepository.save(member);
 
 //        코드 생성
-        String code = aesEncrypt.encrypt(project.getId().toString());
+        String code = aesEncrypt.encrypt(member.getId()+"_"+project.getId());
 
 //      이메일로 코드 전달
 
