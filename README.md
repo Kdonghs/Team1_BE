@@ -118,9 +118,27 @@
    - 각 팀원별 진행도 조회 API
    - 태스크별 진행도 조회 API
 5. **로그인 및 인증관리 API**
-  - 주안점을 두고 개발한 기능!
-  - [동혁이가 준 사진이랑 설명 추가해놓기]
-  - 
+   - **주안점을 두고 개발한 기능!**
+   - 로그인 및 인증 플로우 사진)
+![seamless 로그인 플로우차트 drawio](https://github.com/user-attachments/assets/0dd89459-af2a-42be-9a06-18791d4e3f1b)
+![seamless 멤버 인증 플로우 차트 drawio](https://github.com/user-attachments/assets/030044e6-054a-4c12-b63e-044064ae5cbd)
+   1. Google OAuth2 로그인 플로우
+      - 사용자가 로그인 요청.
+      - 백엔드 서버가 Google 인증 서버에 로그인 요청을 전달.
+      - Google 인증 서버는 사용자 인증 후, 인증 코드를 백엔드 서버에 반환.
+      - 백엔드 서버는 인증 코드로 엑세스 토큰을 요청하여 사용자 정보를 가져옴.
+      - 사용자 정보로 회원가입 여부 확인 후 JWT 토큰을 발급하여 반환.
+   2. 멤버 초대 및 참여 플로우
+      - 초대 과정
+      - 팀장이 백엔드에 멤버 초대 링크 생성 요청.
+      - 백엔드에서 초대 링크를 생성해 팀장에게 반환.
+      - 팀장이 초대 링크를 팀원에게 전달.
+      - 참여 과정
+      - 팀원이 초대 링크 접속 후, 이름과 이메일 입력.
+      - 입력 정보로 참여 코드를 이메일로 수신.
+      - 팀원이 참여 코드를 입력해 프로젝트에 참가.
+      - 백엔드가 참여 코드 검증 후, JWT 토큰 발급 및 프로젝트 정보 반환.
+
 - 더 자세한 설명은 여기로! 👉 [백엔드 구현 기능 링크](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/wiki/%EB%B0%B1%EC%97%94%EB%93%9C-%EA%B5%AC%ED%98%84-%EA%B8%B0%EB%8A%A5-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-%ED%8E%98%EC%9D%B4%EC%A7%80)
 
 ---
@@ -129,8 +147,7 @@
 
 - 각자 작업하다가 생긴 기술적인 이슈들에 대해서 협업으로 해결 및 공유하기 위해 **GitHub Issue**를 활용함.
 - 다음 사진들은 기술적인 이슈들의 해결과정 예시 사진이다.
-![스크린샷 2024-11-12 193537](https://github.com/user-attachments/assets/55fb2544-0547-4e1c-aa99-2deee1541767)
-
+  ![스크린샷 2024-11-12 193537](https://github.com/user-attachments/assets/55fb2544-0547-4e1c-aa99-2deee1541767)
 ![스크린샷 2024-11-12 193624](https://github.com/user-attachments/assets/16174838-f3db-4161-98f6-54dda06d3e03)
 - 자세한 설명은 여기로! 👉 [깃허브 이슈 링크](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/issues)
 
