@@ -3,6 +3,7 @@ package team1.be.seamless.service;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +55,10 @@ public class MemberService {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
         }
 
+        if(!memberEntity.getProjectEntity().isActive()) {
+            throw new BaseHandler(HttpStatus.BAD_REQUEST, "멤버가 속한 프로젝트가 존재 하지 않습니다.");
+        }
+
         return memberMapper.toGetResponseDTO(memberEntity);
     }
 
@@ -63,9 +68,16 @@ public class MemberService {
         if (Role.MEMBER.isRole(role)) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
         }
+        Page<MemberEntity> memberEntities = memberRepository.findAllByProjectEntityIdAndIsDeleteFalse(projectId, memberList.toPageable());
 
-        return memberRepository.findAllByProjectEntityIdAndIsDeleteFalse(projectId,
-            memberList.toPageable()).map(memberMapper::toGetResponseDTO);
+        return new PageImpl<>(
+            memberEntities.stream()
+                .filter(memberEntity -> memberEntity.getProjectEntity().isActive())
+                .map(memberMapper::toGetResponseDTO)
+                .toList(),
+            memberEntities.getPageable(),
+            memberEntities.getTotalElements()
+        );
 
     }
 

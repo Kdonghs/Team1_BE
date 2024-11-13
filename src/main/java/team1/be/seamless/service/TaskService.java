@@ -47,6 +47,10 @@ public class TaskService {
         TaskEntity taskEntity = taskRepository.findByIdAndIsDeletedFalse(taskId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 태스크"));
 
+        if(!taskEntity.getProject().isActive()) {
+            throw new BaseHandler(HttpStatus.NOT_FOUND, "태스크가 속한 프로젝트가 존재 하지 않습니다.");
+        }
+
         return taskMapper.toDetail(taskEntity);
     }
 
@@ -65,7 +69,15 @@ public class TaskService {
         Page<TaskEntity> taskEntities = taskRepository.findByProjectIdAndOptionalFilters(projectId,
             status, priority, memberId, param.toPageable());
 
-        return taskEntities.map(taskMapper::toDetailWithOwner);
+        return new PageImpl<>(
+            taskEntities.stream()
+                .filter(taskEntity -> taskEntity.getProject().isActive())
+                .map(taskMapper::toDetailWithOwner)
+                .toList(),
+            taskEntities.getPageable(),
+            taskEntities.getTotalElements()
+        );
+
     }
 
     public ProjectProgress getProjectProgress(Long projectId, getList param) {
