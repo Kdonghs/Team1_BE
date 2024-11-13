@@ -165,6 +165,6 @@
 
 # 배포중인 인스턴스 주소
 
-- 백엔드 : [URL]
-- 프론트엔드 : [URL]
+- 백엔드 : [URL](3.36.254.166)
+- 프론트엔드 : [URL](https://team1-fe.pages.dev/)
 - 프론트엔드 GitHub 주소 : [프론트엔드 깃허브 링크](https://github.com/kakao-tech-campus-2nd-step3/Team1_FE)

@@ -112,14 +112,8 @@ public class MemberEntity extends BaseEntity {
         isDelete = delete;
     }
 
-    //    public void addTask(TaskEntity taskEntity) {
-//        if (this.taskEntities == null) {
-//            this.taskEntities = new ArrayList<>();
-//        }
-//        this.taskEntities.add(taskEntity);
-//        taskEntity.setOwner(this);  // 양방향 관계 설정
-//    }
-//    public void setEmail(String email) {
-//        this.email = email;
-//    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 }

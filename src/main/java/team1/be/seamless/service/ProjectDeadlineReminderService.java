@@ -14,15 +14,7 @@ import team1.be.seamless.util.MailSend;
 public class ProjectDeadlineReminderService {
 
     private final ProjectRepository projectRepository;
-    //    private final EmailSend emailSend;
     private final MailSend mailSend;
-
-//    @Autowired
-//    public ProjectDeadlineReminderService(ProjectRepository projectRepository, EmailSend emailSend) {
-//        this.projectRepository = projectRepository;
-//        this.emailSend = emailSend;
-//    }
-
 
     @Autowired
     public ProjectDeadlineReminderService(ProjectRepository projectRepository, MailSend mailSend) {
@@ -31,7 +23,7 @@ public class ProjectDeadlineReminderService {
     }
 
     // 오후 4시에 이메일 전송함
-    @Scheduled(cron = "0 21 16 * * ?")
+    @Scheduled(cron = "0 0 16 * * ?")
     public void sendDeadlineReminders() {
         List<ProjectEntity> projects = projectRepository.findAllByIsDeletedFalse();
 
