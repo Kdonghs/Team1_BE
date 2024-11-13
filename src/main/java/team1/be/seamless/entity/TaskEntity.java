@@ -17,6 +17,7 @@ import team1.be.seamless.entity.enums.TaskStatus;
 @Entity(name = "taskss")
 public class TaskEntity extends BaseEntity{
 
+
     public TaskEntity(
         String name,
         String description,
@@ -126,6 +127,10 @@ public class TaskEntity extends BaseEntity{
         return endDate;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setOwner(MemberEntity owner) {
         this.owner = owner;
     }
@@ -160,5 +165,9 @@ public class TaskEntity extends BaseEntity{
 
     public void setPriority(Priority priority) {
         this.priority = priority;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }
