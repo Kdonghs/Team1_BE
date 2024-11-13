@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-public class AuthSuccessContoller {
+public class AuthSuccessController {
     private String returnURL;
 
     @Autowired
-    public AuthSuccessContoller(@Value("${Url.Url}")String returnURL) {
+    public AuthSuccessController(@Value("${Url.Url}")String returnURL) {
         this.returnURL = returnURL;
         TestUrl();
     }
