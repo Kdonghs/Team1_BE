@@ -56,9 +56,10 @@ public class ProjectService {
      */
     public Page<ProjectDetail> getProjectList(ProjectDTO.getList param, String email, String role) {
         //USER만 권한 존재
-        authRole(role);
+        validateRole(role);
 
-        return projectRepository.findAllByUserEntityEmailAndIsDeletedFalse(param.toPageable(), email).map(projectMapper::toDetail);
+        return projectRepository.findAllByUserEntityEmailAndIsDeletedFalse(param.toPageable(),
+            email).map(projectMapper::toDetail);
 
     }
 
@@ -68,7 +69,7 @@ public class ProjectService {
      */
     public ProjectDetail getProject(long projectId, String role) {
         //USER만 권한 존재
-        authRole(role);
+        validateRole(role);
 
         ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
@@ -81,7 +82,7 @@ public class ProjectService {
      */
     public List<OptionDetail> getProjectOptions(long projectId, String role) {
         //USER만 권한 존재
-        authRole(role);
+        validateRole(role);
 
         ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
@@ -97,10 +98,9 @@ public class ProjectService {
      */
     public Page<ProjectDate> getProjectDate(ProjectDTO.getList param, String email, String role) {
         //USER만 권한 존재
-        authRole(role);
+        validateRole(role);
 
-        return projectRepository.findAllByUserEntityEmailAndIsDeletedFalse(param.toPageable(),
-            email).map(projectMapper::toDate);
+        return projectRepository.findAllByUserEntityEmailAndIsDeletedFalse(param.toPageable(), email).map(projectMapper::toDate);
     }
 
     /**
@@ -113,7 +113,7 @@ public class ProjectService {
     @Transactional
     public ProjectDetail createProject(ProjectCreate create, String email, String role) {
         //USER만 권한 존재
-        authRole(role);
+        validateRole(role);
 
         //token의 이메일 정보를 통해 사용자 검증
         UserEntity userEntity = userRepository.findByEmailAndIsDeleteFalse(email)
@@ -121,16 +121,14 @@ public class ProjectService {
 
         //옵션이 존재 하는지
         create.getOptionIds()
-            .forEach(id -> optionRepository.findById(id).
-                orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 옵션이 존재하지 않음")));
+            .forEach(id -> optionRepository.findById(id)
+                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 옵션이 존재하지 않음")));
 
         List<OptionEntity> optionEntities = optionRepository.findByIdIn(create.getOptionIds());
 
-        List<ProjectOptionEntity> projectOptionEntities = optionEntities.stream().map(
-            ProjectOptionEntity::new).toList();
+        List<ProjectOptionEntity> projectOptionEntities = optionEntities.stream().map(ProjectOptionEntity::new).toList();
 
-        ProjectEntity projectEntity = projectRepository.save(
-            projectMapper.toEntity(create, userEntity, projectOptionEntities));
+        ProjectEntity projectEntity = projectRepository.save(projectMapper.toEntity(create, userEntity, projectOptionEntities));
 
         projectOptionEntities.forEach(option -> option.setProjectEntity(projectEntity));
 
@@ -146,7 +144,7 @@ public class ProjectService {
     @Transactional
     public ProjectDetail updateProject(long projectId, ProjectUpdate update, String role) {
         //USER만 권한 존재
-        authRole(role);
+        validateRole(role);
 
         ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
@@ -164,8 +162,7 @@ public class ProjectService {
         List<ProjectOptionEntity> newProjectOptionEntities = new ArrayList<>();
 
         for (OptionEntity optionEntity : optionEntities) {
-            ProjectOptionEntity projectOptionEntity = new ProjectOptionEntity(projectEntity,
-                optionEntity);
+            ProjectOptionEntity projectOptionEntity = new ProjectOptionEntity(projectEntity, optionEntity);
             newProjectOptionEntities.add(projectOptionEntity);
         }
 
@@ -181,7 +178,7 @@ public class ProjectService {
     @Transactional
     public Long deleteProject(long projectId, String role) {
         //USER만 권한 존재
-        authRole(role);
+        validateRole(role);
 
         ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
@@ -190,8 +187,8 @@ public class ProjectService {
         return projectEntity.getId();
     }
 
-    private void authRole(String role) {
-        if(!Role.USER.isRole(role)) {
+    private void validateRole(String role) {
+        if (!Role.USER.isRole(role)) {
             throw new BaseHandler(HttpStatus.FORBIDDEN, "로그인한 유저만 권한이 존재 합니다.");
         }
     }
