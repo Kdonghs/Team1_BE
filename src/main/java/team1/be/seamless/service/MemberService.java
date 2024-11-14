@@ -42,7 +42,7 @@ public class MemberService {
 
     public MemberResponseDTO getMember(Long projectId, Long memberId, String role) {
         // 팀원인지 확인하기
-        if (!Role.MEMBER.isRole(role) || !Role.USER.isRole(role) || !Role.ADMIN.isRole(role)) {
+        if (role == null || role.isEmpty()) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
         }
 
@@ -60,7 +60,7 @@ public class MemberService {
     public Page<MemberResponseDTO> getMemberList(Long projectId,
                                                  getMemberList memberList, String role) {
         // 팀원인지 확인하기
-        if (!Role.MEMBER.isRole(role) || !Role.USER.isRole(role) || !Role.ADMIN.isRole(role)) {
+        if (role == null || role.isEmpty()) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
         }
 
@@ -130,7 +130,7 @@ public class MemberService {
     public MemberResponseDTO updateMember(Long projectId, Long memberId, UpdateMember update,
                                           String role) {
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.
-        if (!Role.USER.isRole(role) || !Role.ADMIN.isRole(role)) {
+        if (Role.MEMBER.isRole(role)) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED, "수정 권한이 없습니다.");
         }
 
@@ -149,7 +149,7 @@ public class MemberService {
     @Transactional
     public MemberResponseDTO deleteMember(Long projectId, Long memberId, String role) {
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.)
-        if (!Role.USER.isRole(role) || !Role.ADMIN.isRole(role)) {
+        if (Role.MEMBER.isRole(role)) {
             throw new BaseHandler(HttpStatus.FORBIDDEN, "삭제 권한이 없습니다.");
         }
 
