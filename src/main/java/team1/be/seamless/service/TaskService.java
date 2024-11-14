@@ -200,8 +200,8 @@ public class TaskService {
     // 테스트용 오버로딩
     public TaskDetail createTask(Long projectId, TaskCreate taskCreate) {
 
-        ProjectEntity project = projectRepository.findByIdAndUserEntityEmailAndIsDeletedFalse(
-                projectId, "user1@google.com")
+        ProjectEntity project = projectRepository.findByIdAndIsDeletedFalse(
+                projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트"));
 
 //        태스크의 일정 검증

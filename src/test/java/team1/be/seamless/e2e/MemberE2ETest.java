@@ -1,14 +1,5 @@
 package team1.be.seamless.e2e;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpMethod.DELETE;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +14,10 @@ import org.springframework.http.ResponseEntity;
 import team1.be.seamless.dto.MemberRequestDTO.CreateMember;
 import team1.be.seamless.dto.MemberRequestDTO.UpdateMember;
 import team1.be.seamless.entity.MemberEntity;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpMethod.*;
+import static org.springframework.http.HttpStatus.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class MemberE2ETest {
@@ -42,7 +37,7 @@ class MemberE2ETest {
 
     @BeforeEach
     public void setUp() {
-        baseUrl = "http://localhost:" + port + "/api/project/1/member/";
+        baseUrl = "http://localhost:" + port + "/api/project/1/member";
 
         // 1. 새로운 멤버 생성
         CreateMember member = new CreateMember(
@@ -59,8 +54,12 @@ class MemberE2ETest {
         );
 
         // 2. 멤버 생성 시 반환되는 초대 코드 추출
-        String code = extractValueFromResponse(response1.getBody(), "attendURL");
+//        String code = extractValueFromResponse(response1.getBody(), "attendURL");
+        int startIndex = response1.getBody().indexOf("\"attendURL\":\"") + "\"attendURL\":\"".length();
+        int endIndex = response1.getBody().indexOf("\"", startIndex);
 
+//        멤버 생성시 반환되는 코드 추출
+        String code = response1.getBody().substring(startIndex, endIndex);
         // 3. 멤버 초대 코드로 토큰 요청
         HttpEntity<Void> request2 = new HttpEntity<>(null);
         ResponseEntity<String> response2 = restTemplate.exchange(
@@ -69,7 +68,11 @@ class MemberE2ETest {
                 request2,
                 String.class
         );
-        memberToken = extractValueFromResponse(response2.getBody(), "token");
+
+        startIndex = response2.getBody().indexOf("\"token\":\"") + "\"token\":\"".length();
+        endIndex = response2.getBody().indexOf("\"", startIndex);
+
+        memberToken = response2.getBody().substring(startIndex, endIndex);
 
         // 4. 팀장의 토큰 요청
         HttpEntity<Void> requestEntity = new HttpEntity<>(null);
@@ -79,7 +82,10 @@ class MemberE2ETest {
                 requestEntity,
                 String.class
         );
-        adminToken = extractValueFromResponse(responseEntity.getBody(), "token");
+        startIndex = responseEntity.getBody().indexOf("\"token\":\"") + "\"token\":\"".length();
+        endIndex = responseEntity.getBody().indexOf("\"", startIndex);
+
+        adminToken = responseEntity.getBody().substring(startIndex, endIndex);
 
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(adminToken);
@@ -97,7 +103,7 @@ class MemberE2ETest {
         HttpEntity<UpdateMember> requestEntity = new HttpEntity<>(updateInfo, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                baseUrl + "1", // 테스트 Member ID
+                baseUrl + "/1", // 테스트 Member ID
                 PUT,
                 requestEntity,
                 String.class
@@ -114,7 +120,7 @@ class MemberE2ETest {
         // Soft delete member
         HttpEntity<Void> requestEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response = restTemplate.exchange(
-                baseUrl + "1", // 테스트 Member ID
+                baseUrl + "/1", // 테스트 Member ID
                 DELETE,
                 requestEntity,
                 String.class
@@ -131,7 +137,7 @@ class MemberE2ETest {
         // Soft delete member
         HttpEntity<Void> requestEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response1 = restTemplate.exchange(
-                baseUrl + "2", // 테스트 Member ID
+                baseUrl + "/2", // 테스트 Member ID
                 DELETE,
                 requestEntity,
                 String.class
