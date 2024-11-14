@@ -49,7 +49,6 @@ class UtilTest {
         String date1 = "2024-05-24T27:66:10";
 
 //        when
-        LocalDateTime parse = Util.parseDate(date1);
 
 //        then
         assertThrows(DateTimeParseException.class, () -> {
