@@ -14,8 +14,7 @@ import team1.be.seamless.dto.UserDTO.UserUpdate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.*;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserE2ETest {
@@ -40,7 +39,7 @@ class UserE2ETest {
     public void setUp() {
         HttpEntity<Long> requestEntity = new HttpEntity<>(null);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-            url + port + "/api/test/userToken/1",
+            url + port + "/api/test/userToken/2",
             POST,
             requestEntity, String.class);
 
@@ -102,6 +101,6 @@ class UserE2ETest {
             requestEntity, String.class);
 
         System.out.println(responseEntity);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(NOT_FOUND);
     }
 }
