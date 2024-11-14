@@ -1,12 +1,5 @@
 package team1.be.seamless.e2e;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +18,13 @@ import team1.be.seamless.entity.enums.Role;
 import team1.be.seamless.entity.enums.TaskStatus;
 import team1.be.seamless.service.ProjectService;
 import team1.be.seamless.service.TaskService;
+
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpStatus.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -61,6 +61,21 @@ class TaskE2ETest {
         token = responseEntity.getBody().substring(startIndex, endIndex);
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(token);
+    }
+
+    @Test
+    public void 태스크_성성() {
+        TaskCreate body = new TaskCreate("태스크1", "첫번째 태스크입니다.",
+                1L, LocalDateTime.of(2024, 10, 10, 0, 0),
+                LocalDateTime.of(2025, 5, 3, 1, 0, 0),
+                Priority.HIGH, TaskStatus.IN_PROGRESS, 1);
+
+        HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
+
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                url + port + "/api/project/1/task", POST, requestEntity, String.class);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     }
 
     @Test
