@@ -19,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import team1.be.seamless.dto.ProjectDTO;
 import team1.be.seamless.dto.TaskDTO;
 import team1.be.seamless.dto.TaskDTO.TaskCreate;
 import team1.be.seamless.dto.TaskDTO.TaskDetail;
@@ -178,7 +177,7 @@ class TaskServiceTest {
         when(memberRepository.findById(1L)).thenReturn(Optional.of(memberEntity));
         when(taskMapper.toEntity(projectEntity, memberEntity, create)).thenReturn(created_task);
         when(taskMapper.toDetail(created_task))
-            .thenReturn(mock(TaskDTO.TaskDetail.class)); // 단순히 Mock 반환
+            .thenReturn(mock(TaskDTO.TaskDetail.class));
 
         // When
         TaskDetail result = taskService.createTask(1L, create);
