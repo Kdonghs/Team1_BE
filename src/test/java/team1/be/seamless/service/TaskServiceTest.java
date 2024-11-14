@@ -129,9 +129,9 @@ class TaskServiceTest {
             1L,
             "IN_PROGRESS",
             "HIGH",
-            memberEntity.getId(),
+            1L,
             taskParam.toPageable())).thenReturn(tasks);
-        when(memberRepository.findByName("멤버 1")).thenReturn(Optional.of(memberEntity));
+        when(memberRepository.findByIdAndIsDeleteFalse(1L)).thenReturn(Optional.of(memberEntity));
         when(taskMapper.toDetailWithOwner(any(TaskEntity.class)))
             .thenReturn(mock(TaskDTO.TaskWithOwnerDetail.class));
 
@@ -140,15 +140,15 @@ class TaskServiceTest {
             1L,
             "IN_PROGRESS",
             "HIGH",
-            "멤버 1",
+            1L,
             taskParam);
 
         // Then
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(2);
         verify(taskRepository, times(1)).findByProjectIdAndOptionalFilters(
-            1L, "IN_PROGRESS", "HIGH", memberEntity.getId(), taskParam.toPageable());
-        verify(memberRepository, times(1)).findByName("멤버 1"); // 멤버 조회가 1번 호출되었는지 확인
+            1L, "IN_PROGRESS", "HIGH", 1L, taskParam.toPageable());
+        verify(memberRepository, times(1)).findByIdAndIsDeleteFalse(1L);
         verify(taskMapper, atLeastOnce()).toDetailWithOwner(any(TaskEntity.class));
     }
 

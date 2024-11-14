@@ -92,7 +92,7 @@ class ProjectE2ETest {
     }
 
     @Test
-    void 프로젝트_날짜_수정_성공() {
+    void 프로젝트_종료일은_태스크의_가장_늦은_종료일보다_뒤여야_합니다() {
         ProjectUpdate body = new ProjectUpdate(
             "프로젝트 이름1",
             "프로젝트 설명1",
@@ -106,7 +106,7 @@ class ProjectE2ETest {
             requestEntity,
             String.class);
         System.out.println(responseEntity.getBody());
-        assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
     }
 
     @Test
