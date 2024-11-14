@@ -215,7 +215,7 @@ class TaskServiceTest {
 
         when(taskRepository.findByIdAndIsDeletedFalse(any(Long.class))).thenReturn(
             Optional.of(taskEntity1));
-        when(memberRepository.findById(1L)).thenReturn(Optional.of(memberEntity));
+        when(memberRepository.findByIdAndIsDeleteFalse(any(Long.class))).thenReturn(Optional.of(memberEntity));
         when(taskMapper.toUpdate(taskEntity1, update)).thenReturn(updated_task);
         when(taskMapper.toDetail(any(TaskEntity.class)))
             .thenReturn(mock(TaskDTO.TaskDetail.class));
@@ -226,7 +226,7 @@ class TaskServiceTest {
         // Then
         assertThat(result).isNotNull();
         verify(taskRepository, times(1)).findByIdAndIsDeletedFalse(1L);
-        verify(memberRepository, times(1)).findById(1L);
+        verify(memberRepository, times(1)).findByIdAndIsDeleteFalse(1L);
         verify(taskMapper, times(1)).toUpdate(taskEntity1, update);
         verify(taskMapper, times(1)).toDetail(any(TaskEntity.class));
     }

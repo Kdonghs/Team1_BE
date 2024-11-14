@@ -35,8 +35,7 @@ public class SwaggerConfig {
     public Info apiInfo() {
         return new Info()
             .title("Seamless")
-            .description("kakao tech camp step3<br>"
-                + "<li>추가 작성</li>")
+            .description("복잡한 협업 툴의 대안을 제시하는 Seamless API입니다.")
             .version("0.1");
     }
 }
