@@ -135,7 +135,7 @@ public class ProjectServiceTest {
         given(projectRepository.findByIdAndIsDeletedFalse(projectId)).willReturn(Optional.empty());
 
         // When / Then
-        assertThatThrownBy(() -> projectService.getProject(projectId, role))
+        assertThatThrownBy(() -> projectService.getProject(projectId, email, role))
             .isInstanceOf(BaseHandler.class);
         then(projectRepository).should().findByIdAndIsDeletedFalse(projectId);
     }
@@ -153,7 +153,7 @@ public class ProjectServiceTest {
         given(optionMapper.toDetail(optionEntity2)).willReturn(optionDetail2);
 
         // When
-        List<OptionDetail> result = projectService.getProjectOptions(projectId, role);
+        List<OptionDetail> result = projectService.getProjectOptions(projectId, email, role);
 
         // Then
         assertThat(result).isNotNull();
@@ -264,7 +264,7 @@ public class ProjectServiceTest {
         given(projectMapper.toDetail(any(ProjectEntity.class))).willReturn(projectDetail);
 
         // When
-        ProjectDTO.ProjectDetail result = projectService.updateProject(1L, update, role);
+        ProjectDTO.ProjectDetail result = projectService.updateProject(1L, update, email, role);
 
         // Then
         assertThat(result).isEqualTo(projectDetail);
@@ -279,18 +279,18 @@ public class ProjectServiceTest {
     void 프로젝트_삭제_검증() {
         // Given
         long projectId = 1L;
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setId(projectId);
-        projectEntity.setIsDeleted(false);
 
-        given(projectRepository.findByIdAndIsDeletedFalse(projectId)).willReturn(Optional.of(projectEntity));
+        projectEntity1.setId(projectId);
+        projectEntity1.setIsDeleted(false);
+
+        given(projectRepository.findByIdAndIsDeletedFalse(projectId)).willReturn(Optional.of(projectEntity1));
 
         // When
-        Long result = projectService.deleteProject(projectId, role);
+        Long result = projectService.deleteProject(projectId, email, role);
 
         // Then
         assertThat(result).isEqualTo(projectId);
-        assertThat(projectEntity.getIsDeleted()).isTrue();
+        assertThat(projectEntity1.getIsDeleted()).isTrue();
         then(projectRepository).should().findByIdAndIsDeletedFalse(projectId);
     }
 

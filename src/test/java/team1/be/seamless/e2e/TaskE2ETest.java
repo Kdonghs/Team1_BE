@@ -96,7 +96,7 @@ class TaskE2ETest {
     @Test
     public void 프로젝트_삭제시_태스크_조회_실패() {
         // 프로젝트 삭제
-        projectService.deleteProject(1L, Role.USER.toString());
+        projectService.deleteProject(1L, "user1@google.com", Role.USER.toString());
 
         HttpEntity<Long> requestEntity = new HttpEntity<>(headers);
 
