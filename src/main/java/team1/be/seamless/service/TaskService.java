@@ -50,19 +50,14 @@ public class TaskService {
     }
 
     public Page<TaskWithOwnerDetail> getTaskList(Long projectId, String status, String priority,
-                                                 String ownerName, getList param) {
+                                                 long ownerId, getList param) {
 
-        //멤버 아이디에 대한 쿼리 파라미터가 존재할때 : null일때
-        Long memberId = null;
 
-        if (ownerName != null) {
-            MemberEntity memberEntity = memberRepository.findByName(ownerName)
+        MemberEntity memberEntity = memberRepository.findByIdAndIsDeleteFalse(ownerId)
                     .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 멤버"));
-            memberId = memberEntity.getId();
-        }
 
         Page<TaskEntity> taskEntities = taskRepository.findByProjectIdAndOptionalFilters(projectId,
-                status, priority, memberId, param.toPageable());
+                status, priority, ownerId, param.toPageable());
 
         return new PageImpl<>(
                 taskEntities.stream()
