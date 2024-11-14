@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import team1.be.seamless.dto.UserDTO.UserUpdate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -88,6 +89,7 @@ class UserE2ETest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     }
 
+    @DirtiesContext
     @Test
     void 유저정보_삭제_실패() {
         HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
