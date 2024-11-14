@@ -6,6 +6,7 @@ import team1.be.seamless.dto.MemberRequestDTO.UpdateMember;
 import team1.be.seamless.dto.MemberResponseDTO;
 import team1.be.seamless.entity.MemberEntity;
 import team1.be.seamless.entity.ProjectEntity;
+import team1.be.seamless.entity.enums.Role;
 
 @Component
 public class MemberMapper {
@@ -14,7 +15,7 @@ public class MemberMapper {
 
         return new MemberEntity(
             create.getName(),
-            "팀원",
+            Role.MEMBER.getKey(),
             create.getEmail(),
             "",
             project
