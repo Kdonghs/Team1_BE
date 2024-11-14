@@ -50,19 +50,14 @@ public class TaskService {
     }
 
     public Page<TaskWithOwnerDetail> getTaskList(Long projectId, String status, String priority,
-                                                 String ownerName, getList param) {
+                                                 long ownerId, getList param) {
 
-        //멤버 아이디에 대한 쿼리 파라미터가 존재할때 : null일때
-        Long memberId = null;
 
-        if (ownerName != null) {
-            MemberEntity memberEntity = memberRepository.findByName(ownerName)
+        MemberEntity memberEntity = memberRepository.findByIdAndIsDeleteFalse(ownerId)
                     .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 멤버"));
-            memberId = memberEntity.getId();
-        }
 
         Page<TaskEntity> taskEntities = taskRepository.findByProjectIdAndOptionalFilters(projectId,
-                status, priority, memberId, param.toPageable());
+                status, priority, ownerId, param.toPageable());
 
         return new PageImpl<>(
                 taskEntities.stream()
@@ -72,7 +67,6 @@ public class TaskService {
                 taskEntities.getPageable(),
                 taskEntities.getTotalElements()
         );
-
     }
 
     public ProjectProgress getProjectProgress(Long projectId, getList param) {
@@ -83,11 +77,7 @@ public class TaskService {
         int sum = taskEntities.getContent().stream().mapToInt(TaskEntity::getProgress).sum();
         int count = taskEntities.getContent().size();
 
-        if (count == 0) {
-            throw new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트에 할당된 태스크가 존재하지 않습니다.");
-        }
-
-        int average = sum / count;
+        int average = (count == 0) ? 0 : sum / count;
         String growthLevel;
         String description;
 
@@ -135,7 +125,6 @@ public class TaskService {
 
         if (param.getPage() * param.getSize() >= memberEntities.size()) {
             start = 0;
-
         } else {
             start = param.getPage() * param.getSize();
         }

@@ -52,11 +52,11 @@ public class TaskController {
     public PageResult<TaskWithOwnerDetail> getTaskList(@PathVariable("projectId") Long projectId,
         @RequestParam(value = "status", required = false) String status,
         @RequestParam(value = "priority", required = false) String priority,
-        @RequestParam(value = "owner", required = false) String ownerName,
+        @RequestParam(value = "owner", required = false) long ownerId,
         @Valid TaskDTO.getList param) {
 
         return PageMapper.toPageResult(
-            taskService.getTaskList(projectId, status, priority, ownerName, param));
+            taskService.getTaskList(projectId, status, priority, ownerId, param));
     }
 
     @Operation(summary = "팀 전체 진행도 확인")
