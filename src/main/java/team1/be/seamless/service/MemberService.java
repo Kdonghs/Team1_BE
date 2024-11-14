@@ -3,7 +3,6 @@ package team1.be.seamless.service;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +32,7 @@ public class MemberService {
 
     @Autowired
     public MemberService(MemberRepository memberRepository, MemberMapper memberMapper,
-        ProjectRepository projectRepository, AesEncrypt aesEncrypt, MailSend mailSend) {
+                         ProjectRepository projectRepository, AesEncrypt aesEncrypt, MailSend mailSend) {
         this.memberRepository = memberRepository;
         this.memberMapper = memberMapper;
         this.projectRepository = projectRepository;
@@ -43,41 +42,30 @@ public class MemberService {
 
     public MemberResponseDTO getMember(Long projectId, Long memberId, String role) {
         // 팀원인지 확인하기
-        if (Role.MEMBER.isRole(role)) {
+        if (Role.MEMBER.isRole(role) || Role.USER.isRole(role) || Role.ADMIN.isRole(role)) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
         }
 
         MemberEntity memberEntity = memberRepository.findByProjectEntityIdAndIdAndIsDeleteFalse(
-                projectId, memberId)
-            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
+                        projectId, memberId)
+                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
 
         if (memberEntity.getProjectEntity().isExpired()) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
-        }
-
-        if(!memberEntity.getProjectEntity().isActive()) {
-            throw new BaseHandler(HttpStatus.BAD_REQUEST, "멤버가 속한 프로젝트가 존재 하지 않습니다.");
         }
 
         return memberMapper.toGetResponseDTO(memberEntity);
     }
 
     public Page<MemberResponseDTO> getMemberList(Long projectId,
-        getMemberList memberList, String role) {
+                                                 getMemberList memberList, String role) {
         // 팀원인지 확인하기
-        if (Role.MEMBER.isRole(role)) {
+        if (Role.MEMBER.isRole(role) || Role.USER.isRole(role) || Role.ADMIN.isRole(role)) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
         }
-        Page<MemberEntity> memberEntities = memberRepository.findAllByProjectEntityIdAndIsDeleteFalse(projectId, memberList.toPageable());
 
-        return new PageImpl<>(
-            memberEntities.stream()
-                .filter(memberEntity -> memberEntity.getProjectEntity().isActive())
-                .map(memberMapper::toGetResponseDTO)
-                .toList(),
-            memberEntities.getPageable(),
-            memberEntities.getTotalElements()
-        );
+        return memberRepository.findAllByProjectEntityIdAndIsDeleteFalse(projectId,
+                memberList.toPageable()).map(memberMapper::toGetResponseDTO);
 
     }
 
@@ -96,7 +84,7 @@ public class MemberService {
 
 //        프로젝트 조회
         ProjectEntity project = projectRepository.findById(projectId)
-            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
+                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트가 존재하지 않습니다."));
 
         if (project.isExpired()) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
@@ -105,7 +93,7 @@ public class MemberService {
 //       멤버 이메일 중복 여부 검사
         for (MemberEntity member : project.getMemberEntities()) {
             if (member.getEmail().equals(create.getEmail()) && Boolean.FALSE.equals(
-                member.getIsDelete())) {
+                    member.getIsDelete())) {
                 throw new BaseHandler(HttpStatus.CONFLICT, "이메일이 중복 됩니다.");
             }
         }
@@ -114,7 +102,7 @@ public class MemberService {
         memberRepository.save(member);
 
 //        코드 생성
-        String code = aesEncrypt.encrypt(member.getId()+"_"+project.getId());
+        String code = aesEncrypt.encrypt(project.getId().toString());
 
 //      이메일로 코드 전달
 
@@ -140,15 +128,15 @@ public class MemberService {
 
     @Transactional
     public MemberResponseDTO updateMember(Long projectId, Long memberId, UpdateMember update,
-        String role) {
+                                          String role) {
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.
-        if (Role.MEMBER.isRole(role)) {
+        if (Role.MEMBER.isRole(role) || Role.USER.isRole(role) || Role.ADMIN.isRole(role)) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED, "수정 권한이 없습니다.");
         }
 
         MemberEntity member = memberRepository.findByProjectEntityIdAndIdAndIsDeleteFalse(
-                projectId, memberId)
-            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
+                        projectId, memberId)
+                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
 
         if (member.getProjectEntity().isExpired()) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
@@ -161,13 +149,13 @@ public class MemberService {
     @Transactional
     public MemberResponseDTO deleteMember(Long projectId, Long memberId, String role) {
         // 팀장인지 확인(팀원인지 굳이 한번 더 확인하지 않음. 팀장인지만 검증.)
-        if (Role.MEMBER.isRole(role)) {
+        if (Role.USER.isRole(role) || Role.ADMIN.isRole(role)) {
             throw new BaseHandler(HttpStatus.FORBIDDEN, "삭제 권한이 없습니다.");
         }
 
         MemberEntity member = memberRepository.findByProjectEntityIdAndIdAndIsDeleteFalse(
-                projectId, memberId)
-            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
+                        projectId, memberId)
+                .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
 
         if (member.getProjectEntity().isExpired()) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
