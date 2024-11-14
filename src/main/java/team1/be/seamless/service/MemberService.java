@@ -1,6 +1,5 @@
 package team1.be.seamless.service;
 
-import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,6 +19,8 @@ import team1.be.seamless.util.MailSend;
 import team1.be.seamless.util.Util;
 import team1.be.seamless.util.auth.AesEncrypt;
 import team1.be.seamless.util.errorException.BaseHandler;
+
+import java.time.LocalDateTime;
 
 @Service
 public class MemberService {
@@ -102,7 +103,7 @@ public class MemberService {
         memberRepository.save(member);
 
 //        코드 생성
-        String code = aesEncrypt.encrypt(project.getId().toString());
+        String code = aesEncrypt.encrypt(member.getId()+"_"+project.getId());
 
 //      이메일로 코드 전달
 
