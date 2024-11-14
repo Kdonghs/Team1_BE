@@ -57,7 +57,7 @@ class MemberServiceTest {
     void 특정_멤버_정상_조회_테스트() {
         Long projectId = 1L;
         Long memberId = 1L;
-        String role = Role.USER.toString();
+        String role = Role.ADMIN.toString();
 
         ProjectEntity projectEntity = new ProjectEntity();
         projectEntity.setEndDate(LocalDateTime.now().plusDays(10));
@@ -77,7 +77,7 @@ class MemberServiceTest {
     @Test // 프로젝트의 모든 멤버를 정상적으로 조회할 수 있는지 검증
     void 프로젝트_멤버_전체_조회_테스트() {
         Long projectId = 1L;
-        String role = Role.USER.toString();
+        String role = Role.ADMIN.toString();
 
         MemberRequestDTO.getMemberList memberListDTO = new MemberRequestDTO.getMemberList();
 
@@ -122,7 +122,7 @@ class MemberServiceTest {
     void 멤버_정보_수정_테스트() {
         Long projectId = 1L;
         Long memberId = 1L;
-        String role = Role.USER.toString();
+        String role = Role.ADMIN.toString();
         MemberRequestDTO.UpdateMember updateMember = new MemberRequestDTO.UpdateMember("New 이름", "New 역할", "new@example.com", "imageURL");
 
         ProjectEntity projectEntity = new ProjectEntity();
@@ -142,7 +142,7 @@ class MemberServiceTest {
     void 멤버_삭제_테스트() {
         Long projectId = 1L;
         Long memberId = 1L;
-        String role = Role.USER.toString();
+        String role = Role.ADMIN.toString();
 
         ProjectEntity projectEntity = new ProjectEntity();
         MemberEntity memberEntity = new MemberEntity(projectEntity);

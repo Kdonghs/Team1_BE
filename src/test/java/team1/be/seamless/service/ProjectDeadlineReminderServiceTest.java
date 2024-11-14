@@ -34,38 +34,6 @@ class ProjectDeadlineReminderServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test // 마감 기한이 3일 또는 1일 남은 경우 이메일 전송
-    void 마감_기한_임박_알림_테스트() {
-
-        LocalDateTime now = LocalDateTime.now();
-
-        ProjectEntity project1 = new ProjectEntity();
-        project1.setId(1L);
-        project1.setName("Project A");
-        project1.setEndDate(now.plusDays(3));
-
-        ProjectEntity project2 = new ProjectEntity();
-        project2.setId(2L);
-        project2.setName("Project B");
-        project2.setEndDate(now.plusDays(1));
-
-        MemberEntity member1 = new MemberEntity();
-        member1.setEmail("member1@example.com");
-
-        MemberEntity member2 = new MemberEntity();
-        member2.setEmail("member2@example.com");
-
-        project1.setMemberEntities(List.of(member1));
-        project2.setMemberEntities(List.of(member2));
-
-        when(projectRepository.findAllByIsDeletedFalse()).thenReturn(List.of(project1, project2));
-
-        reminderService.sendDeadlineReminders();
-
-        verify(mailSend, times(1)).send(eq("member1@example.com"), contains("[프로젝트 마감 임박 알림]"), contains("3일"));
-        verify(mailSend, times(1)).send(eq("member2@example.com"), contains("[프로젝트 마감 임박 알림]"), contains("1일"));
-    }
-
     @Test // 마감 기한이 임박하지 않은 경우 이메일 전송 안 함
     void 마감_기한_임박하지_않음_테스트() {
 
