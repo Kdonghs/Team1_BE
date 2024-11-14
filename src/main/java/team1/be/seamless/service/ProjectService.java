@@ -71,13 +71,8 @@ public class ProjectService {
      * @return : 해당 Id의 프로젝트의 정보를 반환 repository 조회시 존재 하지 않을 경우 Throw Not Found
      */
     public ProjectDetail getProject(long projectId, String email, String role) {
-        //USER만 권한 존재
-        validateRole(role);
-
         ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
-
-        validateProjectOwner(projectEntity, email);
 
         return projectMapper.toDetail(projectEntity);
     }
@@ -186,9 +181,6 @@ public class ProjectService {
                         "변경하려는 프로젝트의 종료일은 현재 태스크의 가장 늦은 종료일 보다 이릅니다.");
                 }
             });
-
-
-
 
         projectMapper.toUpdate(projectEntity, update, newProjectOptionEntities);
 
