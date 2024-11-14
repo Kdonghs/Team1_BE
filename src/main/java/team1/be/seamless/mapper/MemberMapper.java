@@ -6,7 +6,6 @@ import team1.be.seamless.dto.MemberRequestDTO.UpdateMember;
 import team1.be.seamless.dto.MemberResponseDTO;
 import team1.be.seamless.entity.MemberEntity;
 import team1.be.seamless.entity.ProjectEntity;
-import team1.be.seamless.entity.enums.Role;
 
 @Component
 public class MemberMapper {
@@ -15,7 +14,7 @@ public class MemberMapper {
 
         return new MemberEntity(
             create.getName(),
-            Role.MEMBER.getKey(),
+            "팀원",
             create.getEmail(),
             "",
             project
@@ -43,7 +42,8 @@ public class MemberMapper {
         return new MemberResponseDTO("성공적으로 삭제되었습니다.",
             memberEntity.getName(),
             memberEntity.getRole(),
-            memberEntity.getEmail());
+            memberEntity.getEmail(),
+            memberEntity.getId());
     }
 
     public MemberResponseDTO toCreateResponseDTO(MemberEntity memberEntity, String attendURL) {
@@ -51,14 +51,16 @@ public class MemberMapper {
             memberEntity.getName(),
             memberEntity.getRole(),
             memberEntity.getEmail(),
-            attendURL);
+            attendURL,
+            memberEntity.getId());
     }
 
     public MemberResponseDTO toPutResponseDTO(MemberEntity memberEntity) {
         return new MemberResponseDTO("성공적으로 수정되었습니다.",
             memberEntity.getName(),
             memberEntity.getRole(),
-            memberEntity.getEmail());
+            memberEntity.getEmail(),
+            memberEntity.getId());
     }
 
 }
