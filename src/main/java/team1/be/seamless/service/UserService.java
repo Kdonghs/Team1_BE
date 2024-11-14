@@ -9,6 +9,7 @@ import team1.be.seamless.dto.UserDTO.UserDetails;
 import team1.be.seamless.dto.UserDTO.UserSimple;
 import team1.be.seamless.dto.UserDTO.UserUpdate;
 import team1.be.seamless.entity.UserEntity;
+import team1.be.seamless.entity.enums.Role;
 import team1.be.seamless.mapper.UserMapper;
 import team1.be.seamless.repository.UserRepository;
 import team1.be.seamless.util.errorException.BaseHandler;
@@ -25,14 +26,21 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public UserDetails getUser(String email) {
+    public UserDetails getUser(String email, String role) {
+        if (!Role.USER.isRole(role)) {
+            throw new BaseHandler(HttpStatus.UNAUTHORIZED, "조회 권한이 없습니다.");
+        }
         UserEntity user = userRepository.findByEmailAndIsDeleteFalse(email)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다."));
         return userMapper.toUserDetails(user);
     }
 
     @Transactional
-    public UserSimple updateUser(String email, UserUpdate update) {
+    public UserSimple updateUser(String email, String role, UserUpdate update) {
+        if (!Role.USER.isRole(role)) {
+            throw new BaseHandler(HttpStatus.UNAUTHORIZED, "조회 권한이 없습니다.");
+        }
+
         UserEntity user = userRepository.findByEmailAndIsDeleteFalse(email)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다."));
 
@@ -42,7 +50,11 @@ public class UserService {
     }
 
     @Transactional
-    public UserSimple deleteUser(String email) {
+    public UserSimple deleteUser(String email, String role) {
+        if (!Role.USER.isRole(role)) {
+            throw new BaseHandler(HttpStatus.UNAUTHORIZED, "조회 권한이 없습니다.");
+        }
+
         UserEntity user = userRepository.findByEmailAndIsDeleteFalse(email)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다."));
 

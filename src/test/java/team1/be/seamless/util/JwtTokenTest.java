@@ -54,7 +54,7 @@ class JwtTokenTest {
     }
 
     @Test
-    void 생성된_토큰_권한_검사_memer() {
+    void 생성된_토큰_권한_검사_member() {
 //        given
         String name = "test";
         String role = "member";

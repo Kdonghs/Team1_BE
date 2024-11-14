@@ -14,15 +14,7 @@ import team1.be.seamless.util.MailSend;
 public class ProjectDeadlineReminderService {
 
     private final ProjectRepository projectRepository;
-    //    private final EmailSend emailSend;
     private final MailSend mailSend;
-
-//    @Autowired
-//    public ProjectDeadlineReminderService(ProjectRepository projectRepository, EmailSend emailSend) {
-//        this.projectRepository = projectRepository;
-//        this.emailSend = emailSend;
-//    }
-
 
     @Autowired
     public ProjectDeadlineReminderService(ProjectRepository projectRepository, MailSend mailSend) {
@@ -40,12 +32,11 @@ public class ProjectDeadlineReminderService {
             LocalDateTime endDate = project.getEndDate();
             long daysUntilDeadline = ChronoUnit.DAYS.between(now, endDate);
 
-            // 마감일이 14일, 7일, 3일, 1일 남았을 때 이메일 전송
-            if (daysUntilDeadline == 14 || daysUntilDeadline == 7 || daysUntilDeadline == 3
-                || daysUntilDeadline == 1) {
+            // 마감일이 3일, 1일 남았을 때 이메일 전송
+            if (daysUntilDeadline == 3 || daysUntilDeadline == 1) {
                 String subject = "[프로젝트 마감 임박 알림] '" + project.getName() + "' 프로젝트";
                 String message = """
-                    프로젝트 %s의 마감 기한이 %d
+                    프로젝트 %s의 마감 기한이 %d일 남았습니다.
                     
                     프로젝트 관련 작업을 마무리해 주세요.
                     

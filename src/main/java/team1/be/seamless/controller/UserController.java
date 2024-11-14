@@ -35,20 +35,20 @@ public class UserController {
     @Operation(summary = "유저 정보 조회")
     @GetMapping
     public SingleResult<UserDetails> getUser(HttpServletRequest req) {
-        return new SingleResult<>(userService.getUser(parsingParam.getEmail(req)));
+        return new SingleResult<>(userService.getUser(parsingParam.getEmail(req), parsingParam.getRole(req)));
     }
 
     @Operation(summary = "유저 정보 수정")
     @PutMapping
     public SingleResult<UserSimple> updateUser(HttpServletRequest req, @Valid @RequestBody
     UserUpdate update) {
-        return new SingleResult<>(userService.updateUser(parsingParam.getEmail(req), update));
+        return new SingleResult<>(userService.updateUser(parsingParam.getEmail(req), parsingParam.getRole(req), update));
     }
 
     @Operation(summary = "유저 정보 삭제")
     @DeleteMapping
     public SingleResult<UserSimple> deleteUser(HttpServletRequest req) {
-        return new SingleResult<>(userService.deleteUser(parsingParam.getEmail(req)));
+        return new SingleResult<>(userService.deleteUser(parsingParam.getEmail(req), parsingParam.getRole(req)));
     }
 
 }
