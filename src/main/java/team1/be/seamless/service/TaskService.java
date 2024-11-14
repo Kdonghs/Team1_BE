@@ -49,15 +49,13 @@ public class TaskService {
         return taskMapper.toDetail(taskEntity);
     }
 
-    public Page<TaskWithOwnerDetail> getTaskList(Long projectId, String status, String priority,
-                                                 long ownerId, getList param) {
+    public Page<TaskWithOwnerDetail> getTaskList(Long projectId, String status, String priority, Long ownerId, getList param) {
 
+//        MemberEntity memberEntity = memberRepository.findByIdAndIsDeleteFalse(ownerId)
+//                    .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 멤버"));
 
-        MemberEntity memberEntity = memberRepository.findByIdAndIsDeleteFalse(ownerId)
-                    .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "존재하지 않는 멤버"));
-
-        Page<TaskEntity> taskEntities = taskRepository.findByProjectIdAndOptionalFilters(projectId,
-                status, priority, ownerId, param.toPageable());
+        Page<TaskEntity> taskEntities = taskRepository.findByProjectIdAndOptionalFilters(
+            projectId, status, priority, ownerId, param.toPageable());
 
         return new PageImpl<>(
                 taskEntities.stream()

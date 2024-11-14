@@ -52,7 +52,7 @@ public class TaskController {
     public PageResult<TaskWithOwnerDetail> getTaskList(@PathVariable("projectId") Long projectId,
         @RequestParam(value = "status", required = false) String status,
         @RequestParam(value = "priority", required = false) String priority,
-        @RequestParam(value = "owner", required = false) long ownerId,
+        @RequestParam(value = "owner", required = false) Long ownerId,
         @Valid TaskDTO.getList param) {
 
         return PageMapper.toPageResult(
