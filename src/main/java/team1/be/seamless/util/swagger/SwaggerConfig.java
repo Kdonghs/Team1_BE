@@ -5,6 +5,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,10 +22,14 @@ public class SwaggerConfig {
             .name("Authorization");
         SecurityRequirement securityRequirement = new SecurityRequirement().addList("bearerAuth");
 
+        Server server = new Server();
+        server.setUrl("https://seamlessup.com");
+
         return new OpenAPI()
             .info(apiInfo())
             .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
-            .security(Arrays.asList(securityRequirement));
+            .security(Arrays.asList(securityRequirement))
+            .addServersItem(server);
     }
 
     public Info apiInfo() {

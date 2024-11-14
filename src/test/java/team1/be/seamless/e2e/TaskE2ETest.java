@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import team1.be.seamless.dto.TaskDTO;
 import team1.be.seamless.dto.TaskDTO.TaskCreate;
 import team1.be.seamless.entity.enums.Priority;
 import team1.be.seamless.entity.enums.Role;
@@ -23,8 +24,7 @@ import team1.be.seamless.service.TaskService;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.http.HttpStatus.*;
 
 @ExtendWith(SpringExtension.class)
@@ -121,6 +121,26 @@ class TaskE2ETest {
             url + port + "/api/project/task/1", GET, requestEntity, String.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(NOT_FOUND);
+    }
+
+    @Test
+    public void 태스크_수정_성공() {
+        TaskDTO.TaskUpdate body = new TaskDTO.TaskUpdate(
+                "수정된 태스크",
+                "수정된 태스크입니다.",
+                50,
+                1L,
+                LocalDateTime.of(2024, 12, 1, 0, 0, 0),
+                LocalDateTime.of(2024, 12, 2, 0, 0, 0),
+                Priority.HIGH,
+                TaskStatus.IN_PROGRESS);
+
+        HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
+
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                url + port + "/api/project/task/1", PUT, requestEntity, String.class);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     }
 
 }
