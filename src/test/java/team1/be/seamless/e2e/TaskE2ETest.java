@@ -89,7 +89,7 @@ class TaskE2ETest {
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
 
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-            url + port + "/api/project/1/task", POST, requestEntity, String.class);
+            url + port + "/api/project/2/task", POST, requestEntity, String.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
     }
@@ -104,7 +104,7 @@ class TaskE2ETest {
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
 
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-            url + port + "/api/project/1/task", POST, requestEntity, String.class);
+            url + port + "/api/project/2/task", POST, requestEntity, String.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
     }
@@ -113,12 +113,12 @@ class TaskE2ETest {
     @Test
     public void 프로젝트_삭제시_태스크_조회_실패() {
         // 프로젝트 삭제
-        projectService.deleteProject(1L, "user1@google.com", Role.USER.toString());
+        projectService.deleteProject(2L, "user1@google.com", Role.USER.toString());
 
         HttpEntity<Long> requestEntity = new HttpEntity<>(headers);
 
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-            url + port + "/api/project/task/1", GET, requestEntity, String.class);
+            url + port + "/api/project/task/2", GET, requestEntity, String.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(NOT_FOUND);
     }

@@ -131,7 +131,6 @@ class TaskServiceTest {
             "HIGH",
             1L,
             taskParam.toPageable())).thenReturn(tasks);
-        when(memberRepository.findByIdAndIsDeleteFalse(1L)).thenReturn(Optional.of(memberEntity));
         when(taskMapper.toDetailWithOwner(any(TaskEntity.class)))
             .thenReturn(mock(TaskDTO.TaskWithOwnerDetail.class));
 
@@ -148,7 +147,6 @@ class TaskServiceTest {
         assertThat(result.getTotalElements()).isEqualTo(2);
         verify(taskRepository, times(1)).findByProjectIdAndOptionalFilters(
             1L, "IN_PROGRESS", "HIGH", 1L, taskParam.toPageable());
-        verify(memberRepository, times(1)).findByIdAndIsDeleteFalse(1L);
         verify(taskMapper, atLeastOnce()).toDetailWithOwner(any(TaskEntity.class));
     }
 
