@@ -109,23 +109,6 @@ class ProjectE2ETest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     }
 
-    /**
-     * 이 부분 전에 ProjectDTO에서 startDate, endDate 생성 시 현재 이전 값도 되야 되지 않나? 라고 말했던 적 있어서 일단 만들어 놓고 주석처리
-     * 현재는 @Future가 설정 안되어 잇어서 과거의 값도 생성 가능한 상태
-     */
-//    @Test
-//    void 프로젝트_날짜_현재_이전_불가() {
-//        // 현재보다 이전인 날짜 설정
-//        ProjectUpdate body = new ProjectUpdate("프로젝트 이름", List.of(1L, 2L, 3L),
-//            LocalDateTime.of(2022, 10, 1, 0, 0),
-//            LocalDateTime.of(2022, 10, 5, 0, 0));
-//
-//        HttpEntity<ProjectUpdate> requestEntity = new HttpEntity<>(body, headers);
-//        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/project/1",
-//            PUT, requestEntity, String.class);
-//
-//        assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
-//    }
     @Test
     void 프로젝트_종료일_시작일_이전_불가() {
         // 종료일이 시작일보다 이전인 날짜 설정

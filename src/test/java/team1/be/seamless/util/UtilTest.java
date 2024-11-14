@@ -1,13 +1,11 @@
 package team1.be.seamless.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
-import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class UtilTest {
 
@@ -34,7 +32,7 @@ class UtilTest {
     @Test
     void 로컬데이트타임_파싱_성공() {
 //        given
-        String date1 = LocalDate.now().toString();
+        String date1 = LocalDateTime.now().withNano(0).toString();
 
 //        when
         LocalDateTime parse = Util.parseDate(date1);

@@ -1,7 +1,6 @@
 package team1.be.seamless.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -31,14 +30,14 @@ public class OptionService {
     }
 
     public Page<OptionSimple> getProjectOptionList(getList param, String role) {
-        authRole(role);
+        validateRole(role);
 
         return optionRepository.findAllByIsDeletedFalse(param.toPageable())
             .map(optionMapper::toSimple);
     }
 
     public OptionDetail getOption(Long id, String role) {
-        authRole(role);
+        validateRole(role);
 
         return optionMapper.toDetail(optionRepository.findByIdAndIsDeletedFalse(id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당하는 옵션이 존재하지 않습니다.")));
@@ -46,7 +45,7 @@ public class OptionService {
 
     @Transactional
     public OptionDetail createOption(OptionCreate create, String role) {
-        authRole(role);
+        validateRole(role);
 
         OptionEntity optionEntity = optionMapper.toEntity(create);
         optionRepository.save(optionEntity);
@@ -56,7 +55,7 @@ public class OptionService {
 
     @Transactional
     public OptionDetail updateOption(Long id, OptionUpdate update, String role) {
-        authRole(role);
+        validateRole(role);
 
         OptionEntity option = optionRepository.findByIdAndIsDeletedFalse(id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당하는 옵션이 존재하지 않습니다."));
@@ -68,7 +67,7 @@ public class OptionService {
 
     @Transactional
     public OptionDetail deleteOption(Long id, String role) {
-        authRole(role);
+        validateRole(role);
 
         OptionEntity option = optionRepository.findByIdAndIsDeletedFalse(id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당하는 옵션이 존재하지 않습니다."));
@@ -78,7 +77,7 @@ public class OptionService {
         return optionMapper.toDetail(option);
     }
 
-    private void authRole(String role) {
+    private void validateRole(String role) {
         if(!Role.ADMIN.isRole(role)) {
             throw new BaseHandler(HttpStatus.FORBIDDEN, "관리자만 접근 가능합니다.");
         }

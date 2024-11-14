@@ -82,7 +82,7 @@ public class TaskController {
     public SingleResult<TaskDetail> createTask(HttpServletRequest req,
         @Valid @PathVariable("projectId") Long projectId,
         @Valid @RequestBody TaskCreate taskCreate) {
-        return new SingleResult<>(taskService.createTask(parsingParam.getEmail(req), projectId, taskCreate));
+        return new SingleResult<>(taskService.createTask(parsingParam.getEmail(req),parsingParam.getRole(req), projectId, taskCreate));
     }
 
     /**

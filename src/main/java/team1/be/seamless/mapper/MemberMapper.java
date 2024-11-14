@@ -42,7 +42,8 @@ public class MemberMapper {
         return new MemberResponseDTO("성공적으로 삭제되었습니다.",
             memberEntity.getName(),
             memberEntity.getRole(),
-            memberEntity.getEmail());
+            memberEntity.getEmail(),
+            memberEntity.getId());
     }
 
     public MemberResponseDTO toCreateResponseDTO(MemberEntity memberEntity, String attendURL) {
@@ -50,14 +51,16 @@ public class MemberMapper {
             memberEntity.getName(),
             memberEntity.getRole(),
             memberEntity.getEmail(),
-            attendURL);
+            attendURL,
+            memberEntity.getId());
     }
 
     public MemberResponseDTO toPutResponseDTO(MemberEntity memberEntity) {
         return new MemberResponseDTO("성공적으로 수정되었습니다.",
             memberEntity.getName(),
             memberEntity.getRole(),
-            memberEntity.getEmail());
+            memberEntity.getEmail(),
+            memberEntity.getId());
     }
 
 }

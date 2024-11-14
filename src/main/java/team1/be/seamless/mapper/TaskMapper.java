@@ -42,8 +42,8 @@ public class TaskMapper {
 
     public TaskDetail toDetail(TaskEntity task) {
         return new TaskDetail(task.getId(), task.getName(), task.getDescription(),
-            task.getOwner().getId(), task.getProgress(), task.getStartDate(), task.getEndDate(),
-            task.getPriority(), task.getStatus());
+                task.getOwner()==null ? null : task.getOwner().getId(), task.getProgress(), task.getStartDate(), task.getEndDate(),
+                task.getPriority(), task.getStatus());
     }
 
     public TaskWithOwnerDetail toDetailWithOwner(TaskEntity task) {
