@@ -1,6 +1,8 @@
 package team1.be.seamless.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,7 @@ import team1.be.seamless.dto.ProjectDTO.ProjectUpdate;
 import team1.be.seamless.entity.OptionEntity;
 import team1.be.seamless.entity.ProjectEntity;
 import team1.be.seamless.entity.ProjectOptionEntity;
+import team1.be.seamless.entity.TaskEntity;
 import team1.be.seamless.entity.UserEntity;
 import team1.be.seamless.entity.enums.Role;
 import team1.be.seamless.mapper.OptionMapper;
@@ -23,6 +26,7 @@ import team1.be.seamless.mapper.ProjectMapper;
 import team1.be.seamless.repository.OptionRepository;
 import team1.be.seamless.repository.ProjectOptionRepository;
 import team1.be.seamless.repository.ProjectRepository;
+import team1.be.seamless.repository.TaskRepository;
 import team1.be.seamless.repository.UserRepository;
 import team1.be.seamless.util.errorException.BaseHandler;
 
@@ -170,6 +174,15 @@ public class ProjectService {
         for (OptionEntity optionEntity : optionEntities) {
             ProjectOptionEntity projectOptionEntity = new ProjectOptionEntity(projectEntity, optionEntity);
             newProjectOptionEntities.add(projectOptionEntity);
+        }
+
+        //종료일이 가장 늦은 태스크보다 종료일을 이전으로 업데이드 하면 안됨
+        LocalDateTime lastEndDate = projectEntity.getTaskEntities().stream()
+            .map(TaskEntity::getEndDate)
+            .max(Comparator.naturalOrder()).orElseThrow();
+
+        if (lastEndDate.isAfter(update.getEndDate())) {
+            throw new BaseHandler(HttpStatus.BAD_REQUEST, "변경하려는 프로젝트의 종료일은 현재 태스크의 가장 늦은 종료일 보다 이릅니다.");
         }
 
         projectMapper.toUpdate(projectEntity, update, newProjectOptionEntities);
