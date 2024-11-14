@@ -67,7 +67,6 @@ public class TaskService {
                 taskEntities.getPageable(),
                 taskEntities.getTotalElements()
         );
-
     }
 
     public ProjectProgress getProjectProgress(Long projectId, getList param) {
@@ -78,11 +77,7 @@ public class TaskService {
         int sum = taskEntities.getContent().stream().mapToInt(TaskEntity::getProgress).sum();
         int count = taskEntities.getContent().size();
 
-        if (count == 0) {
-            throw new BaseHandler(HttpStatus.NOT_FOUND, "해당 프로젝트에 할당된 태스크가 존재하지 않습니다.");
-        }
-
-        int average = sum / count;
+        int average = (count == 0) ? 0 : sum / count;
         String growthLevel;
         String description;
 
@@ -130,7 +125,6 @@ public class TaskService {
 
         if (param.getPage() * param.getSize() >= memberEntities.size()) {
             start = 0;
-
         } else {
             start = param.getPage() * param.getSize();
         }
