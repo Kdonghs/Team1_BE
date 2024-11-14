@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import team1.be.seamless.dto.TaskDTO.TaskCreate;
 import team1.be.seamless.entity.enums.Priority;
@@ -64,9 +65,9 @@ class TaskE2ETest {
     }
 
     @Test
-    public void 태스크_성성() {
+    public void 태스크_생성() {
         TaskCreate body = new TaskCreate("태스크1", "첫번째 태스크입니다.",
-                1L, LocalDateTime.of(2024, 10, 10, 0, 0),
+                null, LocalDateTime.of(2024, 10, 10, 0, 0),
                 LocalDateTime.of(2025, 5, 3, 1, 0, 0),
                 Priority.HIGH, TaskStatus.IN_PROGRESS, 1);
 
@@ -108,6 +109,7 @@ class TaskE2ETest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
     }
 
+    @DirtiesContext
     @Test
     public void 프로젝트_삭제시_태스크_조회_실패() {
         // 프로젝트 삭제
