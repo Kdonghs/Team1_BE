@@ -21,6 +21,7 @@ import team1.be.seamless.repository.MemberRepository;
 import team1.be.seamless.repository.UserRepository;
 import team1.be.seamless.util.auth.AesEncrypt;
 import team1.be.seamless.util.auth.JwtToken;
+import team1.be.seamless.util.auth.MemberToken;
 import team1.be.seamless.util.auth.Token;
 import team1.be.seamless.util.errorException.BaseHandler;
 
@@ -90,18 +91,18 @@ public class AuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2U
         return userRepository.save(user);
     }
 
-    public Token memberCodeJoin(String memberCode) {
+    public MemberToken memberCodeJoin(String memberCode) {
 //        decode
-        String code = aesEncrypt.decrypt(memberCode);
+        String[] code = aesEncrypt.decrypt(memberCode).split("_");
 
 //        프로젝트, member가 존재하는지 검증
-        MemberEntity member = memberRepository.findById(Long.parseLong(code))
+        MemberEntity member = memberRepository.findById(Long.parseLong(code[0]))
             .orElseThrow(() -> new BaseHandler(HttpStatus.FORBIDDEN, "해당 멤버가 존재하지 않습니다."));
 
 //        토큰 반환
         String token = jwtToken.createMemberToken(member);
 
-        return new Token(token);
+        return new MemberToken(token,code[1]);
     }
 
     public String memberCodeCreate() {

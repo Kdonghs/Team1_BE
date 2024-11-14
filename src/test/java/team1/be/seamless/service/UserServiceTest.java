@@ -54,7 +54,7 @@ class UserServiceTest {
 
         // When
         when(userMapper.toUserDetails(mockUser)).thenReturn(mockUserDetails);
-        UserDetails user = userService.getUser(email);
+        UserDetails user = userService.getUser(email, Role.USER.toString());
 
         // Then
         assertEquals(username, user.getUsername());
@@ -73,7 +73,7 @@ class UserServiceTest {
 
         // When
         when(userMapper.toUserSimple(mockUser)).thenReturn(mockUserSimple);
-        UserSimple user = userService.updateUser(email, update);
+        UserSimple user = userService.updateUser(email, Role.USER.toString(), update);
 
         // Then
         assertEquals(updatedUsername, user.getUsername());
@@ -87,7 +87,7 @@ class UserServiceTest {
 
         // When
         when(userMapper.toUserSimple(mockUser)).thenReturn(mockUserSimple);
-        UserSimple user = userService.deleteUser(email);
+        UserSimple user = userService.deleteUser(email, Role.USER.toString());
 
         // Then
         assertEquals(username, user.getUsername());

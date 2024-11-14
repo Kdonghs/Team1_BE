@@ -5,9 +5,6 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import team1.be.seamless.entity.MemberEntity;
 import team1.be.seamless.entity.TaskEntity;
@@ -15,6 +12,10 @@ import team1.be.seamless.entity.enums.Priority;
 import team1.be.seamless.entity.enums.TaskStatus;
 import team1.be.seamless.util.errorException.BaseHandler;
 import team1.be.seamless.util.page.PageParam;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TaskDTO {
 
@@ -29,7 +30,7 @@ public class TaskDTO {
 
         private String description;
 
-        @NotNull(message = "멤버 아이디는 필수 입력 사항입니다.")
+//        @NotNull(message = "멤버 아이디는 필수 입력 사항입니다.")
         private Long ownerId;
 
         @NotNull(message = "진행 상태(status)는 필수 입력 사항입니다.")
@@ -210,7 +211,6 @@ public class TaskDTO {
             this.description = task.getDescription();
             this.ownerId = task.getId();
             this.progress = task.getProgress();
-            this.description = task.getDescription();
             this.startDate = task.getStartDate();
             this.endDate = task.getEndDate();
             this.taskStatus = task.getStatus();

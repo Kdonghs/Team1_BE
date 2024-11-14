@@ -1,18 +1,99 @@
-# Team1_BE
+# Seamless
+- Notion, Trello와 같은 협업 툴 개발을 목표로하는 프로젝트입니다.
+  - 기존의 협업 툴로 간단한 프로젝트를 진행하려고 하는데, 처음 써보는 사람에게는 너무 복잡하다고 느꼈습니다.
+  - 배보다 배꼽이 더 큰 것은 프로젝트 진행에 모순이라는 생각이 들어서, 이 웹을 제작하게 되었습니다.
+- 이미 시중에 나와있는 협업 툴들에 비교한 경쟁력은 다음과 같습니다.
+  - 로그인 없이 **참여 코드**만으로 참여할 수 있게 하여, 참여 과정에 대한 진입 장벽을 낮추었습니다.
+  - 깃허브 잔디심기와 같이 동기부여를 위한 게이미피케이션 요소들을 기능으로 탑재했습니다.
+
+---
+
+# 어플리케이션 사용법
+- 이 앱의 사용자는 크게 **팀장**과 **팀원**으로 나뉜다.
+- 팀장은 프로젝트를 생성하고 팀원들을 초대할 수 있다.
+  - 팀장은 어텐드링크를 생성하여 팀원들을 초대할 수 있다.
+  - 팀원들은 어텐드링크에서 정보를 입력하면 자신의 이메일로 **참여 코드**를 받는다.
+- 초대받은 팀원들은 **로그인 없이** 참여 코드의 입력만으로 프로젝트에 참가할 수 있다.
+- 참여 코드를 입력한 팀원은 자신의 프로젝트에 입장하여 프로젝트 진행도 및 팀원들 개인의 진행도를 확인할 수 있다.
+  - 또한 팀원은 자신의 태스크를 컨트롤 할 수 있다.
+- 자세한 설명은 여기로! 👉 [어플리케이션 사용법 링크](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/wiki/%EC%96%B4%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98-%EC%82%AC%EC%9A%A9%EB%B2%95)
+
+예시 사진)
+1. 랜딩 페이지
+   ![1  랜딩 페이지](https://github.com/user-attachments/assets/070052c6-333d-49bc-8b6f-b272de5a8a9f)
+2. 로그인 UI
+   ![2  로그인 시 UI](https://github.com/user-attachments/assets/3d3e342e-7021-46da-8b40-fc1cf864edfc)
+3. 프로젝트 참여시 UI
+   ![4  프로젝트 참여(사이드 메뉴O)](https://github.com/user-attachments/assets/bf635f6c-299b-4f6c-9c7e-30a763ecd85f)
+
+
+- 전체 프로토 타입은 여기로! [프로토타입 링크](https://www.figma.com/design/ZhOOxxb7yLfcJORzvXLFjh/%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84?node-id=15-7915&node-type=canvas&t=3Nv8MvV08K1XFntC-11)
+
+---
+
+# 기술스택
+
+- **프론트 팀**
+  - ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) ![JS](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white) ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![NPM](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white) ![visualcode](https://img.shields.io/badge/Visual_Studio_Code-0078D4?style=for-the-badge&logo=visual) ![타입스크립트](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) ![eslint](https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white) ![node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white) ![Chakra](https://img.shields.io/badge/chakra-%234ED1C5.svg?style=for-the-badge&logo=chakraui&logoColor=white) ![Storybook](https://img.shields.io/badge/-Storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white) ![Webpack](https://img.shields.io/badge/webpack-%238DD6F9.svg?style=for-the-badge&logo=webpack&logoColor=black)
+- **백엔드 팀**
+  - ![JAVA](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white) ![SPRING](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white") ![MYSQL](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white) ![HIBERNATE](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white) ![spring시큐리티](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=Spring-Security&logoColor=white) ![GMAIL](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white) ![intellij](https://img.shields.io/badge/IntelliJ_IDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white) ![스웨거](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white) ![Amazon S3](https://img.shields.io/badge/Amazon%20S3-FF9900?style=for-the-badge&logo=amazons3&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+- **배포**
+  - ![GITHUB ACTION](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white) ![AMAZON AWS](https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white) ![cloudflarpages](	https://img.shields.io/badge/Cloudflare%20Pages-F38020?style=for-the-badge&logo=Cloudflare%20Pages&logoColor=white) ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)
+- **디자인**
+  - ![figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
+- **소통**
+  - ![slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white) ![git](https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white) ![github](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)
+- **추가**
+  - JPA, axios, JUnit5, oauth2
 
 ---
 
 # 프로젝트 구조도
 
 ![seamless drawio](https://github.com/user-attachments/assets/2bc76c2c-ac20-4d67-b746-f4fa2b064cec)
-
+- 사용자는 브라우저나 클라이언트를 통해 HTTPS로 특정 기능(예: 로그인, 데이터 조회, 페이지 로드 등)을 요청합니다.
+- 사용자 요청은 IP 주소를 기반으로 Nginx로 전달합니다.
+  - JSON 데이터 요청
+- 요청을 받은 백엔드에서 로그인, 데이터 저장/조회 요청 시, 사용자에게 적절한 응답(JSON 형식)을 반환합니다.
+- 페이지 로드 시 필요한 데이터(예: 사용자 정보, 프로젝트 목록 등)는 백엔드에서의 API 응답 데이터를 바탕으로 화면을 구성하여 사용자와 상호작용할 수 있는 UI를 제공합니다.
+- 백엔드와 프론트엔드는 각각 독립적으로 GitHub Actions를 통해 빌드 및 배포했습니다.
+- 자세한 설명은 여기로! 👉 [아키텍처 설명 링크](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/wiki/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%EC%97%90-%EB%8C%80%ED%95%9C-%EC%9E%90%EC%84%B8%ED%95%9C-%EC%84%A4%EB%AA%85)
 
 
 ---
 
-# 코드 컨벤션
+# ERD
 
-- angular code conventions을 기반으로 커밋 메세지 작성
+![KakaoTalk_20241112_183947117](https://github.com/user-attachments/assets/fcac1f9b-2f0f-4276-9481-47748648e7bf)
+
+
+- **User 관리** 
+  - 팀장의 로그인 및 CRUD
+- **프로젝트 관리**
+  - 프로젝트 CRUD 
+- **멤버 관리**
+  - 프로젝트에 참여하는 팀원 CRUD 
+- **태스크 관리**
+  - 프로젝트 내 작업 생성, 진행 상태 및 우선순위 등 CRUD
+- 자세한 설명은 여기로! 👉 [ERD 설명 링크](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/wiki/ERD-%EC%84%A4%EB%AA%85)
+
+
+---
+
+# 협업 전략
+
+- **브랜치 전략**
+  1. (프론트, 백엔드 공통) 팀원들은 매주 weekly 브랜치를 받아서 자신의 이름 브랜치를 생성한다.
+  2. 각자 금주의 작업이 완료되면, weekly 브랜치로 PR을 보낸다.
+  3. weekly 브랜치에서 충돌을 해결한다.
+  4. 충돌이 완료되면 develop 브랜치 -> master 브랜치 순으로 보낸다.
+     - develop 브랜치가 CI/CD를 담당하는 브랜치이다.
+  5. master 브랜치에서 review 브랜치로 멘토님께 리뷰를 요청하는 PR을 보낸다.
+  6. 멘토님의 리뷰가 완료되면 해결 후 그 다음주 weekly 브랜치에 반영한다.
+  7. 팀원들은 다시 weekly 브랜치를 받아서 똑같이 작업한다.
+
+
+- **커밋 메세지 규칙(angular code conventions 기반)**
   - feat : 새로운 기능 추가
   - fix : 버그 수정
   - docs : 문서 변경
@@ -20,137 +101,72 @@
   - refactor : 코드 리팩토링
   - test : 테스트 코드 추가, 수정
   - chore : 빌드 프로세스, 도구 설정 변경 등 기타 작업
+  - 자세한 설명은 여기로! 👉 [커밋 메시지 규칙 링크](https://quickest-asterisk-75d.notion.site/P2P-d38e691fbcbb4a719274fb91e48f91cd?p=1d0fac986a2e48e5a4152524214084e7&pm=s)
+
+
+- **API문서**
+  - 백엔드가 개발해야할 API의 설명과 입출력 타입을 정의한다.
+  - 자세한 설명은 여기로! 👉 [API 문서 링크](https://quickest-asterisk-75d.notion.site/P2P-d38e691fbcbb4a719274fb91e48f91cd?p=905fd6f9a8a140178580b5fd9593e0fe&pm=s)
 
 ---
 
-# 구현 기능 목록
+# 백엔드 구현 기능
 
-- 인증(김동혁)
-    - 회원가입 & 로그인
-      - google oauth2로 구현
-      - 몇 가지 예외처리된 경로를 제외하면 구글 로그인 요구
-        - swagger3
-        - h2-console
-        - /
-      - flow
-        - 토큰 검증
-          - 토큰이 없다면
-            - 로그인
-              - 가입 정보가 없다면 회원가입
-            - 성공시 토큰 생성 및 반환
-              - GET Param으로 반환됨
-            - 실패시 /error로 이동
-          - 토큰이 있다면
-            - 토큰 검증
-            - 토큰 내부의 정보를 파싱
-    - 유저 정보 조회
-      - 토큰내 정보로 유저 파싱
-    - 유저 정보 수정
-      - 토큰내 정보로 유저 파싱
-      - 유저이름(username), 사진(picture) 수정 가능
-      - 입력된 값만 검증해서 변경
-        - 공백 검사
-          - 공백시 기존 값 유지
-        - 이미지는 url 검사
-          - url패턴을 어길 시 400
-    - 유저 정보 삭제
-      - soft delete
-    - 코드로 참여
-      - 코드로 인증 후 토큰 반환
-      - 코드는 멤버id를 aes256으로 암호화 해서 코드 생성
-      - 코드를 복호화해서 검증
-      - 인증 후 멤버 이메일로 토큰 생성
-    - 시큐리티 토큰 생성 예외처리
-      - 기존 방식으로(@RestControllerAdvice)는 스프링 시큐리티 예외처리가 안됨
-      - 다른 방법 찾는중(w5)
-- 프로젝트(김도헌)
-  - 프로젝트 리스트 조회
-    - 토큰 내 유저의 email 정보를 통해 본인이 관리하는 프로젝트들을 페이지네이션을 통해 보여줌 
-  - 프로젝트 기간 리스트 조회
-    - 토큰 내 유저의 email 정보를 통해 본인이 관리하는 프로젝트들의 일정 정보를 페이지네이션을 통해 보여줌
-  - 프로젝트 조회
-    - 프로젝트 Id를 통한 단일 조회
-  - 프로젝트 멤버 조회
-    - 프로젝트 Id를 통해 해당 프로젝트의 멤버들의 정보를 조회
-    - 현재 객체를 통해 정보를 받아 오는 것으로 되어있지만, 추후 fetch join을 활용한 방법으로 수정 예정
-  - 프로젝트 생성
-    - 프로젝트를 생성함
-    - 플로우 : 
-      - email을 통해 유저가 존재하는 지 검증 ->
-      - DTO에 담긴 optionEntity들의 id 정보들을 통해 OptionEntity조회 ->
-      - OptionEntity을 ProjectOption으로 매핑 ->
-      - 해당 정보를 가진 ProjectEntity를 생성 후 Repo에 save ->
-      - 각 ProjectOption의 ProjectEntity field를 생성한 ProjectEntity로 설정
-  - 프로젝트 설정 수정
-    - 해당하는 Id의 프로젝트를 수정
-    - 플로우 : 
-      - 프로젝트가 존재하는지 검증 ->
-      - 기존의 ProjectOption 리스트 초기화->
-      - DTO에 담긴 Option id들을 통해 OptionEntity 조회 ->
-      - OptionEntity를 ProjectOption으로 매핑 ->
-      - ProjectOption 리스트에 추가 ->
-      - 나머지 정보 업데이트 후 저장
-  - 프로젝트 삭제
-    - 해당하는 Id의 프로젝트 삭제
-    - 현재는 그냥 삭제를 하지만, 추후 Soft Delete 방식으로 재구현 예정
-- 게스트(권순호)
-  - 게스트 생성
-  - 게스트 수정
-  - 게스트 삭제
-  - 프로젝트 내 게스트 추가
-  - 프로젝트 코드 메일로 전달
-- 태스크(조서영)
-  - 태스크 리스트 조회(프로젝트 아이디를 이용)
-  - 태스트 단건 조회
-  - 태스크 생성
-    - isDeleted와 progress 생성시 기본값인 0으로 설정
-    - 프로젝트id, 태스크를 수행할 멤버(팀원)id, 제목, 본문,시작일, 종료일을 입력받아서 ->
-      dto에서 시작일, 종료일 검증 ->
-      토큰내 이메일과 프로젝트id로 프로젝트를 불러오기 ->
-      멤버(팀원)존재 검증 ->
-      task객체 생성 (미완)
-      저장
-  - 태스크 수정
-  - 태스트 삭제
-- 이벤트
-  - 독려 이메일 전달
-  - 각 게스트별 진행도 조회
-  - 태스크별 진행도 조회
-- ...
+1. 프로젝트 관리 API
+2. 팀원 관리 API
+3. 태스크 관리 API
+4. 이벤트 관련 API
+   - 독려 이메일 전달 API
+   - 각 팀원별 진행도 조회 API
+   - 태스크별 진행도 조회 API
+5. **로그인 및 인증관리 API**
+   - **주안점을 두고 개발한 기능!**
+   - 로그인 및 인증 플로우 사진)
+![seamless 로그인 플로우차트 drawio](https://github.com/user-attachments/assets/0dd89459-af2a-42be-9a06-18791d4e3f1b)
+![seamless 멤버 인증 플로우 차트 drawio](https://github.com/user-attachments/assets/030044e6-054a-4c12-b63e-044064ae5cbd)
+   1. Google OAuth2 로그인 플로우
+      - 사용자가 로그인 요청.
+      - 백엔드 서버가 Google 인증 서버에 로그인 요청을 전달.
+      - Google 인증 서버는 사용자 인증 후, 인증 코드를 백엔드 서버에 반환.
+      - 백엔드 서버는 인증 코드로 엑세스 토큰을 요청하여 사용자 정보를 가져옴.
+      - 사용자 정보로 회원가입 여부 확인 후 JWT 토큰을 발급하여 반환.
+   2. 멤버 초대 및 참여 플로우
+      - 초대 과정
+      - 팀장이 백엔드에 멤버 초대 링크 생성 요청.
+      - 백엔드에서 초대 링크를 생성해 팀장에게 반환.
+      - 팀장이 초대 링크를 팀원에게 전달.
+      - 참여 과정
+      - 팀원이 초대 링크 접속 후, 이름과 이메일 입력.
+      - 입력 정보로 참여 코드를 이메일로 수신.
+      - 팀원이 참여 코드를 입력해 프로젝트에 참가.
+      - 백엔드가 참여 코드 검증 후, JWT 토큰 발급 및 프로젝트 정보 반환.
+
+- 더 자세한 설명은 여기로! 👉 [백엔드 구현 기능 링크](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/wiki/%EB%B0%B1%EC%97%94%EB%93%9C-%EA%B5%AC%ED%98%84-%EA%B8%B0%EB%8A%A5-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85-%ED%8E%98%EC%9D%B4%EC%A7%80)
+
 ---
-# 피드백
-- [3주차 리뷰](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/issues/13)
-- [3주차 피드백](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/pull/11)
-- [4주차 리뷰](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/issues/17)
-- [4주차 멘토링](https://quickest-asterisk-75d.notion.site/Back-end_-323b0e20ae2b405189ffe5b7c4242e00)
-- [5주차 리뷰](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/issues/31)
-- [6주차 피드백](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/pull/58)
+
+# Technical Issue와 해결과정
+
+- 각자 작업하다가 생긴 기술적인 이슈들에 대해서 협업으로 해결 및 공유하기 위해 **GitHub Issue**를 활용함.
+- 다음 사진들은 기술적인 이슈들의 해결과정 예시 사진이다.
+  ![스크린샷 2024-11-12 193537](https://github.com/user-attachments/assets/55fb2544-0547-4e1c-aa99-2deee1541767)
+![스크린샷 2024-11-12 193624](https://github.com/user-attachments/assets/16174838-f3db-4161-98f6-54dda06d3e03)
+- 자세한 설명은 여기로! 👉 [깃허브 이슈 링크](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/issues)
+
 ---
-# Issue
-- [week4 프로젝트 빌드 실패](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/issues/27)
-- [week6 프로젝트 빌드 실패](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/issues/39)
-- [week6 구글 로그인 실패](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/issues/41)
-- [week6 멤버 생성 실패](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/issues/42)
-- [week6 pathvaliable로 값 파싱 실패](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/issues/43)
-- [week6 task 날짜 validation 오류](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/issues/44)
-- [week6 aws server 구글 로그인 실패](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/issues/45)
-- [week6 멤버 생성 권한 수정](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/issues/46)
-- [week6 task 조회 쿼리 문법 오류](https://github.com/kakao-tech-campus-2nd-step3/Team1_BE/issues/47)
+
+# 협업에 대한 이슈들 해결 
+
+- 프론트 팀과의 협업에서는 다음의 사진과 같이 노션을 이용하여, 협업에 관한 이슈를 해결해나감.
+- 다음은 프론트 팀으로부터 요청 사항을 받고 답변을 주고 받는 **협업**이 이루어지는 사진들이다.
+![스크린샷 2024-11-12 194745](https://github.com/user-attachments/assets/c57ea804-562c-4855-bb28-29feaedf55c3)
+![스크린샷 2024-11-12 194841](https://github.com/user-attachments/assets/8e61bab5-a27f-4251-a3fa-e51dd098e4f4)
+- 자세한 설명은 여기로! 👉 [트랙 간 협업 과정 링크](https://polar-yellowhorn-1cd.notion.site/Swagger-241107-137a2fbcb2b180a0a67cf6906ab83ab8)
+
 ---
-# 질문사항
-- week3
-  - 팀원마다 코드스타일이 다른경우 통일을 하나요?
-  - 프로젝트 시작 시 세팅은 어느정도로 하나요?
-  - 현재 팀원마다 각각 domain을 1개씩 담당하여 작업을 하고 있습니다. 이러한 경우 다른 팀원이 만들어야 하는 객체를 참조해야 되는 상황일 때,(저는 그냥 구현을 해버려서 conflict가 발생했습니다.) 구현을하지 않고 mock 혹은 fake 객체를 만들어 두고 작업을 하는 편인가요?
-  - 보통 이 정도 규모의 프로젝트를 분업하게 되면 어떠한 기준으로 작업을 분배하나요?
-  - conflict resolve시의 기준이 있나요?
-- week4(멘토링)
-  - 유저 삭제시 인증 구현 방식
-  - 다양한 소셜 로그인의 유저를 특정하는 방법
-  - 메일 발송 방법
-  - 코드 스타일
-  - 동시성 처리
-- week5
-  - softDelete의 구현 방법
-  - 연결괸 객체의 정보를 가져오는 방법
-- week6
+
+# 배포중인 인스턴스 주소
+
+- 백엔드 : [URL](3.36.254.166)
+- 프론트엔드 : [URL](https://team1-fe.pages.dev/)
+- 프론트엔드 GitHub 주소 : [프론트엔드 깃허브 링크](https://github.com/kakao-tech-campus-2nd-step3/Team1_FE)

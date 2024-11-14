@@ -1,14 +1,5 @@
 package team1.be.seamless.e2e;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpMethod.DELETE;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,14 +15,18 @@ import team1.be.seamless.dto.MemberRequestDTO.CreateMember;
 import team1.be.seamless.dto.MemberRequestDTO.UpdateMember;
 import team1.be.seamless.entity.MemberEntity;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpMethod.*;
+import static org.springframework.http.HttpStatus.*;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class MemberE2ETest {
 
     @LocalServerPort
     private int port;
-    private String url = "http://localhost:";
+    private String baseUrl;
     private final TestRestTemplate restTemplate;
-    private String token;
+    private String adminToken;
     private String memberToken;
     private HttpHeaders headers = new HttpHeaders();
 
@@ -42,80 +37,94 @@ class MemberE2ETest {
 
     @BeforeEach
     public void setUp() {
-//        새로운 멤버 생성
-        CreateMember member = new CreateMember("ex@gmail.com",
-            "sv_XKCT5j5Sm0msQw-mEAmstJ5tq9uBh6c8_QLhzKGo=", "랄랄랄");
+        baseUrl = "http://localhost:" + port + "/api/project/1/member";
+
+        // 1. 새로운 멤버 생성
+        CreateMember member = new CreateMember(
+                "ex@gmail.com",
+                "sv_XKCT5j5Sm0msQw-mEAmstJ5tq9uBh6c8_QLhzKGo=",
+                "랄랄랄"
+        );
         HttpEntity<CreateMember> request1 = new HttpEntity<>(member);
         ResponseEntity<String> response1 = restTemplate.exchange(
-            url + port + "/api/project/1/member",
-            POST,
-            request1, String.class);
+                baseUrl,
+                POST,
+                request1,
+                String.class
+        );
 
-        int startIndex =
-            response1.getBody().indexOf("\"attendURL\":\"") + "\"attendURL\":\"".length();
+        // 2. 멤버 생성 시 반환되는 초대 코드 추출
+//        String code = extractValueFromResponse(response1.getBody(), "attendURL");
+        int startIndex = response1.getBody().indexOf("\"attendURL\":\"") + "\"attendURL\":\"".length();
         int endIndex = response1.getBody().indexOf("\"", startIndex);
 
 //        멤버 생성시 반환되는 코드 추출
         String code = response1.getBody().substring(startIndex, endIndex);
-
-//        코드로 멤버 토큰 요청
-        HttpEntity<Long> request2 = new HttpEntity<>(null);
+        // 3. 멤버 초대 코드로 토큰 요청
+        HttpEntity<Void> request2 = new HttpEntity<>(null);
         ResponseEntity<String> response2 = restTemplate.exchange(
-            url + port + "/api/auth/memberCode?memberCode=" + code,
-            GET,
-            request2, String.class);
+                "http://localhost:" + port + "/api/auth/memberCode?memberCode=" + code,
+                GET,
+                request2,
+                String.class
+        );
 
         startIndex = response2.getBody().indexOf("\"token\":\"") + "\"token\":\"".length();
         endIndex = response2.getBody().indexOf("\"", startIndex);
 
         memberToken = response2.getBody().substring(startIndex, endIndex);
 
-//        팀장의 토큰 요청
-        HttpEntity<Long> requestEntity = new HttpEntity<>(null);
+        // 4. 팀장의 토큰 요청
+        HttpEntity<Void> requestEntity = new HttpEntity<>(null);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-            url + port + "/api/test/userToken/1",
-            POST,
-            requestEntity, String.class);
-
+                "http://localhost:" + port + "/api/test/userToken/1",
+                POST,
+                requestEntity,
+                String.class
+        );
         startIndex = responseEntity.getBody().indexOf("\"token\":\"") + "\"token\":\"".length();
         endIndex = responseEntity.getBody().indexOf("\"", startIndex);
 
-        token = responseEntity.getBody().substring(startIndex, endIndex);
+        adminToken = responseEntity.getBody().substring(startIndex, endIndex);
 
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
-        this.url += port + "/api/project/1/member/";
+        headers.setBearerAuth(adminToken);
     }
-
 
     @DisplayName("\"멤버 이메일 빈 칸으로 정보 수정시 반영이 안되거나 예외처리 되는가?\" 에 대한 테스트")
     @Test
     void 멤버_정보_수정_테스트() {
-        UpdateMember updateInfo = new UpdateMember("새로운 이름", "팀원", "", "http://example.com/");
+        UpdateMember updateInfo = new UpdateMember(
+                "새로운 이름",
+                "팀원",
+                "",
+                "http://example.com/"
+        );
         HttpEntity<UpdateMember> requestEntity = new HttpEntity<>(updateInfo, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-            url + "1", // 테스트 Member ID
-            PUT,
-            requestEntity,
-            String.class);
+                baseUrl + "/1", // 테스트 Member ID
+                PUT,
+                requestEntity,
+                String.class
+        );
 
         assertThat(response.getStatusCode()).isEqualTo(OK);
     }
 
-    @DisplayName("멤버가 멤버를 삭제 가능한에 대한 테스트")
+    @DisplayName("멤버가 멤버를 삭제 가능한지에 대한 테스트")
     @Test
     void 멤버_삭제권한_테스트() {
         headers.setBearerAuth(memberToken);
 
         // Soft delete member
-        HttpEntity<UpdateMember> requestEntity = new HttpEntity<>(null, headers);
+        HttpEntity<Void> requestEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response = restTemplate.exchange(
-            url + "1", // 테스트 Member ID
-            DELETE,
-            requestEntity,
-            String.class);
+                baseUrl + "/1", // 테스트 Member ID
+                DELETE,
+                requestEntity,
+                String.class
+        );
 
         assertThat(response.getStatusCode()).isEqualTo(FORBIDDEN);
     }
@@ -123,24 +132,34 @@ class MemberE2ETest {
     @DisplayName("\"멤버 삭제(softdelete로 되는가, 다시 조회하면 조회 되는가)\" 에 대한 테스트")
     @Test
     void 멤버_삭제_후_조회_여부_테스트() {
-        headers.setBearerAuth(token);
-
-        HttpEntity<UpdateMember> requestEntity = new HttpEntity<>(null, headers);
+        headers.setBearerAuth(adminToken);
 
         // Soft delete member
+        HttpEntity<Void> requestEntity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response1 = restTemplate.exchange(
-            url + "2", // 테스트 Member ID
-            DELETE,
-            requestEntity,
-            String.class);
+                baseUrl + "/2", // 테스트 Member ID
+                DELETE,
+                requestEntity,
+                String.class
+        );
         assertThat(response1.getStatusCode()).isEqualTo(OK);
 
+        // 다시 조회 시 NOT_FOUND 검증
         ResponseEntity<MemberEntity> response2 = restTemplate.exchange(
-            url + "2",
-            GET,
-            new HttpEntity<>(headers),
-            MemberEntity.class);
-
+                baseUrl + "2",
+                GET,
+                new HttpEntity<>(headers),
+                MemberEntity.class
+        );
         assertThat(response2.getStatusCode()).isEqualTo(NOT_FOUND);
+    }
+
+    /**
+     * 응답 문자열에서 특정 키의 값을 추출하는 유틸리티 메서드.(create에서 사용)
+     */
+    private String extractValueFromResponse(String responseBody, String key) {
+        int startIndex = responseBody.indexOf("\"" + key + "\":\"") + key.length() + 3;
+        int endIndex = responseBody.indexOf("\"", startIndex);
+        return responseBody.substring(startIndex, endIndex);
     }
 }

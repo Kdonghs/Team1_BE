@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import team1.be.seamless.service.AuthService;
+import team1.be.seamless.util.auth.MemberToken;
 import team1.be.seamless.util.auth.Token;
 import team1.be.seamless.util.page.SingleResult;
 
@@ -25,14 +26,9 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @GetMapping("/success")
-    public SingleResult<Token> temp(@RequestParam("accessToken") String accessToken) {
-        return new SingleResult<>(new Token(accessToken));
-    }
-
     @Operation(summary = "인증 코드로 멤버 토큰 반환")
     @GetMapping("/memberCode")
-    public SingleResult<Token> memberCodeJoin(@Valid @RequestParam String memberCode) {
+    public SingleResult<MemberToken> memberCodeJoin(@Valid @RequestParam String memberCode) {
         return new SingleResult<>(authService.memberCodeJoin(memberCode));
     }
 

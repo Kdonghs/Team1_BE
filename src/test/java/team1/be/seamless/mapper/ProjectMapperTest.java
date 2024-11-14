@@ -2,7 +2,7 @@ package team1.be.seamless.mapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import team1.be.seamless.dto.ProjectDTO;
@@ -71,14 +71,14 @@ public class ProjectMapperTest {
         ProjectEntity projectEntity = projectMapper.toEntity(create, userEntity, projectOptions);
 
         //Then
-        Assertions.assertThat(projectEntity.getName()).isEqualTo("프로젝트1");
-        Assertions.assertThat(projectEntity.getDescription()).isEqualTo("프로젝트 설명1");
-        Assertions.assertThat(projectEntity.getImageURL()).isEqualTo("https://example.com/project1.jpg");
-        Assertions.assertThat(projectEntity.getStartDate()).isEqualTo(LocalDateTime.of(2024, 10, 1, 0, 0, 0));
-        Assertions.assertThat(projectEntity.getEndDate()).isEqualTo(LocalDateTime.of(2025, 10, 1, 0, 0, 0));
-        Assertions.assertThat(projectEntity.getUserEntity()).isEqualTo(userEntity);
-        Assertions.assertThat(projectEntity.isActive()).isTrue();
-        Assertions.assertThat(projectEntity.isExpired()).isFalse();
+        assertThat(projectEntity.getName()).isEqualTo("프로젝트1");
+        assertThat(projectEntity.getDescription()).isEqualTo("프로젝트 설명1");
+        assertThat(projectEntity.getImageURL()).isEqualTo("https://example.com/project1.jpg");
+        assertThat(projectEntity.getStartDate()).isEqualTo(LocalDateTime.of(2024, 10, 1, 0, 0, 0));
+        assertThat(projectEntity.getEndDate()).isEqualTo(LocalDateTime.of(2025, 10, 1, 0, 0, 0));
+        assertThat(projectEntity.getUserEntity()).isEqualTo(userEntity);
+        assertThat(projectEntity.isActive()).isTrue();
+        assertThat(projectEntity.isExpired()).isFalse();
     }
 
     @Test
@@ -97,11 +97,11 @@ public class ProjectMapperTest {
         ProjectEntity projectEntity = projectMapper.toUpdate(projectEntity1, update, projectOptions);
 
         //Then
-        Assertions.assertThat(projectEntity.getName()).isEqualTo("프로젝트2");
-        Assertions.assertThat(projectEntity.getDescription()).isEqualTo("프로젝트 설명2");
-        Assertions.assertThat(projectEntity.getImageURL()).isEqualTo("https://example.com/project2.jpg");
-        Assertions.assertThat(projectEntity.getStartDate()).isEqualTo(LocalDateTime.of(2024, 10, 1, 0, 0, 0));
-        Assertions.assertThat(projectEntity.getEndDate()).isEqualTo(LocalDateTime.of(2026, 10, 1, 0, 0, 0));
+        assertThat(projectEntity.getName()).isEqualTo("프로젝트2");
+        assertThat(projectEntity.getDescription()).isEqualTo("프로젝트 설명2");
+        assertThat(projectEntity.getImageURL()).isEqualTo("https://example.com/project2.jpg");
+        assertThat(projectEntity.getStartDate()).isEqualTo(LocalDateTime.of(2024, 10, 1, 0, 0, 0));
+        assertThat(projectEntity.getEndDate()).isEqualTo(LocalDateTime.of(2026, 10, 1, 0, 0, 0));
     }
 
     @Test
@@ -110,14 +110,14 @@ public class ProjectMapperTest {
         ProjectDetail projectDetail = projectMapper.toDetail(projectEntity1);
 
         // Then
-        Assertions.assertThat(projectDetail.getName()).isEqualTo("프로젝트1");
-        Assertions.assertThat(projectDetail.getDescription()).isEqualTo("프로젝트 설명1");
-        Assertions.assertThat(projectDetail.getImageURL()).isEqualTo("https://example.com/project1.jpg");
-        Assertions.assertThat(projectDetail.getTotalMembers()).isEqualTo(0);
-        Assertions.assertThat(projectDetail.getProjectManager().getName()).isEqualTo(userEntity.getName());
-        Assertions.assertThat(projectDetail.getProjectManager().getImageURL()).isEqualTo(userEntity.getPicture());
-        Assertions.assertThat(projectDetail.getStartDate()).isEqualTo(LocalDateTime.of(2024,11,21,0,0,0));
-        Assertions.assertThat(projectDetail.getEndDate()).isEqualTo(LocalDateTime.of(2025,11,21,0,0,0));
+        assertThat(projectDetail.getName()).isEqualTo("프로젝트1");
+        assertThat(projectDetail.getDescription()).isEqualTo("프로젝트 설명1");
+        assertThat(projectDetail.getImageURL()).isEqualTo("https://example.com/project1.jpg");
+        assertThat(projectDetail.getTotalMembers()).isEqualTo(0);
+        assertThat(projectDetail.getProjectManager().getName()).isEqualTo(userEntity.getName());
+        assertThat(projectDetail.getProjectManager().getImageURL()).isEqualTo(userEntity.getPicture());
+        assertThat(projectDetail.getStartDate()).isEqualTo(LocalDateTime.of(2024,11,21,0,0,0));
+        assertThat(projectDetail.getEndDate()).isEqualTo(LocalDateTime.of(2025,11,21,0,0,0));
     }
 
     @Test
@@ -126,9 +126,9 @@ public class ProjectMapperTest {
         ProjectDate projectDate = projectMapper.toDate(projectEntity1);
 
         // Then
-        Assertions.assertThat(projectDate.getName()).isEqualTo("프로젝트1");
-        Assertions.assertThat(projectDate.getStartDate()).isEqualTo(LocalDateTime.of(2024,11,21,0,0,0));
-        Assertions.assertThat(projectDate.getEndDate()).isEqualTo(LocalDateTime.of(2025,11,21,0,0,0));
+        assertThat(projectDate.getName()).isEqualTo("프로젝트1");
+        assertThat(projectDate.getStartDate()).isEqualTo(LocalDateTime.of(2024,11,21,0,0,0));
+        assertThat(projectDate.getEndDate()).isEqualTo(LocalDateTime.of(2025,11,21,0,0,0));
     }
 
     @Test
@@ -137,8 +137,8 @@ public class ProjectMapperTest {
         ProjectManager projectManager = projectMapper.toManager(userEntity);
 
         // Then
-        Assertions.assertThat(projectManager.getName()).isEqualTo("사용자1");
-        Assertions.assertThat(projectManager.getImageURL()).isEqualTo("user1Image.jpg");
+        assertThat(projectManager.getName()).isEqualTo("사용자1");
+        assertThat(projectManager.getImageURL()).isEqualTo("user1Image.jpg");
     }
 
 }
