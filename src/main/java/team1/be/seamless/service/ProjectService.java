@@ -74,8 +74,6 @@ public class ProjectService {
         ProjectEntity projectEntity = projectRepository.findByIdAndIsDeletedFalse(projectId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "프로젝트가 존재하지 않음"));
 
-        validateProjectOwner(projectEntity, email);
-
         return projectMapper.toDetail(projectEntity);
     }
 
