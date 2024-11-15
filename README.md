@@ -7,6 +7,12 @@ Notion, Trello와 같은 기존 협업 툴의 복잡함을 해소하고, 간편�
 
 ---
 
+## **📌 테스트 계정**
+
+- **Google 테스트 계정**: `kakaotechcampus.mentor@gmail.com`
+
+---
+
 ## **📖 목차**
 
 - [Seamless란?](#seamless란)
