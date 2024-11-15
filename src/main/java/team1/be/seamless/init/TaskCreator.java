@@ -26,7 +26,7 @@ public class TaskCreator {
                 LocalDateTime.of(2025, 9, 3, 0, 0), Priority.HIGH, TaskStatus.IN_PROGRESS, 1);
         taskService.createTask(1L, task1);
 
-        TaskCreate task2 = new TaskCreate("태스크2", "두번째 태스크입니다.", null,
+        TaskCreate task2 = new TaskCreate("태스크2", "두번째 태스크입니다.", 2L,
                 LocalDateTime.of(2024, 10, 10, 0, 0),
                 LocalDateTime.of(2025, 9, 3, 0, 0), Priority.LOW, TaskStatus.IN_PROGRESS, 1);
         taskService.createTask(1L, task2);
@@ -51,7 +51,7 @@ public class TaskCreator {
                 LocalDateTime.of(2025, 9, 3, 0, 0), Priority.MEDIUM, TaskStatus.IN_PROGRESS, 1);
         taskService.createTask(1L, task6);
 
-        TaskCreate task7 = new TaskCreate("태스크7", "일곱번째 태스크입니다.", null,
+        TaskCreate task7 = new TaskCreate("태스크7", "일곱번째 태스크입니다.", 4L,
                 LocalDateTime.of(2024, 10, 10, 0, 0),
                 LocalDateTime.of(2025, 9, 3, 0, 0), Priority.MEDIUM, TaskStatus.COMPLETED, 1);
         taskService.createTask(1L, task7);
@@ -61,7 +61,7 @@ public class TaskCreator {
                 LocalDateTime.of(2025, 9, 3, 0, 0), Priority.LOW, TaskStatus.IN_PROGRESS, 1);
         taskService.createTask(1L, task8);
 
-        TaskCreate task9 = new TaskCreate("태스크9", "아홉번째 태스크입니다.", null,
+        TaskCreate task9 = new TaskCreate("태스크9", "아홉번째 태스크입니다.", 4L,
                 LocalDateTime.of(2024, 10, 10, 0, 0),
                 LocalDateTime.of(2025, 9, 3, 0, 0), Priority.MEDIUM, TaskStatus.PENDING, 1);
         taskService.createTask(1L, task9);
