@@ -35,6 +35,14 @@ public class MemberController {
         this.parsingParam = parsingParam;
     }
 
+    @Operation(summary = "팀원 본인 조회")
+    @GetMapping("/me")
+    public SingleResult<MemberResponseDTO> getMyMember(
+        @Valid @PathVariable("projectId") Long projectId,
+        HttpServletRequest req) {
+        return new SingleResult<>(memberService.getMyMember(projectId, parsingParam.getEmail(req), parsingParam.getRole(req)));
+    }
+
     @Operation(summary = "팀원 개별 조회")
     @GetMapping("/{memberId}")
     public SingleResult<MemberResponseDTO> getMember(

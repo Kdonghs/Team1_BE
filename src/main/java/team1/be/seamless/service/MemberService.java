@@ -41,6 +41,23 @@ public class MemberService {
         this.mailSend = mailSend;
     }
 
+    public MemberResponseDTO getMyMember(Long projectId, String email, String role) {
+        // 팀원인지 확인하기
+        if (role == null || role.isEmpty()) {
+            throw new BaseHandler(HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
+        }
+
+        MemberEntity memberEntity = memberRepository.findByProjectEntityIdAndEmailAndIsDeleteFalse(
+                projectId, email)
+            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 멤버가 존재하지 않습니다."));
+
+        if (memberEntity.getProjectEntity().isExpired()) {
+            throw new BaseHandler(HttpStatus.BAD_REQUEST, "프로젝트는 종료되었습니다.");
+        }
+
+        return memberMapper.toGetResponseDTO(memberEntity);
+    }
+
     public MemberResponseDTO getMember(Long projectId, Long memberId, String role) {
         // 팀원인지 확인하기
         if (role == null || role.isEmpty()) {
