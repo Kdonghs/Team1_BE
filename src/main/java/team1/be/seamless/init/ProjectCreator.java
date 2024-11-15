@@ -21,22 +21,13 @@ public class ProjectCreator {
     public void creator() {
         projectService.createProject(
             new ProjectCreate(
-                "프로젝트 이름1",
-                "프로젝트 설명1",
-                "https://example.com/image1.jpg",
+                "테스트 프로젝트",
+                "카카오테크캠퍼스",
+                "https://ca.slack-edge.com/T06MHGBCEKG-U06M9KTL9GX-e92c9472326e-512",
                 List.of(1L, 2L, 3L),
-                LocalDateTime.of(2024, 10, 1, 0, 0, 0),
+                LocalDateTime.of(2024, 4, 1, 0, 0, 0),
                 LocalDateTime.of(2025, 10, 1, 0, 0, 0)
-            ), "user1@google.com", Role.USER.getKey());
+            ), "kakaotechcampus.mentor@gmail.com", Role.USER.getKey());
 
-        projectService.createProject(
-            new ProjectCreate(
-                "프로젝트 이름2",
-                "프로젝트 설명2",
-                "https://example.com/image2.jpg",
-                List.of(1L, 2L, 3L),
-                LocalDateTime.of(2024, 11, 11, 0, 0, 0),
-                LocalDateTime.of(2025, 11, 11, 0, 0, 0)
-            ), "user1@google.com", Role.USER.getKey());
     }
 }
