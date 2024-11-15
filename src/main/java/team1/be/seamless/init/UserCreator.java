@@ -16,7 +16,7 @@ public class UserCreator {
     }
 
     public void creator() {
-        userService.createUser(new UserSimple("사용자1", "user1@google.com", "https://user1Image.jpg"));
+        userService.createUser(new UserSimple("테스트 계정", "kakaotechcampus.mentor@gmail.com", "https://ca.slack-edge.com/T06MHGBCEKG-U06M9KTL9GX-e92c9472326e-512"));
         userService.createUser(new UserSimple("사용자2", "user2@google.com", "https://user2Image.jpg"));
         userService.createUser(new UserSimple("사용자3", "user3@google.com", "https://user3Image.jpg"));
     }
