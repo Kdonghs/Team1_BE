@@ -173,6 +173,7 @@ public class ProjectService {
 
         //종료일이 가장 늦은 태스크보다 종료일을 이전으로 업데이드 하면 안됨
         projectEntity.getTaskEntities().stream()
+            .filter(taskEntity -> taskEntity.getIsDeleted().equals(false))
             .map(TaskEntity::getEndDate)
             .max(Comparator.naturalOrder())
             .ifPresent(lastEndDate -> {

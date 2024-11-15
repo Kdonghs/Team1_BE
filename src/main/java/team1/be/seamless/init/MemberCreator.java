@@ -28,6 +28,18 @@ public class MemberCreator {
         MemberRequestDTO.CreateMember member3 = new MemberRequestDTO.CreateMember("ex3@gmail.com",
             "sv_XKCT5j5Sm0msQw-mEAmstJ5tq9uBh6c8_QLhzKGo=", "도헌");
         memberService.createMember(member3);
+
+        MemberRequestDTO.CreateMember member4 = new MemberRequestDTO.CreateMember("ex4@gmail.com",
+            "sv_XKCT5j5Sm0msQw-mEAmstJ5tq9uBh6c8_QLhzKGo=", "서영");
+        memberService.createMember(member4);
+
+        MemberRequestDTO.CreateMember member5 = new MemberRequestDTO.CreateMember("ex5@gmail.com",
+            "sv_XKCT5j5Sm0msQw-mEAmstJ5tq9uBh6c8_QLhzKGo=", "채연");
+        memberService.createMember(member5);
+
+        MemberRequestDTO.CreateMember member6 = new MemberRequestDTO.CreateMember("ex6@gmail.com",
+            "sv_XKCT5j5Sm0msQw-mEAmstJ5tq9uBh6c8_QLhzKGo=", "정윤");
+        memberService.createMember(member6);
     }
 
 }
